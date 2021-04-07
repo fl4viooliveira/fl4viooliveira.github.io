@@ -1,30 +1,37 @@
 <script>
-	export let name;
+	import tilt from './tilt.js';
+	
+	let reverse = false;
 </script>
 
-<main>
-	<h1>Hello {name}!</h1>
-	<p>Visit the <a href="https://svelte.dev/tutorial">Svelte tutorial</a> to learn how to build Svelte apps.</p>
-</main>
-
 <style>
-	main {
+	:global(body) {
+		display: grid;
+		justify-content: center;
+		align-content: center;
+		grid-gap: 20px;
+	}
+	* { margin: 0; }
+	div {
+		height: 200px;
+		width: 200px;
+		background: linear-gradient(45deg, #cc00ff, #d9055d);
+		color: white;
+		
+		display: grid;
+		justify-content: center;
+		align-content: center;
 		text-align: center;
-		padding: 1em;
-		max-width: 240px;
-		margin: 0 auto;
-	}
-
-	h1 {
-		color: #ff3e00;
-		text-transform: uppercase;
-		font-size: 4em;
-		font-weight: 100;
-	}
-
-	@media (min-width: 640px) {
-		main {
-			max-width: none;
-		}
 	}
 </style>
+
+<div use:tilt={{ scale: 1.1, reverse }}>
+	<h3>Svelte Tilt Test!</h3>
+	<p>
+		Just hover!
+	</p>
+</div>
+
+<button on:click={() => reverse = !reverse}>
+	toggle tilt direction
+</button>
