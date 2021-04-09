@@ -10,7 +10,7 @@
 <!-- Home Page -->
 <section class="banner" id="home">
     <div class="imgSidebar">
-        <img src="/images/bg.jpg" alt="">
+        <img src="images/bg.jpg" alt="">
     </div>
     <div class="contentBx">
         <h5 class="logoText">Fl4_Dev</h5>
@@ -23,9 +23,9 @@
             <a href="#0" class="btn">About Me</a>
         </div>
         <ul class="sci">
-            <li><a href="#0"><img src="/images/facebook.png" alt="facebook"></a></li>
-            <li><a href="#0"><img src="/images/twitter.png" alt="twitter"></a></li>
-            <li><a href="#0"><img src="/images/instagram.png" alt="instagram"></a></li>
+            <li><a href="#0"><img src="images/facebook.png" alt="facebook"></a></li>
+            <li><a href="#0"><img src="images/twitter.png" alt="twitter"></a></li>
+            <li><a href="#0"><img src="images/instagram.png" alt="instagram"></a></li>
         </ul>
     </div>
 </section>
@@ -43,7 +43,7 @@
             </p>
         </div>
         <div class="imgBx">
-            <img src="/images/flavio_pc.PNG" alt="Flavio">
+            <img src="images/flavio_pc.PNG" alt="Flavio">
         </div>
     </div>
 </section>
