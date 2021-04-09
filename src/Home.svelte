@@ -7,7 +7,7 @@
 </svelte:head>
 
 <div class="toggle" class:active on:click={() => active= !active}></div>
-
+<!-- Home Page -->
 <section class="banner" id="home">
     <div class="imgSidebar">
         <img src="/images/bg.jpg" alt="">
@@ -29,7 +29,7 @@
         </ul>
     </div>
 </section>
-
+<!-- About-Us Page -->
 <section class="about" id="about">
     <div class="title white">
         <h2>About Us</h2>
@@ -47,14 +47,21 @@
         </div>
     </div>
 </section>
+<!-- Services Page -->
+<section class="services" id="services">
+    <div class="title">
+        <h2>Our Services</h2>
+        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Officia sapiente repellendus numquam iste impedit dolorum earum minima. Nisi ex eligendi ad illo officia!</p>
+    </div>
+</section>
 
 <div class="sidebar" class:active on:click={() => active= !active}>
     <ul class="menu">
-        <li><a href="#home">Home</a></li>
-        <li><a href="#about">About</a></li>
-        <li><a href="#0">Services</a></li>
-        <li><a href="#0">Work</a></li>
-        <li><a href="#0">Contact</a></li>
+        <li><a href="#home" class:active on:click={() => active}>Home</a></li>
+        <li><a href="#about" class:active on:click={() => active}>About</a></li>
+        <li><a href="#services" class:active on:click={() => active}>Services</a></li>
+        <li><a href="#0" class:active on:click={() => active}>Work</a></li>
+        <li><a href="#0" class:active on:click={() => active}>Contact</a></li>
     </ul>
 </div>
 
@@ -66,6 +73,7 @@
         padding: 0;
         box-sizing: border-box;
         font-family: 'Poppins', sans-serif;
+        scroll-behavior: smooth;
     }
     .toggle {
         position: fixed;
