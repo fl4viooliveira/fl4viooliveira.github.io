@@ -566,4 +566,66 @@
         margin: 0;
         font-size: 16px;
     }
+
+    @media (max-width: 991px){
+        .banner .imgSidebar{
+            display: none;
+        }
+        .banner .contentBx, .sidebar{
+            width: 100%;
+            padding: 40px;
+        }
+        .logoText{
+            top: 40px;
+        }
+        .toggle{
+            right: 40px;
+        }
+        .sci{
+            left: 40px;
+        }
+        section{
+            padding: 40px;
+        }
+        .about .content{
+            flex-direction: column;
+        }
+        .about .content .textBx{
+            min-width: 100%;
+            width: 100%;
+        }
+        .about .content{
+            margin-top: 0;
+        }
+        .about .content .imgBx{
+            margin-left: 0;
+        }
+        .services .content .servicesBx{
+            padding: 30px 20px;
+            max-width: 340px;
+            margin: 10px;
+        }
+        .contact .contactForm{
+            width: 100%;
+        }
+        .contactForm .row{
+            width: 100%;
+            display: flex;
+            flex-wrap: wrap;
+        }
+        .contact .contactForm .row .col50{
+            width: 100%;
+        }
+        .sidebar ul li a{
+            font-size: 1.5em;
+        }
+    }
+
+    @media (max-width: 500px){
+        .services .content .servicesBx, .work .content .workBx{
+            max-width: 100%;
+            width: 100%;
+            margin: 10px 0;
+        }
+    }
 </style> 
