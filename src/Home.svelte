@@ -53,15 +53,159 @@
         <h2>Our Services</h2>
         <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Officia sapiente repellendus numquam iste impedit dolorum earum minima. Nisi ex eligendi ad illo officia!</p>
     </div>
+    <div class="content">
+        <div class="servicesBx">
+            <img src="images/icon1.png" alt="Web Design icon">
+            <h2>Web Design</h2>
+            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nemo rerum, dolores soluta aperiam odit nostrum, quae unde voluptatem asperiores delectus dolorum.</p>
+        </div>
+        <div class="servicesBx">
+            <img src="images/icon2.png" alt="Web Design icon">
+            <h2>Web Development</h2>
+            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nemo rerum, dolores soluta aperiam odit nostrum, quae unde voluptatem asperiores delectus dolorum.</p>
+        </div>
+        <div class="servicesBx">
+            <img src="images/icon3.png" alt="Web Design icon">
+            <h2>Android Apps</h2>
+            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nemo rerum, dolores soluta aperiam odit nostrum, quae unde voluptatem asperiores delectus dolorum.</p>
+        </div>
+        <div class="servicesBx">
+            <img src="images/icon4.png" alt="Web Design icon">
+            <h2>Photography</h2>
+            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nemo rerum, dolores soluta aperiam odit nostrum, quae unde voluptatem asperiores delectus dolorum.</p>
+        </div>
+        <div class="servicesBx">
+            <img src="images/icon5.png" alt="Web Design icon">
+            <h2>Content Writing</h2>
+            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nemo rerum, dolores soluta aperiam odit nostrum, quae unde voluptatem asperiores delectus dolorum.</p>
+        </div>
+        <div class="servicesBx">
+            <img src="images/icon6.png" alt="Web Design icon">
+            <h2>Video Editing</h2>
+            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nemo rerum, dolores soluta aperiam odit nostrum, quae unde voluptatem asperiores delectus dolorum.</p>
+        </div>
+    </div>
 </section>
+<!-- Work Page -->
+<section class="work" id="work">
+    <div class="title">
+        <h2>Recent Work</h2>
+        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Officia sapiente repellendus numquam iste impedit dolorum earum minima. Nisi ex eligendi ad illo officia!</p>
+    </div>
+    <div class="content">
+        <div class="workBx">
+            <div class="imgBx">
+                <img src="images/img1.jpg" alt="work-1">
+            </div>
+            <div class="textBx">
+                <h3>Project 01</h3>
+            </div>
+        </div>
+        <div class="workBx">
+            <div class="imgBx">
+                <img src="images/img2.jpg" alt="work-2">
+            </div>
+            <div class="textBx">
+                <h3>Project 02</h3>
+            </div>
+        </div>
+        <div class="workBx">
+            <div class="imgBx">
+                <img src="images/img3.jpg" alt="work-3">
+            </div>
+            <div class="textBx">
+                <h3>Project 03</h3>
+            </div>
+        </div>
+        <div class="workBx">
+            <div class="imgBx">
+                <img src="images/img4.jpg" alt="work-4">
+            </div>
+            <div class="textBx">
+                <h3>Project 04</h3>
+            </div>
+        </div>
+        <div class="workBx">
+            <div class="imgBx">
+                <img src="images/img5.jpg" alt="work-5">
+            </div>
+            <div class="textBx">
+                <h3>Project 05</h3>
+            </div>
+        </div>
+        <div class="workBx">
+            <div class="imgBx">
+                <img src="images/img6.jpg" alt="work-6">
+            </div>
+            <div class="textBx">
+                <h3>Project 06</h3>
+            </div>
+        </div>
+        <div class="workBx">
+            <div class="imgBx">
+                <img src="images/img7.jpg" alt="work-7">
+            </div>
+            <div class="textBx">
+                <h3>Project 07</h3>
+            </div>
+        </div>
+        <div class="workBx">
+            <div class="imgBx">
+                <img src="images/img8.jpg" alt="work-8">
+            </div>
+            <div class="textBx">
+                <h3>Project 08</h3>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Contact Page -->
+<section class="contact" id="contact">
+    <div class="title white">
+        <h2>Contact Us</h2>
+        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Officia sapiente repellendus numquam iste impedit dolorum earum minima. Nisi ex eligendi ad illo officia!</p>
+    </div>
+    <div class="contactForm">
+        <div class="row">
+            <div class="col50">
+                <input type="text" name="" placeholder="First Name">
+            </div>
+            <div class="col50">
+                <input type="text" name="" placeholder="Last Name">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col50">
+                <input type="text" name="" placeholder="Email">
+            </div>
+            <div class="col50">
+                <input type="text" name="" placeholder="Mobile No.">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col100">
+                <textarea placeholder="Message"></textarea>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col100">
+                <input type="submit" value="Send">
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="copyright">
+    <p>Copyright © 2021 Flavio Oliveira. All Right Reserved.</p>
+</div>
 
 <div class="sidebar" class:active on:click={() => active= !active}>
     <ul class="menu">
         <li><a href="#home" class:active on:click={() => active}>Home</a></li>
         <li><a href="#about" class:active on:click={() => active}>About</a></li>
         <li><a href="#services" class:active on:click={() => active}>Services</a></li>
-        <li><a href="#0" class:active on:click={() => active}>Work</a></li>
-        <li><a href="#0" class:active on:click={() => active}>Contact</a></li>
+        <li><a href="#work" class:active on:click={() => active}>Work</a></li>
+        <li><a href="#contact" class:active on:click={() => active}>Contact</a></li>
     </ul>
 </div>
 
@@ -276,5 +420,150 @@
     .about .content .imgBx img{
         max-width: 100%;
     }
+    .services .content{
+        display: flex;
+        justify-content: center;
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+    .services .content .servicesBx{
+        padding: 40px 20px;
+        max-width: 340px;
+        margin: 20px;
+        transition: 0.5s;
+        text-align: center;
+        background: #f5f5f5;
+    }
+    .services .content .servicesBx:hover{
+        background: #000;
+    }
+    .services .content .servicesBx img{
+        max-width: 80px;
+        transition: 0.5s;
+    }
+    .services .content .servicesBx:hover img{
+        filter:invert(1);
+    }
+    .services .content .servicesBx h2{
+        margin-top: 20px;
+        margin-bottom: 10px;
+        font-size: 20px;
+        font-weight: 600;
+        transition: 0.5s;
+    }
+    .services .content .servicesBx:hover h2{
+        color: #fff;
+    }
+    .services .content .servicesBx p{
+        margin: 0;
+        transition: 0.5s;
+    }
+    .services .content .servicesBx:hover p{
+        color: #fff;
+    }
+    .work .content{
+        display: flex;
+        justify-content: center;
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+    .work .content .workBx{
+        position: relative;
+        width: 265px;
+        height: 265px;
+        margin: 10px;
+        transition: 0.5s;
+        text-align: center;
+    }
+    .work .content .workBx .imgBx, .work .content .workBx .textBx{
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .work .content .workBx .imgBx img{
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+    .work .content .workBx .textBx{
+        background: #000;
+        opacity: 0;
+        transition: 0.5s;
+    }
+    .work .content .workBx:hover .textBx{
+        opacity: 1;
+    }
+    .work .content .workBx .textBx h3{
+        color: #fff;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        font-size: 1em;
+    }
+    .contact{
+        background: #000;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+    }
+    .contact .contactForm{
+        position: relative;
+        width: 700px;
+        margin-top: 20px;
+    }
+    .contact .contactForm .row{
+        width: 100%;
+        display: flex;
+    }
+    .contact .contactForm .row .col50{
+        width: 50%;
+        margin: 10px;
+    }
+    .contact .contactForm .row .col100{
+        width: 100%;
+        margin: 10px;
+        text-align: center;
 
+    }
+    .contact .contactForm .row input, .contact .contactForm .row textarea{
+        width: 100%;
+        padding: 10px;
+        border: none;
+        outline: none;
+        background: #111;
+        color: #fff;
+        font-size: 16px;
+        resize: none;
+    }
+    .contact .contactForm .row textarea{
+        height: 100px;
+    }
+    .contact .contactForm .row input[type="submit"]{
+        background: #00bcd4;
+        color: #fff;
+        padding: 10px 30px;
+        display: inline-block;
+        font-weight: 500;
+        letter-spacing: 2px;
+        cursor:pointer;
+        max-width: 150px;
+    }
+    .copyright{
+        color: #fff;
+        background: #111;
+        text-align: center;
+        padding: 10px;
+    }
+    .copyright p{
+        margin: 0;
+        font-size: 16px;
+    }
 </style> 
