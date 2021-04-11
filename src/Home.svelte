@@ -13,14 +13,13 @@
         <img src="images/bg.jpg" alt="">
     </div>
     <div class="contentBx">
-        <h5 class="logoText">Fl4_Dev</h5>
+        <h5 class="logoText">Fl4.Dev</h5>
         <div>
             <h4><span>Hello</span>, I'm</h4>
             <h2>Flavio Oliveira</h2>
-            <h4>I'm a FullStack Web Developer.</h4>
-            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Culpa nemo amet, reiciendis rem ipsum at accusantium aperiam minima iusto ipsam, quasi ab reprehenderit inventore dolorem. Facere voluptatum iure provident cumque!
-            Autem natus sit repudiandae, hic sint ullam molestias ratione vel consectetur!</p>
-            <a href="#0" class="btn">About Me</a>
+            <h4>A developer with a versatile coding skillset.</h4>
+            <p>We are a developer with a broad and versatile coding skillset. We can help startups and enterprises with prototypes and ideas by efficiently building those things into reality. Our expertise lies in building MVPs, enterprise software, scalable microservices, REST and Socket APIs and deployments in AWS, Azure, DigitalOcean and others. </p>
+            <a href="#about" class="btn">About Me</a>
         </div>
         <ul class="sci">
             <li><a href="#0"><img src="images/facebook.png" alt="facebook"></a></li>
@@ -33,13 +32,15 @@
 <section class="about" id="about">
     <div class="title white">
         <h2>About Us</h2>
-        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
+        <p>I'm Flavio, continuously working to improve my web development skills.</p>
     </div>
     <div class="content">
         <div class="textBx">
             <p>
-                Lorem ipsum dolor, sit amet consectetur adipisicing elit. Sapiente laborum voluptate aut error aliquam veritatis deleniti suscipit expedita velit tempora! Ut molestiae commodi quia adipisci consequuntur et a rem ipsum.
-                Distinctio excepturi, veritatis magni eum qui adipisci esse explicabo nam hic possimus ipsam enim nesciunt quisquam ut odit fuga praesentium ipsa sunt doloribus aperiam accusantium voluptatum error amet culpa? Labore?<br><br>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Culpa repellendus corrupti reiciendis hic facilis adipisci, atque quae, quaerat doloribus unde molestias repudiandae. Minima iusto reprehenderit, fugit expedita labore harum saepe?
+                I'm Flavio, continuously working to improve my web development skills with JavaScript and Svelte for frontend, Python and Django on the backend. I'm working on e-commerce that integrates a print on demand API on the Django backend with the Svelte frontend. This project has been a tremendous challenge to apply my primary skills in one project. It will consume an API, will work on an SQL database that will communicate with the frontend through a restful API.<br><br>
+                I speak Portuguese, English, and Spanish at the lower level.<br> 
+                I consider the most substantial skill of mine "fast adaptation." I could confirm it in the last six years, moving country, changing the job, and adapting well in diverse environments.<br><br>                
+                I used to be an athlete in Jiu Jitsu. I still compete, sometimes. I just described it because this experience helps me to push myself to be better day by day.  
             </p>
         </div>
         <div class="imgBx">
