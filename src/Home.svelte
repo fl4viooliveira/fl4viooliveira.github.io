@@ -166,34 +166,38 @@
         <h2>Contact Us</h2>
         <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Officia sapiente repellendus numquam iste impedit dolorum earum minima. Nisi ex eligendi ad illo officia!</p>
     </div>
-    <div class="contactForm">
-        <div class="row">
-            <div class="col50">
-                <input type="text" name="" placeholder="First Name">
+    <form action="https://getform.io/f/04feb2e1-24e2-4e73-98b3-837225c11041" method="POST">
+        <div class="contactForm">
+            <div class="row">
+                <div class="col50">
+                    <input type="text" name="first_name" placeholder="First Name">
+                </div>
+                <div class="col50">
+                    <input type="text" name="last_name" placeholder="Last Name">
+                </div>
             </div>
-            <div class="col50">
-                <input type="text" name="" placeholder="Last Name">
+            <div class="row">
+                <div class="col50">
+                    <input type="email" name="email" placeholder="Email">
+                </div>
+                <div class="col50">
+                    <input type="text" name="subject" placeholder="Subject">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col100">
+                    <textarea name="message" placeholder="Message"></textarea>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col100">
+                    <button>
+                        <input type="submit" value="Send">
+                    </button>
+                </div>
             </div>
         </div>
-        <div class="row">
-            <div class="col50">
-                <input type="text" name="" placeholder="Email">
-            </div>
-            <div class="col50">
-                <input type="text" name="" placeholder="Mobile No.">
-            </div>
-        </div>
-        <div class="row">
-            <div class="col100">
-                <textarea placeholder="Message"></textarea>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col100">
-                <input type="submit" value="Send">
-            </div>
-        </div>
-    </div>
+    </form>
 </section>
 
 <div class="copyright">
