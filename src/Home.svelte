@@ -95,11 +95,13 @@
     </div>
     <div class="content">
         <div class="workBx">
-            <div class="imgBx">
-                <img src="images/img1.jpg" alt="work-1">
+            <div class="imgBx">                
+                <img src="images/img1.jpg" alt="work-1">                
             </div>
-            <div class="textBx">
-                <h3>Project 01</h3>
+            <div class="textBx"> 
+                <a href="https://fl4viooliveira.github.io/bkg_grid_layout/" target="_blank">               
+                <h3>Grid Layout</h3>
+                </a>
             </div>
         </div>
         <div class="workBx">
@@ -497,7 +499,7 @@
         width: 100%;
         height: 100%;
         object-fit: cover;
-    }
+    } 
     .work .content .workBx .textBx{
         background: #000;
         opacity: 0;
