@@ -203,7 +203,7 @@
 </section>
 
 <div class="copyright">
-    <p>Copyright © 2021 Flavio Oliveira. All Right Reserved.</p>
+    <p>MIT License. Copyright © 2021 Flavio Oliveira.</p>
 </div>
 
 <div class="sidebar" class:active on:click={() => active= !active}>
