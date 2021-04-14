@@ -109,7 +109,9 @@
                 <img src="images/img2.jpg" alt="work-2">
             </div>
             <div class="textBx">
-                <h3>Project 02</h3>
+                <a href="https://fl4viooliveira.github.io/animated_form/" target="_blank">               
+                    <h3>Animated Form</h3>
+                </a>
             </div>
         </div>
         <div class="workBx">
