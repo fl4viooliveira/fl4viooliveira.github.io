@@ -119,7 +119,9 @@
                 <img src="images/img3.jpg" alt="work-3">
             </div>
             <div class="textBx">
-                <h3>Project 03</h3>
+                <a href="https://fl4viooliveira.github.io/profile_card/" target="_blank">               
+                    <h3>Profile Card</h3>
+                </a>
             </div>
         </div>
         <div class="workBx">
@@ -127,7 +129,9 @@
                 <img src="images/img4.jpg" alt="work-4">
             </div>
             <div class="textBx">
-                <h3>Project 04</h3>
+                <a href="https://fl4viooliveira.github.io/blogr_landing_page/" target="_blank">               
+                    <h3>Landing Page</h3>
+                </a>
             </div>
         </div>
         <div class="workBx">

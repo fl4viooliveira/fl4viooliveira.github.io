@@ -775,6 +775,7 @@ var app = (function () {
     	let img13_src_value;
     	let t73;
     	let div24;
+    	let a6;
     	let h32;
     	let t75;
     	let div28;
@@ -783,6 +784,7 @@ var app = (function () {
     	let img14_src_value;
     	let t76;
     	let div27;
+    	let a7;
     	let h33;
     	let t78;
     	let div31;
@@ -854,19 +856,19 @@ var app = (function () {
     	let div55;
     	let ul1;
     	let li3;
-    	let a6;
+    	let a8;
     	let t104;
     	let li4;
-    	let a7;
+    	let a9;
     	let t106;
     	let li5;
-    	let a8;
+    	let a10;
     	let t108;
     	let li6;
-    	let a9;
+    	let a11;
     	let t110;
     	let li7;
-    	let a10;
+    	let a12;
     	let mounted;
     	let dispose;
 
@@ -1033,16 +1035,18 @@ var app = (function () {
     			img13 = element("img");
     			t73 = space();
     			div24 = element("div");
+    			a6 = element("a");
     			h32 = element("h3");
-    			h32.textContent = "Project 03";
+    			h32.textContent = "Profile Card";
     			t75 = space();
     			div28 = element("div");
     			div26 = element("div");
     			img14 = element("img");
     			t76 = space();
     			div27 = element("div");
+    			a7 = element("a");
     			h33 = element("h3");
-    			h33.textContent = "Project 04";
+    			h33.textContent = "Landing Page";
     			t78 = space();
     			div31 = element("div");
     			div29 = element("div");
@@ -1116,24 +1120,24 @@ var app = (function () {
     			div55 = element("div");
     			ul1 = element("ul");
     			li3 = element("li");
-    			a6 = element("a");
-    			a6.textContent = "Home";
+    			a8 = element("a");
+    			a8.textContent = "Home";
     			t104 = space();
     			li4 = element("li");
-    			a7 = element("a");
-    			a7.textContent = "About";
+    			a9 = element("a");
+    			a9.textContent = "About";
     			t106 = space();
     			li5 = element("li");
-    			a8 = element("a");
-    			a8.textContent = "Services";
+    			a10 = element("a");
+    			a10.textContent = "Services";
     			t108 = space();
     			li6 = element("li");
-    			a9 = element("a");
-    			a9.textContent = "Work";
+    			a11 = element("a");
+    			a11.textContent = "Work";
     			t110 = space();
     			li7 = element("li");
-    			a10 = element("a");
-    			a10.textContent = "Contact";
+    			a12 = element("a");
+    			a12.textContent = "Contact";
     			document.title = "Flavio Oliveira";
     			attr_dev(div0, "class", "toggle svelte-1vgpxsg");
     			toggle_class(div0, "active", /*active*/ ctx[0]);
@@ -1342,7 +1346,11 @@ var app = (function () {
     			attr_dev(div23, "class", "imgBx svelte-1vgpxsg");
     			add_location(div23, file, 117, 12, 6112);
     			attr_dev(h32, "class", "svelte-1vgpxsg");
-    			add_location(h32, file, 121, 16, 6257);
+    			add_location(h32, file, 122, 20, 6366);
+    			attr_dev(a6, "href", "https://fl4viooliveira.github.io/profile_card/");
+    			attr_dev(a6, "target", "_blank");
+    			attr_dev(a6, "class", "svelte-1vgpxsg");
+    			add_location(a6, file, 121, 16, 6257);
     			attr_dev(div24, "class", "textBx svelte-1vgpxsg");
     			add_location(div24, file, 120, 12, 6220);
     			attr_dev(div25, "class", "workBx svelte-1vgpxsg");
@@ -1350,172 +1358,176 @@ var app = (function () {
     			if (img14.src !== (img14_src_value = "images/img4.jpg")) attr_dev(img14, "src", img14_src_value);
     			attr_dev(img14, "alt", "work-4");
     			attr_dev(img14, "class", "svelte-1vgpxsg");
-    			add_location(img14, file, 126, 16, 6388);
+    			add_location(img14, file, 128, 16, 6520);
     			attr_dev(div26, "class", "imgBx svelte-1vgpxsg");
-    			add_location(div26, file, 125, 12, 6352);
+    			add_location(div26, file, 127, 12, 6484);
     			attr_dev(h33, "class", "svelte-1vgpxsg");
-    			add_location(h33, file, 129, 16, 6497);
+    			add_location(h33, file, 132, 20, 6744);
+    			attr_dev(a7, "href", "https://fl4viooliveira.github.io/blogr_landing_page/");
+    			attr_dev(a7, "target", "_blank");
+    			attr_dev(a7, "class", "svelte-1vgpxsg");
+    			add_location(a7, file, 131, 16, 6629);
     			attr_dev(div27, "class", "textBx svelte-1vgpxsg");
-    			add_location(div27, file, 128, 12, 6460);
+    			add_location(div27, file, 130, 12, 6592);
     			attr_dev(div28, "class", "workBx svelte-1vgpxsg");
-    			add_location(div28, file, 124, 8, 6319);
+    			add_location(div28, file, 126, 8, 6451);
     			if (img15.src !== (img15_src_value = "images/img5.jpg")) attr_dev(img15, "src", img15_src_value);
     			attr_dev(img15, "alt", "work-5");
     			attr_dev(img15, "class", "svelte-1vgpxsg");
-    			add_location(img15, file, 134, 16, 6628);
+    			add_location(img15, file, 138, 16, 6898);
     			attr_dev(div29, "class", "imgBx svelte-1vgpxsg");
-    			add_location(div29, file, 133, 12, 6592);
+    			add_location(div29, file, 137, 12, 6862);
     			attr_dev(h34, "class", "svelte-1vgpxsg");
-    			add_location(h34, file, 137, 16, 6737);
+    			add_location(h34, file, 141, 16, 7007);
     			attr_dev(div30, "class", "textBx svelte-1vgpxsg");
-    			add_location(div30, file, 136, 12, 6700);
+    			add_location(div30, file, 140, 12, 6970);
     			attr_dev(div31, "class", "workBx svelte-1vgpxsg");
-    			add_location(div31, file, 132, 8, 6559);
+    			add_location(div31, file, 136, 8, 6829);
     			if (img16.src !== (img16_src_value = "images/img6.jpg")) attr_dev(img16, "src", img16_src_value);
     			attr_dev(img16, "alt", "work-6");
     			attr_dev(img16, "class", "svelte-1vgpxsg");
-    			add_location(img16, file, 142, 16, 6868);
+    			add_location(img16, file, 146, 16, 7138);
     			attr_dev(div32, "class", "imgBx svelte-1vgpxsg");
-    			add_location(div32, file, 141, 12, 6832);
+    			add_location(div32, file, 145, 12, 7102);
     			attr_dev(h35, "class", "svelte-1vgpxsg");
-    			add_location(h35, file, 145, 16, 6977);
+    			add_location(h35, file, 149, 16, 7247);
     			attr_dev(div33, "class", "textBx svelte-1vgpxsg");
-    			add_location(div33, file, 144, 12, 6940);
+    			add_location(div33, file, 148, 12, 7210);
     			attr_dev(div34, "class", "workBx svelte-1vgpxsg");
-    			add_location(div34, file, 140, 8, 6799);
+    			add_location(div34, file, 144, 8, 7069);
     			if (img17.src !== (img17_src_value = "images/img7.jpg")) attr_dev(img17, "src", img17_src_value);
     			attr_dev(img17, "alt", "work-7");
     			attr_dev(img17, "class", "svelte-1vgpxsg");
-    			add_location(img17, file, 150, 16, 7108);
+    			add_location(img17, file, 154, 16, 7378);
     			attr_dev(div35, "class", "imgBx svelte-1vgpxsg");
-    			add_location(div35, file, 149, 12, 7072);
+    			add_location(div35, file, 153, 12, 7342);
     			attr_dev(h36, "class", "svelte-1vgpxsg");
-    			add_location(h36, file, 153, 16, 7217);
+    			add_location(h36, file, 157, 16, 7487);
     			attr_dev(div36, "class", "textBx svelte-1vgpxsg");
-    			add_location(div36, file, 152, 12, 7180);
+    			add_location(div36, file, 156, 12, 7450);
     			attr_dev(div37, "class", "workBx svelte-1vgpxsg");
-    			add_location(div37, file, 148, 8, 7039);
+    			add_location(div37, file, 152, 8, 7309);
     			if (img18.src !== (img18_src_value = "images/img8.jpg")) attr_dev(img18, "src", img18_src_value);
     			attr_dev(img18, "alt", "work-8");
     			attr_dev(img18, "class", "svelte-1vgpxsg");
-    			add_location(img18, file, 158, 16, 7348);
+    			add_location(img18, file, 162, 16, 7618);
     			attr_dev(div38, "class", "imgBx svelte-1vgpxsg");
-    			add_location(div38, file, 157, 12, 7312);
+    			add_location(div38, file, 161, 12, 7582);
     			attr_dev(h37, "class", "svelte-1vgpxsg");
-    			add_location(h37, file, 161, 16, 7457);
+    			add_location(h37, file, 165, 16, 7727);
     			attr_dev(div39, "class", "textBx svelte-1vgpxsg");
-    			add_location(div39, file, 160, 12, 7420);
+    			add_location(div39, file, 164, 12, 7690);
     			attr_dev(div40, "class", "workBx svelte-1vgpxsg");
-    			add_location(div40, file, 156, 8, 7279);
+    			add_location(div40, file, 160, 8, 7549);
     			attr_dev(div41, "class", "content svelte-1vgpxsg");
     			add_location(div41, file, 95, 4, 5272);
     			attr_dev(section3, "class", "work svelte-1vgpxsg");
     			attr_dev(section3, "id", "work");
     			add_location(section3, file, 90, 0, 4993);
     			attr_dev(h210, "class", "svelte-1vgpxsg");
-    			add_location(h210, file, 169, 8, 7632);
+    			add_location(h210, file, 173, 8, 7902);
     			attr_dev(p11, "class", "svelte-1vgpxsg");
-    			add_location(p11, file, 170, 8, 7660);
+    			add_location(p11, file, 174, 8, 7930);
     			attr_dev(div42, "class", "title white svelte-1vgpxsg");
-    			add_location(div42, file, 168, 4, 7598);
+    			add_location(div42, file, 172, 4, 7868);
     			attr_dev(input0, "type", "text");
     			attr_dev(input0, "name", "first_name");
     			attr_dev(input0, "placeholder", "First Name");
     			attr_dev(input0, "class", "svelte-1vgpxsg");
-    			add_location(input0, file, 176, 20, 8053);
+    			add_location(input0, file, 180, 20, 8323);
     			attr_dev(div43, "class", "col50 svelte-1vgpxsg");
-    			add_location(div43, file, 175, 16, 8013);
+    			add_location(div43, file, 179, 16, 8283);
     			attr_dev(input1, "type", "text");
     			attr_dev(input1, "name", "last_name");
     			attr_dev(input1, "placeholder", "Last Name");
     			attr_dev(input1, "class", "svelte-1vgpxsg");
-    			add_location(input1, file, 179, 20, 8195);
+    			add_location(input1, file, 183, 20, 8465);
     			attr_dev(div44, "class", "col50 svelte-1vgpxsg");
-    			add_location(div44, file, 178, 16, 8155);
+    			add_location(div44, file, 182, 16, 8425);
     			attr_dev(div45, "class", "row svelte-1vgpxsg");
-    			add_location(div45, file, 174, 12, 7979);
+    			add_location(div45, file, 178, 12, 8249);
     			attr_dev(input2, "type", "email");
     			attr_dev(input2, "name", "email");
     			attr_dev(input2, "placeholder", "Email");
     			attr_dev(input2, "class", "svelte-1vgpxsg");
-    			add_location(input2, file, 184, 20, 8384);
+    			add_location(input2, file, 188, 20, 8654);
     			attr_dev(div46, "class", "col50 svelte-1vgpxsg");
-    			add_location(div46, file, 183, 16, 8344);
+    			add_location(div46, file, 187, 16, 8614);
     			attr_dev(input3, "type", "text");
     			attr_dev(input3, "name", "subject");
     			attr_dev(input3, "placeholder", "Subject");
     			attr_dev(input3, "class", "svelte-1vgpxsg");
-    			add_location(input3, file, 187, 20, 8517);
+    			add_location(input3, file, 191, 20, 8787);
     			attr_dev(div47, "class", "col50 svelte-1vgpxsg");
-    			add_location(div47, file, 186, 16, 8477);
+    			add_location(div47, file, 190, 16, 8747);
     			attr_dev(div48, "class", "row svelte-1vgpxsg");
-    			add_location(div48, file, 182, 12, 8310);
+    			add_location(div48, file, 186, 12, 8580);
     			attr_dev(textarea, "name", "message");
     			attr_dev(textarea, "placeholder", "Message");
     			attr_dev(textarea, "class", "svelte-1vgpxsg");
-    			add_location(textarea, file, 192, 20, 8703);
+    			add_location(textarea, file, 196, 20, 8973);
     			attr_dev(div49, "class", "col100 svelte-1vgpxsg");
-    			add_location(div49, file, 191, 16, 8662);
+    			add_location(div49, file, 195, 16, 8932);
     			attr_dev(div50, "class", "row svelte-1vgpxsg");
-    			add_location(div50, file, 190, 12, 8628);
+    			add_location(div50, file, 194, 12, 8898);
     			attr_dev(input4, "type", "submit");
     			input4.value = "Send";
     			attr_dev(input4, "class", "svelte-1vgpxsg");
-    			add_location(input4, file, 198, 24, 8924);
+    			add_location(input4, file, 202, 24, 9194);
     			attr_dev(button, "class", "svelte-1vgpxsg");
-    			add_location(button, file, 197, 20, 8891);
+    			add_location(button, file, 201, 20, 9161);
     			attr_dev(div51, "class", "col100 svelte-1vgpxsg");
-    			add_location(div51, file, 196, 16, 8850);
+    			add_location(div51, file, 200, 16, 9120);
     			attr_dev(div52, "class", "row svelte-1vgpxsg");
-    			add_location(div52, file, 195, 12, 8816);
+    			add_location(div52, file, 199, 12, 9086);
     			attr_dev(div53, "class", "contactForm svelte-1vgpxsg");
-    			add_location(div53, file, 173, 8, 7941);
+    			add_location(div53, file, 177, 8, 8211);
     			attr_dev(form, "action", "https://getform.io/f/04feb2e1-24e2-4e73-98b3-837225c11041");
     			attr_dev(form, "method", "POST");
     			attr_dev(form, "class", "svelte-1vgpxsg");
-    			add_location(form, file, 172, 4, 7845);
+    			add_location(form, file, 176, 4, 8115);
     			attr_dev(section4, "class", "contact svelte-1vgpxsg");
     			attr_dev(section4, "id", "contact");
-    			add_location(section4, file, 167, 0, 7555);
+    			add_location(section4, file, 171, 0, 7825);
     			attr_dev(p12, "class", "svelte-1vgpxsg");
-    			add_location(p12, file, 207, 4, 9098);
+    			add_location(p12, file, 211, 4, 9368);
     			attr_dev(div54, "class", "copyright svelte-1vgpxsg");
-    			add_location(div54, file, 206, 0, 9070);
-    			attr_dev(a6, "href", "#home");
-    			attr_dev(a6, "class", "svelte-1vgpxsg");
-    			toggle_class(a6, "active", /*active*/ ctx[0]);
-    			add_location(a6, file, 212, 12, 9262);
-    			attr_dev(li3, "class", "svelte-1vgpxsg");
-    			add_location(li3, file, 212, 8, 9258);
-    			attr_dev(a7, "href", "#about");
-    			attr_dev(a7, "class", "svelte-1vgpxsg");
-    			toggle_class(a7, "active", /*active*/ ctx[0]);
-    			add_location(a7, file, 213, 12, 9341);
-    			attr_dev(li4, "class", "svelte-1vgpxsg");
-    			add_location(li4, file, 213, 8, 9337);
-    			attr_dev(a8, "href", "#services");
+    			add_location(div54, file, 210, 0, 9340);
+    			attr_dev(a8, "href", "#home");
     			attr_dev(a8, "class", "svelte-1vgpxsg");
     			toggle_class(a8, "active", /*active*/ ctx[0]);
-    			add_location(a8, file, 214, 12, 9422);
-    			attr_dev(li5, "class", "svelte-1vgpxsg");
-    			add_location(li5, file, 214, 8, 9418);
-    			attr_dev(a9, "href", "#work");
+    			add_location(a8, file, 216, 12, 9532);
+    			attr_dev(li3, "class", "svelte-1vgpxsg");
+    			add_location(li3, file, 216, 8, 9528);
+    			attr_dev(a9, "href", "#about");
     			attr_dev(a9, "class", "svelte-1vgpxsg");
     			toggle_class(a9, "active", /*active*/ ctx[0]);
-    			add_location(a9, file, 215, 12, 9509);
-    			attr_dev(li6, "class", "svelte-1vgpxsg");
-    			add_location(li6, file, 215, 8, 9505);
-    			attr_dev(a10, "href", "#contact");
+    			add_location(a9, file, 217, 12, 9611);
+    			attr_dev(li4, "class", "svelte-1vgpxsg");
+    			add_location(li4, file, 217, 8, 9607);
+    			attr_dev(a10, "href", "#services");
     			attr_dev(a10, "class", "svelte-1vgpxsg");
     			toggle_class(a10, "active", /*active*/ ctx[0]);
-    			add_location(a10, file, 216, 12, 9588);
+    			add_location(a10, file, 218, 12, 9692);
+    			attr_dev(li5, "class", "svelte-1vgpxsg");
+    			add_location(li5, file, 218, 8, 9688);
+    			attr_dev(a11, "href", "#work");
+    			attr_dev(a11, "class", "svelte-1vgpxsg");
+    			toggle_class(a11, "active", /*active*/ ctx[0]);
+    			add_location(a11, file, 219, 12, 9779);
+    			attr_dev(li6, "class", "svelte-1vgpxsg");
+    			add_location(li6, file, 219, 8, 9775);
+    			attr_dev(a12, "href", "#contact");
+    			attr_dev(a12, "class", "svelte-1vgpxsg");
+    			toggle_class(a12, "active", /*active*/ ctx[0]);
+    			add_location(a12, file, 220, 12, 9858);
     			attr_dev(li7, "class", "svelte-1vgpxsg");
-    			add_location(li7, file, 216, 8, 9584);
+    			add_location(li7, file, 220, 8, 9854);
     			attr_dev(ul1, "class", "menu svelte-1vgpxsg");
-    			add_location(ul1, file, 211, 4, 9232);
+    			add_location(ul1, file, 215, 4, 9502);
     			attr_dev(div55, "class", "sidebar svelte-1vgpxsg");
     			toggle_class(div55, "active", /*active*/ ctx[0]);
-    			add_location(div55, file, 210, 0, 9160);
+    			add_location(div55, file, 214, 0, 9430);
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -1656,14 +1668,16 @@ var app = (function () {
     			append_dev(div23, img13);
     			append_dev(div25, t73);
     			append_dev(div25, div24);
-    			append_dev(div24, h32);
+    			append_dev(div24, a6);
+    			append_dev(a6, h32);
     			append_dev(div41, t75);
     			append_dev(div41, div28);
     			append_dev(div28, div26);
     			append_dev(div26, img14);
     			append_dev(div28, t76);
     			append_dev(div28, div27);
-    			append_dev(div27, h33);
+    			append_dev(div27, a7);
+    			append_dev(a7, h33);
     			append_dev(div41, t78);
     			append_dev(div41, div31);
     			append_dev(div31, div29);
@@ -1730,28 +1744,28 @@ var app = (function () {
     			insert_dev(target, div55, anchor);
     			append_dev(div55, ul1);
     			append_dev(ul1, li3);
-    			append_dev(li3, a6);
+    			append_dev(li3, a8);
     			append_dev(ul1, t104);
     			append_dev(ul1, li4);
-    			append_dev(li4, a7);
+    			append_dev(li4, a9);
     			append_dev(ul1, t106);
     			append_dev(ul1, li5);
-    			append_dev(li5, a8);
+    			append_dev(li5, a10);
     			append_dev(ul1, t108);
     			append_dev(ul1, li6);
-    			append_dev(li6, a9);
+    			append_dev(li6, a11);
     			append_dev(ul1, t110);
     			append_dev(ul1, li7);
-    			append_dev(li7, a10);
+    			append_dev(li7, a12);
 
     			if (!mounted) {
     				dispose = [
     					listen_dev(div0, "click", /*click_handler*/ ctx[1], false, false, false),
-    					listen_dev(a6, "click", /*click_handler_1*/ ctx[2], false, false, false),
-    					listen_dev(a7, "click", /*click_handler_2*/ ctx[3], false, false, false),
-    					listen_dev(a8, "click", /*click_handler_3*/ ctx[4], false, false, false),
-    					listen_dev(a9, "click", /*click_handler_4*/ ctx[5], false, false, false),
-    					listen_dev(a10, "click", /*click_handler_5*/ ctx[6], false, false, false),
+    					listen_dev(a8, "click", /*click_handler_1*/ ctx[2], false, false, false),
+    					listen_dev(a9, "click", /*click_handler_2*/ ctx[3], false, false, false),
+    					listen_dev(a10, "click", /*click_handler_3*/ ctx[4], false, false, false),
+    					listen_dev(a11, "click", /*click_handler_4*/ ctx[5], false, false, false),
+    					listen_dev(a12, "click", /*click_handler_5*/ ctx[6], false, false, false),
     					listen_dev(div55, "click", /*click_handler_6*/ ctx[7], false, false, false)
     				];
 
@@ -1764,14 +1778,6 @@ var app = (function () {
     			}
 
     			if (dirty & /*active*/ 1) {
-    				toggle_class(a6, "active", /*active*/ ctx[0]);
-    			}
-
-    			if (dirty & /*active*/ 1) {
-    				toggle_class(a7, "active", /*active*/ ctx[0]);
-    			}
-
-    			if (dirty & /*active*/ 1) {
     				toggle_class(a8, "active", /*active*/ ctx[0]);
     			}
 
@@ -1781,6 +1787,14 @@ var app = (function () {
 
     			if (dirty & /*active*/ 1) {
     				toggle_class(a10, "active", /*active*/ ctx[0]);
+    			}
+
+    			if (dirty & /*active*/ 1) {
+    				toggle_class(a11, "active", /*active*/ ctx[0]);
+    			}
+
+    			if (dirty & /*active*/ 1) {
+    				toggle_class(a12, "active", /*active*/ ctx[0]);
     			}
 
     			if (dirty & /*active*/ 1) {
