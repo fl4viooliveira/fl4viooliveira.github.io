@@ -37,7 +37,7 @@
     <div class="content">
         <div class="textBx">
             <p>
-                I'm Flavio, continuously working to improve my web development skills with JavaScript and Svelte for frontend, Python and Django on the backend. I'm working on e-commerce that integrates a print on demand API on the Django backend with the Svelte frontend. This project has been a tremendous challenge to apply my primary skills in one project. It will consume an API, will work on an SQL database that will communicate with the frontend through a restful API.<br><br>
+                I'm Flavio, continuously working to improve my web development skills on the frontend, basically using Svelte framework, JavaScript, CSS3 and HTML5.  On the backend, we are mainly developing using the Django framework, Python and SQL database. I'm working as a freelancer, developing some web solutions for projects with scalable perspectives and integrating Django Rest API with the Svelte frontend.  In this way, we could see some fantastic plans, project, and dreams get off the paper to reality.<br><br>
                 I speak Portuguese, English, and Spanish at the lower level.<br> 
                 I consider the most substantial skill of mine "fast adaptation." I could confirm it in the last six years, moving country, changing the job, and adapting well in diverse environments.<br><br>                
                 I used to be an athlete in Jiu Jitsu. I still compete, sometimes. I just described it because this experience helps me to push myself to be better day by day.  
@@ -56,33 +56,33 @@
     </div>
     <div class="content">
         <div class="servicesBx">
-            <img src="images/icon1.png" alt="Web Design icon">
-            <h2>Web Design</h2>
-            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nemo rerum, dolores soluta aperiam odit nostrum, quae unde voluptatem asperiores delectus dolorum.</p>
-        </div>
-        <div class="servicesBx">
-            <img src="images/icon2.png" alt="Web Design icon">
+            <img src="images/webdevelopment.png" alt="Web Development icon">
             <h2>Web Development</h2>
             <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nemo rerum, dolores soluta aperiam odit nostrum, quae unde voluptatem asperiores delectus dolorum.</p>
         </div>
         <div class="servicesBx">
-            <img src="images/icon3.png" alt="Web Design icon">
-            <h2>Android Apps</h2>
+            <img src="images/webdesign.png" alt="Web Development icon">
+            <h2>Web Design</h2>
             <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nemo rerum, dolores soluta aperiam odit nostrum, quae unde voluptatem asperiores delectus dolorum.</p>
         </div>
         <div class="servicesBx">
-            <img src="images/icon4.png" alt="Web Design icon">
-            <h2>Photography</h2>
+            <img src="images/frontend.png" alt="Frontend icon">
+            <h2>Frontend</h2>
             <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nemo rerum, dolores soluta aperiam odit nostrum, quae unde voluptatem asperiores delectus dolorum.</p>
         </div>
         <div class="servicesBx">
-            <img src="images/icon5.png" alt="Web Design icon">
-            <h2>Content Writing</h2>
+            <img src="images/backend.png" alt="Backend icon">
+            <h2>Backend</h2>
             <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nemo rerum, dolores soluta aperiam odit nostrum, quae unde voluptatem asperiores delectus dolorum.</p>
         </div>
         <div class="servicesBx">
-            <img src="images/icon6.png" alt="Web Design icon">
-            <h2>Video Editing</h2>
+            <img src="images/deployment.png" alt="Deployment icon">
+            <h2>Deployment</h2>
+            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nemo rerum, dolores soluta aperiam odit nostrum, quae unde voluptatem asperiores delectus dolorum.</p>
+        </div>
+        <div class="servicesBx">
+          <img src="images/administrator.png" alt="Administrator icon">
+          <h2>Website Administration</h2>
             <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nemo rerum, dolores soluta aperiam odit nostrum, quae unde voluptatem asperiores delectus dolorum.</p>
         </div>
     </div>
