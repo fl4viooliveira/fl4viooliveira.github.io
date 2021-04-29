@@ -13,7 +13,7 @@
         <img src="images/bg.jpg" alt="">
     </div>
     <div class="contentBx">
-        <h5 class="logoText">Fl4.Dev</h5>
+      <h5 class="logoText">Fl4v.io</h5>
         <div>
             <h4><span>Hello</span>, I'm</h4>
             <h2>Flavio Oliveira</h2>
@@ -52,38 +52,38 @@
 <section class="services" id="services">
     <div class="title">
         <h2>Our Services</h2>
-        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Officia sapiente repellendus numquam iste impedit dolorum earum minima. Nisi ex eligendi ad illo officia!</p>
+        <p>It is the services that we offer to help you bring your project to life. We can do any step separately or the whole process from scratch to the deployment.</p>
     </div>
     <div class="content">
         <div class="servicesBx">
             <img src="images/webdevelopment.png" alt="Web Development icon">
             <h2>Web Development</h2>
-            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nemo rerum, dolores soluta aperiam odit nostrum, quae unde voluptatem asperiores delectus dolorum.</p>
+            <p>We develop intuitive software solutions for businesses. This helps to streamline, improve, and convert across a range of web based applications.</p>
         </div>
         <div class="servicesBx">
             <img src="images/webdesign.png" alt="Web Development icon">
             <h2>Web Design</h2>
-            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nemo rerum, dolores soluta aperiam odit nostrum, quae unde voluptatem asperiores delectus dolorum.</p>
+            <p>By creating the perfect visual identity for your project, we aim to attract the attention of your audience with much more than just a logo refresh.</p>
         </div>
         <div class="servicesBx">
             <img src="images/frontend.png" alt="Frontend icon">
             <h2>Frontend</h2>
-            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nemo rerum, dolores soluta aperiam odit nostrum, quae unde voluptatem asperiores delectus dolorum.</p>
+            <p>We’ll guarantee your website works over a range of popular devices. Whether you need to function on tablets or mobile, we have the skills to make it happen.</p>
         </div>
         <div class="servicesBx">
             <img src="images/backend.png" alt="Backend icon">
             <h2>Backend</h2>
-            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nemo rerum, dolores soluta aperiam odit nostrum, quae unde voluptatem asperiores delectus dolorum.</p>
+            <p>Our backend applications usually are scalable and structured in one way to give you the possibility to grow with your project, adding easily new functionalities.</p>
         </div>
         <div class="servicesBx">
             <img src="images/deployment.png" alt="Deployment icon">
             <h2>Deployment</h2>
-            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nemo rerum, dolores soluta aperiam odit nostrum, quae unde voluptatem asperiores delectus dolorum.</p>
+            <p>We can deploy and administrate your applications on clouds services like AWS, Azure, Google Cloud and others. </p>
         </div>
         <div class="servicesBx">
           <img src="images/administrator.png" alt="Administrator icon">
           <h2>Website Administration</h2>
-            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nemo rerum, dolores soluta aperiam odit nostrum, quae unde voluptatem asperiores delectus dolorum.</p>
+        <p>If something has broken on your website, it needs to be fixed – fast. You’ll have someone on hand at all times, ready to resolve any issues that arise quickly and efficiently.</p>
         </div>
     </div>
 </section>
@@ -91,7 +91,7 @@
 <section class="work" id="work">
     <div class="title">
         <h2>Recent Work</h2>
-        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Officia sapiente repellendus numquam iste impedit dolorum earum minima. Nisi ex eligendi ad illo officia!</p>
+        <p>Here are some studies, projects and jobs that we recently did to expose some technique and styles that we can use in your projects.</p>
     </div>
     <div class="content">
         <div class="workBx">
@@ -172,7 +172,7 @@
 <section class="contact" id="contact">
     <div class="title white">
         <h2>Contact Us</h2>
-        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Officia sapiente repellendus numquam iste impedit dolorum earum minima. Nisi ex eligendi ad illo officia!</p>
+        <p>Use this form to tell us about your project or idea; let's talk about how to make this happen.</p>
     </div>
     <form action="https://getform.io/f/04feb2e1-24e2-4e73-98b3-837225c11041" method="POST">
         <div class="contactForm">
