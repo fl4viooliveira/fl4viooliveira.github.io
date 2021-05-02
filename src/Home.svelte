@@ -22,9 +22,9 @@
             <a href="#about" class="btn">About Me</a>
         </div>
         <ul class="sci">
-            <li><a href="#0"><img src="images/facebook.png" alt="facebook"></a></li>
-            <li><a href="#0"><img src="images/twitter.png" alt="twitter"></a></li>
-            <li><a href="#0"><img src="images/instagram.png" alt="instagram"></a></li>
+          <!--<li><a href="#0"><img src="images/facebook.png" alt="facebook"></a></li>-->
+            <li><a href="https://twitter.com/fl4viooliveira"><img src="images/twitter.png" alt="twitter" target="_blank"></a></li>
+            <!--<li><a href="#0"><img src="images/instagram.png" alt="instagram"></a></li>-->
         </ul>
     </div>
 </section>
@@ -134,7 +134,7 @@
                 </a>
             </div>
         </div>
-        <div class="workBx">
+        <!--<div class="workBx">
             <div class="imgBx">
                 <img src="images/img5.jpg" alt="work-5">
             </div>
@@ -165,7 +165,7 @@
             <div class="textBx">
                 <h3>Project 08</h3>
             </div>
-        </div>
+        </div> -->
     </div>
 </section>
 <!-- Contact Page -->
