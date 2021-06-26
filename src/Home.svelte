@@ -1,4 +1,13 @@
 <script>
+    import {onMount} from 'svelte';
+    import {createScene} from './scene.js'
+
+    let webgl;
+
+    onMount(() => {
+        createScene(webgl)
+    });
+
     let active = false
 </script>
 
@@ -8,7 +17,7 @@
 
 <div class="toggle" class:active on:click={() => active= !active}></div>
 <!-- Home Page -->
-<section class="banner" id="home">
+<canvas bind:this={webgl} class="banner" id="home">
     <div class="imgSidebar">
         <img src="images/bg.jpg" alt="">
     </div>
@@ -27,7 +36,7 @@
             <!--<li><a href="#0"><img src="images/instagram.png" alt="instagram"></a></li>-->
         </ul>
     </div>
-</section>
+</canvas>
 <!-- About-Us Page -->
 <section class="about" id="about">
     <div class="title white">
