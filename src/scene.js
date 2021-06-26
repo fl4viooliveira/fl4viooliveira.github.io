@@ -1,29 +1,78 @@
-import * as THREE from 'three';
+import * as THREE from "three";
+import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 
+/**
+ * Base
+ */
+// Canvas
+const canvas = document.querySelector("canvas.webgl");
+
+// Scene
 const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-const geometry = new THREE.BoxGeometry();
-const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
-const cube = new THREE.Mesh(geometry, material);
-let renderer;
-scene.add(cube);
-camera.position.z = 5;
 
-const animate = () => {
-  requestAnimationFrame(animate);
-  cube.rotation.x += 0.01;
-  cube.rotation.y += 0.01;
-  renderer.render(scene, camera);
+// Objects
+const geometry = new THREE.BoxGeometry(1, 1, 1);
+const material = new THREE.MeshBasicMaterial({ color: 0xff0000 });
+const mesh = new THREE.Mesh(geometry, material);
+scene.add(mesh);
+
+// Sizes
+const sizes = {
+  width: window.innerWidth,
+  height: window.innerHeight,
 };
 
-const resize = () => {
-  renderer.setSize(window.innerWidth, window.innerHeight)
-  camera.aspect = window.innerWidth / window.innerHeight;
+window.addEventListener("resize", () => {
+  // Update sizes
+  sizes.width = window.innerWidth;
+  sizes.height = window.innerHeight;
+
+  // Update camera
+  camera.aspect = sizes.width / sizes.height;
   camera.updateProjectionMatrix();
-};
+
+  // Update renderer
+  renderer.setSize(sizes.width, sizes.height);
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+});
+
+// Camera
+const camera = new THREE.PerspectiveCamera(
+  75,
+  sizes.width / sizes.height,
+  0.1,
+  100
+);
+camera.position.z = 3;
+scene.add(camera);
+
+// Renderer
+let renderer;
 
 export const createScene = (webgl) => {
-  renderer = new THREE.WebGLRenderer({ antialias: true, canvas: webgl });
-  resize();
-  animate();
-}
+  renderer = new THREE.WebGLRenderer({ canvas: webgl });
+  renderer.setSize(sizes.width, sizes.height);
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  // Controls
+  const controls = new OrbitControls(camera, webgl);
+  controls.enabled = true;
+
+  // Animate
+  const clock = new THREE.Clock();
+
+  const tick = () => {
+    const elapsedTime = clock.getElapsedTime();
+
+    // Update controls
+    controls.update();
+
+    // Render
+    renderer.render(scene, camera);
+    renderer.setClearColor("#ffffff");
+
+    // Call tick again on the next frame
+    window.requestAnimationFrame(tick);
+  };
+
+  tick();
+};
