@@ -17,11 +17,11 @@
 
 <div class="toggle" class:active on:click={() => active= !active}></div>
 <!-- Home Page -->
-<canvas bind:this={webgl} class="banner" id="home">
+<section class="banner" id="home">
     <div class="imgSidebar">
         <img src="images/bg.jpg" alt="">
     </div>
-    <div class="contentBx">
+    <canvas bind:this={webgl} class="contentBx">
       <h5 class="logoText">Fl4v.io</h5>
         <div>
             <h4><span>Hello</span>, I'm</h4>
@@ -31,12 +31,12 @@
             <a href="#about" class="btn">About Me</a>
         </div>
         <ul class="sci">
-          <!--<li><a href="#0"><img src="images/facebook.png" alt="facebook"></a></li>-->
+            <li><a href="#0"><img src="images/facebook.png" alt="facebook"></a></li>
             <li><a href="https://twitter.com/fl4viooliveira"><img src="images/twitter.png" alt="twitter" target="_blank"></a></li>
-            <!--<li><a href="#0"><img src="images/instagram.png" alt="instagram"></a></li>-->
+            <li><a href="#0"><img src="images/instagram.png" alt="instagram"></a></li>
         </ul>
-    </div>
-</canvas>
+    </canvas>
+</section>
 <!-- About-Us Page -->
 <section class="about" id="about">
     <div class="title white">

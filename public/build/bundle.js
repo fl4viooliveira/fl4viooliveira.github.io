@@ -25913,6 +25913,268 @@ var app = (function () {
 
     Scene.prototype.isScene = true;
 
+    class CylinderGeometry extends BufferGeometry {
+
+    	constructor( radiusTop = 1, radiusBottom = 1, height = 1, radialSegments = 8, heightSegments = 1, openEnded = false, thetaStart = 0, thetaLength = Math.PI * 2 ) {
+
+    		super();
+    		this.type = 'CylinderGeometry';
+
+    		this.parameters = {
+    			radiusTop: radiusTop,
+    			radiusBottom: radiusBottom,
+    			height: height,
+    			radialSegments: radialSegments,
+    			heightSegments: heightSegments,
+    			openEnded: openEnded,
+    			thetaStart: thetaStart,
+    			thetaLength: thetaLength
+    		};
+
+    		const scope = this;
+
+    		radialSegments = Math.floor( radialSegments );
+    		heightSegments = Math.floor( heightSegments );
+
+    		// buffers
+
+    		const indices = [];
+    		const vertices = [];
+    		const normals = [];
+    		const uvs = [];
+
+    		// helper variables
+
+    		let index = 0;
+    		const indexArray = [];
+    		const halfHeight = height / 2;
+    		let groupStart = 0;
+
+    		// generate geometry
+
+    		generateTorso();
+
+    		if ( openEnded === false ) {
+
+    			if ( radiusTop > 0 ) generateCap( true );
+    			if ( radiusBottom > 0 ) generateCap( false );
+
+    		}
+
+    		// build geometry
+
+    		this.setIndex( indices );
+    		this.setAttribute( 'position', new Float32BufferAttribute( vertices, 3 ) );
+    		this.setAttribute( 'normal', new Float32BufferAttribute( normals, 3 ) );
+    		this.setAttribute( 'uv', new Float32BufferAttribute( uvs, 2 ) );
+
+    		function generateTorso() {
+
+    			const normal = new Vector3();
+    			const vertex = new Vector3();
+
+    			let groupCount = 0;
+
+    			// this will be used to calculate the normal
+    			const slope = ( radiusBottom - radiusTop ) / height;
+
+    			// generate vertices, normals and uvs
+
+    			for ( let y = 0; y <= heightSegments; y ++ ) {
+
+    				const indexRow = [];
+
+    				const v = y / heightSegments;
+
+    				// calculate the radius of the current row
+
+    				const radius = v * ( radiusBottom - radiusTop ) + radiusTop;
+
+    				for ( let x = 0; x <= radialSegments; x ++ ) {
+
+    					const u = x / radialSegments;
+
+    					const theta = u * thetaLength + thetaStart;
+
+    					const sinTheta = Math.sin( theta );
+    					const cosTheta = Math.cos( theta );
+
+    					// vertex
+
+    					vertex.x = radius * sinTheta;
+    					vertex.y = - v * height + halfHeight;
+    					vertex.z = radius * cosTheta;
+    					vertices.push( vertex.x, vertex.y, vertex.z );
+
+    					// normal
+
+    					normal.set( sinTheta, slope, cosTheta ).normalize();
+    					normals.push( normal.x, normal.y, normal.z );
+
+    					// uv
+
+    					uvs.push( u, 1 - v );
+
+    					// save index of vertex in respective row
+
+    					indexRow.push( index ++ );
+
+    				}
+
+    				// now save vertices of the row in our index array
+
+    				indexArray.push( indexRow );
+
+    			}
+
+    			// generate indices
+
+    			for ( let x = 0; x < radialSegments; x ++ ) {
+
+    				for ( let y = 0; y < heightSegments; y ++ ) {
+
+    					// we use the index array to access the correct indices
+
+    					const a = indexArray[ y ][ x ];
+    					const b = indexArray[ y + 1 ][ x ];
+    					const c = indexArray[ y + 1 ][ x + 1 ];
+    					const d = indexArray[ y ][ x + 1 ];
+
+    					// faces
+
+    					indices.push( a, b, d );
+    					indices.push( b, c, d );
+
+    					// update group counter
+
+    					groupCount += 6;
+
+    				}
+
+    			}
+
+    			// add a group to the geometry. this will ensure multi material support
+
+    			scope.addGroup( groupStart, groupCount, 0 );
+
+    			// calculate new start value for groups
+
+    			groupStart += groupCount;
+
+    		}
+
+    		function generateCap( top ) {
+
+    			// save the index of the first center vertex
+    			const centerIndexStart = index;
+
+    			const uv = new Vector2();
+    			const vertex = new Vector3();
+
+    			let groupCount = 0;
+
+    			const radius = ( top === true ) ? radiusTop : radiusBottom;
+    			const sign = ( top === true ) ? 1 : - 1;
+
+    			// first we generate the center vertex data of the cap.
+    			// because the geometry needs one set of uvs per face,
+    			// we must generate a center vertex per face/segment
+
+    			for ( let x = 1; x <= radialSegments; x ++ ) {
+
+    				// vertex
+
+    				vertices.push( 0, halfHeight * sign, 0 );
+
+    				// normal
+
+    				normals.push( 0, sign, 0 );
+
+    				// uv
+
+    				uvs.push( 0.5, 0.5 );
+
+    				// increase index
+
+    				index ++;
+
+    			}
+
+    			// save the index of the last center vertex
+    			const centerIndexEnd = index;
+
+    			// now we generate the surrounding vertices, normals and uvs
+
+    			for ( let x = 0; x <= radialSegments; x ++ ) {
+
+    				const u = x / radialSegments;
+    				const theta = u * thetaLength + thetaStart;
+
+    				const cosTheta = Math.cos( theta );
+    				const sinTheta = Math.sin( theta );
+
+    				// vertex
+
+    				vertex.x = radius * sinTheta;
+    				vertex.y = halfHeight * sign;
+    				vertex.z = radius * cosTheta;
+    				vertices.push( vertex.x, vertex.y, vertex.z );
+
+    				// normal
+
+    				normals.push( 0, sign, 0 );
+
+    				// uv
+
+    				uv.x = ( cosTheta * 0.5 ) + 0.5;
+    				uv.y = ( sinTheta * 0.5 * sign ) + 0.5;
+    				uvs.push( uv.x, uv.y );
+
+    				// increase index
+
+    				index ++;
+
+    			}
+
+    			// generate indices
+
+    			for ( let x = 0; x < radialSegments; x ++ ) {
+
+    				const c = centerIndexStart + x;
+    				const i = centerIndexEnd + x;
+
+    				if ( top === true ) {
+
+    					// face top
+
+    					indices.push( i, i + 1, c );
+
+    				} else {
+
+    					// face bottom
+
+    					indices.push( i + 1, i, c );
+
+    				}
+
+    				groupCount += 3;
+
+    			}
+
+    			// add a group to the geometry. this will ensure multi material support
+
+    			scope.addGroup( groupStart, groupCount, top === true ? 1 : 2 );
+
+    			// calculate new start value for groups
+
+    			groupStart += groupCount;
+
+    		}
+
+    	}
+
+    }
+
     const Cache = {
 
     	enabled: false,
@@ -29250,31 +29512,42 @@ var app = (function () {
     // Scene
     const scene = new Scene();
 
-    // Objects
-    const geometry = new BoxGeometry(1, 1, 1);
-    const material = new MeshBasicMaterial({ color: 0xff0000 });
-    const mesh = new Mesh(geometry, material);
-    scene.add(mesh);
+    // usage:
+
+    // Monitor container
+    const monitor = new Group();
+    scene.add(monitor);
+
+    // Screen
+    const screen = new Mesh(
+      new BoxGeometry(5, 3, 0.1),
+      new MeshBasicMaterial({ color: "#57b6fa" })
+    );
+    // screen.position.z = -1;
+    // screen.position.x = 2.5;
+    monitor.add(screen);
+
+    // Base Cylinder
+    const baseCylinder = new Mesh(
+      new CylinderGeometry(0.3, 0.3, 0.4, 10),
+      new MeshBasicMaterial({ color: 0xffff00 })
+    );
+    baseCylinder.position.y = -1.67;
+    monitor.add(baseCylinder);
+
+    // Base Box
+    const baseBox = new Mesh(
+      new BoxGeometry(1.5, 0.08, 1),
+      new MeshBasicMaterial({ color: 0xffff00 })
+    );
+    baseBox.position.y = -1.9;
+    monitor.add(baseBox);
 
     // Sizes
     const sizes = {
       width: window.innerWidth,
       height: window.innerHeight,
     };
-
-    window.addEventListener("resize", () => {
-      // Update sizes
-      sizes.width = window.innerWidth;
-      sizes.height = window.innerHeight;
-
-      // Update camera
-      camera.aspect = sizes.width / sizes.height;
-      camera.updateProjectionMatrix();
-
-      // Update renderer
-      renderer.setSize(sizes.width, sizes.height);
-      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-    });
 
     // Camera
     const camera = new PerspectiveCamera(
@@ -29283,14 +29556,16 @@ var app = (function () {
       0.1,
       100
     );
-    camera.position.z = 3;
+    camera.position.z = 4;
+    // camera.position.x = 0.5;
+    // camera.position.y = 1;
     scene.add(camera);
 
     // Renderer
     let renderer;
 
     const createScene = (webgl) => {
-      renderer = new WebGLRenderer({ canvas: webgl });
+      renderer = new WebGLRenderer({ canvas: webgl, alpha: true });
       renderer.setSize(sizes.width, sizes.height);
       renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
       // Controls
@@ -29308,7 +29583,8 @@ var app = (function () {
 
         // Render
         renderer.render(scene, camera);
-        renderer.setClearColor("#ffffff");
+        renderer.setClearColor(0x000000, 0);
+        // renderer.setClearColor("#ffffff");
 
         // Call tick again on the next frame
         window.requestAnimationFrame(tick);
@@ -29317,6 +29593,20 @@ var app = (function () {
       tick();
     };
 
+    window.addEventListener("resize", () => {
+      // Update sizes
+      sizes.width = window.innerWidth;
+      sizes.height = window.innerHeight;
+
+      // Update camera
+      camera.aspect = sizes.width / sizes.height;
+      camera.updateProjectionMatrix();
+
+      // Update renderer
+      renderer.setSize(sizes.width, sizes.height);
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    });
+
     /* src/Home.svelte generated by Svelte v3.37.0 */
     const file = "src/Home.svelte";
 
@@ -29324,12 +29614,12 @@ var app = (function () {
     	let t0;
     	let div0;
     	let t1;
-    	let canvas;
+    	let section0;
     	let div1;
     	let img0;
     	let img0_src_value;
     	let t2;
-    	let div3;
+    	let canvas;
     	let h5;
     	let t4;
     	let div2;
@@ -29351,177 +29641,187 @@ var app = (function () {
     	let img1;
     	let img1_src_value;
     	let t16;
-    	let section0;
-    	let div4;
-    	let h21;
-    	let t18;
-    	let p1;
-    	let t20;
-    	let div7;
-    	let div5;
-    	let p2;
-    	let t21;
-    	let br0;
-    	let br1;
-    	let t22;
-    	let br2;
-    	let t23;
-    	let br3;
-    	let br4;
-    	let t24;
-    	let t25;
-    	let div6;
+    	let li1;
+    	let a2;
     	let img2;
     	let img2_src_value;
-    	let t26;
-    	let section1;
-    	let div8;
-    	let h22;
-    	let t28;
-    	let p3;
-    	let t30;
-    	let div15;
-    	let div9;
+    	let t17;
+    	let li2;
+    	let a3;
     	let img3;
     	let img3_src_value;
-    	let t31;
-    	let h23;
-    	let t33;
-    	let p4;
-    	let t35;
-    	let div10;
+    	let t18;
+    	let section1;
+    	let div3;
+    	let h21;
+    	let t20;
+    	let p1;
+    	let t22;
+    	let div6;
+    	let div4;
+    	let p2;
+    	let t23;
+    	let br0;
+    	let br1;
+    	let t24;
+    	let br2;
+    	let t25;
+    	let br3;
+    	let br4;
+    	let t26;
+    	let t27;
+    	let div5;
     	let img4;
     	let img4_src_value;
-    	let t36;
-    	let h24;
-    	let t38;
-    	let p5;
-    	let t40;
-    	let div11;
+    	let t28;
+    	let section2;
+    	let div7;
+    	let h22;
+    	let t30;
+    	let p3;
+    	let t32;
+    	let div14;
+    	let div8;
     	let img5;
     	let img5_src_value;
-    	let t41;
-    	let h25;
-    	let t43;
-    	let p6;
-    	let t45;
-    	let div12;
+    	let t33;
+    	let h23;
+    	let t35;
+    	let p4;
+    	let t37;
+    	let div9;
     	let img6;
     	let img6_src_value;
-    	let t46;
-    	let h26;
-    	let t48;
-    	let p7;
-    	let t50;
-    	let div13;
+    	let t38;
+    	let h24;
+    	let t40;
+    	let p5;
+    	let t42;
+    	let div10;
     	let img7;
     	let img7_src_value;
-    	let t51;
-    	let h27;
-    	let t53;
-    	let p8;
-    	let t55;
-    	let div14;
+    	let t43;
+    	let h25;
+    	let t45;
+    	let p6;
+    	let t47;
+    	let div11;
     	let img8;
     	let img8_src_value;
-    	let t56;
-    	let h28;
-    	let t58;
-    	let p9;
-    	let t60;
-    	let section2;
-    	let div16;
-    	let h29;
-    	let t62;
-    	let p10;
-    	let t64;
-    	let div29;
-    	let div19;
-    	let div17;
+    	let t48;
+    	let h26;
+    	let t50;
+    	let p7;
+    	let t52;
+    	let div12;
     	let img9;
     	let img9_src_value;
-    	let t65;
-    	let div18;
-    	let a2;
-    	let h30;
-    	let t67;
-    	let div22;
-    	let div20;
+    	let t53;
+    	let h27;
+    	let t55;
+    	let p8;
+    	let t57;
+    	let div13;
     	let img10;
     	let img10_src_value;
-    	let t68;
-    	let div21;
-    	let a3;
-    	let h31;
-    	let t70;
-    	let div25;
-    	let div23;
+    	let t58;
+    	let h28;
+    	let t60;
+    	let p9;
+    	let t62;
+    	let section3;
+    	let div15;
+    	let h29;
+    	let t64;
+    	let p10;
+    	let t66;
+    	let div28;
+    	let div18;
+    	let div16;
     	let img11;
     	let img11_src_value;
-    	let t71;
-    	let div24;
+    	let t67;
+    	let div17;
     	let a4;
-    	let h32;
-    	let t73;
-    	let div28;
-    	let div26;
+    	let h30;
+    	let t69;
+    	let div21;
+    	let div19;
     	let img12;
     	let img12_src_value;
-    	let t74;
-    	let div27;
+    	let t70;
+    	let div20;
     	let a5;
-    	let h33;
+    	let h31;
+    	let t72;
+    	let div24;
+    	let div22;
+    	let img13;
+    	let img13_src_value;
+    	let t73;
+    	let div23;
+    	let a6;
+    	let h32;
+    	let t75;
+    	let div27;
+    	let div25;
+    	let img14;
+    	let img14_src_value;
     	let t76;
-    	let section3;
-    	let div30;
-    	let h210;
+    	let div26;
+    	let a7;
+    	let h33;
     	let t78;
-    	let p11;
+    	let section4;
+    	let div29;
+    	let h210;
     	let t80;
-    	let form;
-    	let div41;
-    	let div33;
-    	let div31;
-    	let input0;
-    	let t81;
-    	let div32;
-    	let input1;
+    	let p11;
     	let t82;
-    	let div36;
-    	let div34;
-    	let input2;
-    	let t83;
-    	let div35;
-    	let input3;
-    	let t84;
-    	let div38;
-    	let div37;
-    	let textarea;
-    	let t85;
+    	let form;
     	let div40;
+    	let div32;
+    	let div30;
+    	let input0;
+    	let t83;
+    	let div31;
+    	let input1;
+    	let t84;
+    	let div35;
+    	let div33;
+    	let input2;
+    	let t85;
+    	let div34;
+    	let input3;
+    	let t86;
+    	let div37;
+    	let div36;
+    	let textarea;
+    	let t87;
     	let div39;
+    	let div38;
     	let button;
     	let input4;
-    	let t86;
-    	let div42;
-    	let p12;
     	let t88;
-    	let div43;
-    	let ul1;
-    	let li1;
-    	let a6;
+    	let div41;
+    	let p12;
     	let t90;
-    	let li2;
-    	let a7;
-    	let t92;
+    	let div42;
+    	let ul1;
     	let li3;
     	let a8;
-    	let t94;
+    	let t92;
     	let li4;
     	let a9;
-    	let t96;
+    	let t94;
     	let li5;
     	let a10;
+    	let t96;
+    	let li6;
+    	let a11;
+    	let t98;
+    	let li7;
+    	let a12;
     	let mounted;
     	let dispose;
 
@@ -29530,11 +29830,11 @@ var app = (function () {
     			t0 = space();
     			div0 = element("div");
     			t1 = space();
-    			canvas = element("canvas");
+    			section0 = element("section");
     			div1 = element("div");
     			img0 = element("img");
     			t2 = space();
-    			div3 = element("div");
+    			canvas = element("canvas");
     			h5 = element("h5");
     			h5.textContent = "Fl4v.io";
     			t4 = space();
@@ -29561,196 +29861,204 @@ var app = (function () {
     			a1 = element("a");
     			img1 = element("img");
     			t16 = space();
-    			section0 = element("section");
-    			div4 = element("div");
+    			li1 = element("li");
+    			a2 = element("a");
+    			img2 = element("img");
+    			t17 = space();
+    			li2 = element("li");
+    			a3 = element("a");
+    			img3 = element("img");
+    			t18 = space();
+    			section1 = element("section");
+    			div3 = element("div");
     			h21 = element("h2");
     			h21.textContent = "About Us";
-    			t18 = space();
+    			t20 = space();
     			p1 = element("p");
     			p1.textContent = "I'm Flavio, continuously working to improve my web development skills.";
-    			t20 = space();
-    			div7 = element("div");
-    			div5 = element("div");
+    			t22 = space();
+    			div6 = element("div");
+    			div4 = element("div");
     			p2 = element("p");
-    			t21 = text("I'm Flavio, continuously working to improve my web development skills on the frontend, basically using Svelte framework, JavaScript, CSS3 and HTML5.  On the backend, we are mainly developing using the Django framework, Python and SQL database. I'm working as a freelancer, developing some web solutions for projects with scalable perspectives and integrating Django Rest API with the Svelte frontend.  In this way, we could see some fantastic plans, project, and dreams get off the paper to reality.");
+    			t23 = text("I'm Flavio, continuously working to improve my web development skills on the frontend, basically using Svelte framework, JavaScript, CSS3 and HTML5.  On the backend, we are mainly developing using the Django framework, Python and SQL database. I'm working as a freelancer, developing some web solutions for projects with scalable perspectives and integrating Django Rest API with the Svelte frontend.  In this way, we could see some fantastic plans, project, and dreams get off the paper to reality.");
     			br0 = element("br");
     			br1 = element("br");
-    			t22 = text("\n                I speak Portuguese, English, and Spanish at the lower level.");
+    			t24 = text("\n                I speak Portuguese, English, and Spanish at the lower level.");
     			br2 = element("br");
-    			t23 = text(" \n                I consider the most substantial skill of mine \"fast adaptation.\" I could confirm it in the last six years, moving country, changing the job, and adapting well in diverse environments.");
+    			t25 = text(" \n                I consider the most substantial skill of mine \"fast adaptation.\" I could confirm it in the last six years, moving country, changing the job, and adapting well in diverse environments.");
     			br3 = element("br");
     			br4 = element("br");
-    			t24 = text("                \n                I used to be an athlete in Jiu Jitsu. I still compete, sometimes. I just described it because this experience helps me to push myself to be better day by day.");
-    			t25 = space();
-    			div6 = element("div");
-    			img2 = element("img");
-    			t26 = space();
-    			section1 = element("section");
-    			div8 = element("div");
+    			t26 = text("                \n                I used to be an athlete in Jiu Jitsu. I still compete, sometimes. I just described it because this experience helps me to push myself to be better day by day.");
+    			t27 = space();
+    			div5 = element("div");
+    			img4 = element("img");
+    			t28 = space();
+    			section2 = element("section");
+    			div7 = element("div");
     			h22 = element("h2");
     			h22.textContent = "Our Services";
-    			t28 = space();
+    			t30 = space();
     			p3 = element("p");
     			p3.textContent = "It is the services that we offer to help you bring your project to life. We can do any step separately or the whole process from scratch to the deployment.";
-    			t30 = space();
-    			div15 = element("div");
-    			div9 = element("div");
-    			img3 = element("img");
-    			t31 = space();
+    			t32 = space();
+    			div14 = element("div");
+    			div8 = element("div");
+    			img5 = element("img");
+    			t33 = space();
     			h23 = element("h2");
     			h23.textContent = "Web Development";
-    			t33 = space();
+    			t35 = space();
     			p4 = element("p");
     			p4.textContent = "We develop intuitive software solutions for businesses. This helps to streamline, improve, and convert across a range of web based applications.";
-    			t35 = space();
-    			div10 = element("div");
-    			img4 = element("img");
-    			t36 = space();
+    			t37 = space();
+    			div9 = element("div");
+    			img6 = element("img");
+    			t38 = space();
     			h24 = element("h2");
     			h24.textContent = "Web Design";
-    			t38 = space();
+    			t40 = space();
     			p5 = element("p");
     			p5.textContent = "By creating the perfect visual identity for your project, we aim to attract the attention of your audience with much more than just a logo refresh.";
-    			t40 = space();
-    			div11 = element("div");
-    			img5 = element("img");
-    			t41 = space();
+    			t42 = space();
+    			div10 = element("div");
+    			img7 = element("img");
+    			t43 = space();
     			h25 = element("h2");
     			h25.textContent = "Frontend";
-    			t43 = space();
+    			t45 = space();
     			p6 = element("p");
     			p6.textContent = "We’ll guarantee your website works over a range of popular devices. Whether you need to function on tablets or mobile, we have the skills to make it happen.";
-    			t45 = space();
-    			div12 = element("div");
-    			img6 = element("img");
-    			t46 = space();
+    			t47 = space();
+    			div11 = element("div");
+    			img8 = element("img");
+    			t48 = space();
     			h26 = element("h2");
     			h26.textContent = "Backend";
-    			t48 = space();
+    			t50 = space();
     			p7 = element("p");
     			p7.textContent = "Our backend applications usually are scalable and structured in one way to give you the possibility to grow with your project, adding easily new functionalities.";
-    			t50 = space();
-    			div13 = element("div");
-    			img7 = element("img");
-    			t51 = space();
+    			t52 = space();
+    			div12 = element("div");
+    			img9 = element("img");
+    			t53 = space();
     			h27 = element("h2");
     			h27.textContent = "Deployment";
-    			t53 = space();
+    			t55 = space();
     			p8 = element("p");
     			p8.textContent = "We can deploy and administrate your applications on clouds services like AWS, Azure, Google Cloud and others.";
-    			t55 = space();
-    			div14 = element("div");
-    			img8 = element("img");
-    			t56 = space();
+    			t57 = space();
+    			div13 = element("div");
+    			img10 = element("img");
+    			t58 = space();
     			h28 = element("h2");
     			h28.textContent = "Website Administration";
-    			t58 = space();
+    			t60 = space();
     			p9 = element("p");
     			p9.textContent = "If something has broken on your website, it needs to be fixed – fast. You’ll have someone on hand at all times, ready to resolve any issues that arise quickly and efficiently.";
-    			t60 = space();
-    			section2 = element("section");
-    			div16 = element("div");
+    			t62 = space();
+    			section3 = element("section");
+    			div15 = element("div");
     			h29 = element("h2");
     			h29.textContent = "Recent Work";
-    			t62 = space();
+    			t64 = space();
     			p10 = element("p");
     			p10.textContent = "Here are some studies, projects and jobs that we recently did to expose some technique and styles that we can use in your projects.";
-    			t64 = space();
-    			div29 = element("div");
-    			div19 = element("div");
-    			div17 = element("div");
-    			img9 = element("img");
-    			t65 = space();
+    			t66 = space();
+    			div28 = element("div");
     			div18 = element("div");
-    			a2 = element("a");
+    			div16 = element("div");
+    			img11 = element("img");
+    			t67 = space();
+    			div17 = element("div");
+    			a4 = element("a");
     			h30 = element("h3");
     			h30.textContent = "Grid Layout";
-    			t67 = space();
-    			div22 = element("div");
-    			div20 = element("div");
-    			img10 = element("img");
-    			t68 = space();
+    			t69 = space();
     			div21 = element("div");
-    			a3 = element("a");
+    			div19 = element("div");
+    			img12 = element("img");
+    			t70 = space();
+    			div20 = element("div");
+    			a5 = element("a");
     			h31 = element("h3");
     			h31.textContent = "Animated Form";
-    			t70 = space();
-    			div25 = element("div");
-    			div23 = element("div");
-    			img11 = element("img");
-    			t71 = space();
+    			t72 = space();
     			div24 = element("div");
-    			a4 = element("a");
+    			div22 = element("div");
+    			img13 = element("img");
+    			t73 = space();
+    			div23 = element("div");
+    			a6 = element("a");
     			h32 = element("h3");
     			h32.textContent = "Profile Card";
-    			t73 = space();
-    			div28 = element("div");
-    			div26 = element("div");
-    			img12 = element("img");
-    			t74 = space();
+    			t75 = space();
     			div27 = element("div");
-    			a5 = element("a");
+    			div25 = element("div");
+    			img14 = element("img");
+    			t76 = space();
+    			div26 = element("div");
+    			a7 = element("a");
     			h33 = element("h3");
     			h33.textContent = "Landing Page";
-    			t76 = space();
-    			section3 = element("section");
-    			div30 = element("div");
+    			t78 = space();
+    			section4 = element("section");
+    			div29 = element("div");
     			h210 = element("h2");
     			h210.textContent = "Contact Us";
-    			t78 = space();
+    			t80 = space();
     			p11 = element("p");
     			p11.textContent = "Use this form to tell us about your project or idea; let's talk about how to make this happen.";
-    			t80 = space();
-    			form = element("form");
-    			div41 = element("div");
-    			div33 = element("div");
-    			div31 = element("div");
-    			input0 = element("input");
-    			t81 = space();
-    			div32 = element("div");
-    			input1 = element("input");
     			t82 = space();
-    			div36 = element("div");
-    			div34 = element("div");
-    			input2 = element("input");
-    			t83 = space();
-    			div35 = element("div");
-    			input3 = element("input");
-    			t84 = space();
-    			div38 = element("div");
-    			div37 = element("div");
-    			textarea = element("textarea");
-    			t85 = space();
+    			form = element("form");
     			div40 = element("div");
+    			div32 = element("div");
+    			div30 = element("div");
+    			input0 = element("input");
+    			t83 = space();
+    			div31 = element("div");
+    			input1 = element("input");
+    			t84 = space();
+    			div35 = element("div");
+    			div33 = element("div");
+    			input2 = element("input");
+    			t85 = space();
+    			div34 = element("div");
+    			input3 = element("input");
+    			t86 = space();
+    			div37 = element("div");
+    			div36 = element("div");
+    			textarea = element("textarea");
+    			t87 = space();
     			div39 = element("div");
+    			div38 = element("div");
     			button = element("button");
     			input4 = element("input");
-    			t86 = space();
-    			div42 = element("div");
+    			t88 = space();
+    			div41 = element("div");
     			p12 = element("p");
     			p12.textContent = "MIT License. Copyright © 2021 Flavio Oliveira.";
-    			t88 = space();
-    			div43 = element("div");
-    			ul1 = element("ul");
-    			li1 = element("li");
-    			a6 = element("a");
-    			a6.textContent = "Home";
     			t90 = space();
-    			li2 = element("li");
-    			a7 = element("a");
-    			a7.textContent = "About";
-    			t92 = space();
+    			div42 = element("div");
+    			ul1 = element("ul");
     			li3 = element("li");
     			a8 = element("a");
-    			a8.textContent = "Services";
-    			t94 = space();
+    			a8.textContent = "Home";
+    			t92 = space();
     			li4 = element("li");
     			a9 = element("a");
-    			a9.textContent = "Work";
-    			t96 = space();
+    			a9.textContent = "About";
+    			t94 = space();
     			li5 = element("li");
     			a10 = element("a");
-    			a10.textContent = "Contact";
+    			a10.textContent = "Services";
+    			t96 = space();
+    			li6 = element("li");
+    			a11 = element("a");
+    			a11.textContent = "Work";
+    			t98 = space();
+    			li7 = element("li");
+    			a12 = element("a");
+    			a12.textContent = "Contact";
     			document.title = "Flavio Oliveira";
     			attr_dev(div0, "class", "toggle svelte-1vgpxsg");
     			toggle_class(div0, "active", /*active*/ ctx[1]);
@@ -29758,324 +30066,342 @@ var app = (function () {
     			if (img0.src !== (img0_src_value = "images/bg.jpg")) attr_dev(img0, "src", img0_src_value);
     			attr_dev(img0, "alt", "");
     			attr_dev(img0, "class", "svelte-1vgpxsg");
-    			add_location(img0, file, 21, 8, 441);
+    			add_location(img0, file, 21, 8, 424);
     			attr_dev(div1, "class", "imgSidebar svelte-1vgpxsg");
-    			add_location(div1, file, 20, 4, 408);
+    			add_location(div1, file, 20, 4, 391);
     			attr_dev(h5, "class", "logoText svelte-1vgpxsg");
-    			add_location(h5, file, 24, 6, 519);
+    			add_location(h5, file, 24, 6, 523);
     			attr_dev(span, "class", "svelte-1vgpxsg");
-    			add_location(span, file, 26, 16, 583);
+    			add_location(span, file, 26, 16, 587);
     			attr_dev(h40, "class", "svelte-1vgpxsg");
-    			add_location(h40, file, 26, 12, 579);
+    			add_location(h40, file, 26, 12, 583);
     			attr_dev(h20, "class", "svelte-1vgpxsg");
-    			add_location(h20, file, 27, 12, 624);
+    			add_location(h20, file, 27, 12, 628);
     			attr_dev(h41, "class", "svelte-1vgpxsg");
-    			add_location(h41, file, 28, 12, 661);
+    			add_location(h41, file, 28, 12, 665);
     			attr_dev(p0, "class", "svelte-1vgpxsg");
-    			add_location(p0, file, 29, 12, 728);
+    			add_location(p0, file, 29, 12, 732);
     			attr_dev(a0, "href", "#about");
     			attr_dev(a0, "class", "btn svelte-1vgpxsg");
-    			add_location(a0, file, 30, 12, 1084);
+    			add_location(a0, file, 30, 12, 1088);
     			attr_dev(div2, "class", "svelte-1vgpxsg");
-    			add_location(div2, file, 25, 8, 561);
-    			if (img1.src !== (img1_src_value = "images/twitter.png")) attr_dev(img1, "src", img1_src_value);
-    			attr_dev(img1, "alt", "twitter");
-    			attr_dev(img1, "target", "_blank");
+    			add_location(div2, file, 25, 8, 565);
+    			if (img1.src !== (img1_src_value = "images/facebook.png")) attr_dev(img1, "src", img1_src_value);
+    			attr_dev(img1, "alt", "facebook");
     			attr_dev(img1, "class", "svelte-1vgpxsg");
-    			add_location(img1, file, 34, 61, 1317);
-    			attr_dev(a1, "href", "https://twitter.com/fl4viooliveira");
+    			add_location(img1, file, 33, 29, 1199);
+    			attr_dev(a1, "href", "#0");
     			attr_dev(a1, "class", "svelte-1vgpxsg");
-    			add_location(a1, file, 34, 16, 1272);
+    			add_location(a1, file, 33, 16, 1186);
     			attr_dev(li0, "class", "svelte-1vgpxsg");
-    			add_location(li0, file, 34, 12, 1268);
-    			attr_dev(ul0, "class", "sci svelte-1vgpxsg");
-    			add_location(ul0, file, 32, 8, 1149);
-    			attr_dev(div3, "class", "contentBx svelte-1vgpxsg");
-    			add_location(div3, file, 23, 4, 489);
-    			attr_dev(canvas, "class", "banner svelte-1vgpxsg");
-    			attr_dev(canvas, "id", "home");
-    			add_location(canvas, file, 19, 0, 352);
-    			attr_dev(h21, "class", "svelte-1vgpxsg");
-    			add_location(h21, file, 42, 8, 1612);
-    			attr_dev(p1, "class", "svelte-1vgpxsg");
-    			add_location(p1, file, 43, 8, 1638);
-    			attr_dev(div4, "class", "title white svelte-1vgpxsg");
-    			add_location(div4, file, 41, 4, 1578);
-    			attr_dev(br0, "class", "svelte-1vgpxsg");
-    			add_location(br0, file, 48, 515, 2313);
-    			attr_dev(br1, "class", "svelte-1vgpxsg");
-    			add_location(br1, file, 48, 519, 2317);
-    			attr_dev(br2, "class", "svelte-1vgpxsg");
-    			add_location(br2, file, 49, 76, 2398);
-    			attr_dev(br3, "class", "svelte-1vgpxsg");
-    			add_location(br3, file, 50, 199, 2603);
-    			attr_dev(br4, "class", "svelte-1vgpxsg");
-    			add_location(br4, file, 50, 203, 2607);
-    			attr_dev(p2, "class", "svelte-1vgpxsg");
-    			add_location(p2, file, 47, 12, 1794);
-    			attr_dev(div5, "class", "textBx svelte-1vgpxsg");
-    			add_location(div5, file, 46, 8, 1761);
-    			if (img2.src !== (img2_src_value = "images/flavio_pc.PNG")) attr_dev(img2, "src", img2_src_value);
-    			attr_dev(img2, "alt", "Flavio");
+    			add_location(li0, file, 33, 12, 1182);
+    			if (img2.src !== (img2_src_value = "images/twitter.png")) attr_dev(img2, "src", img2_src_value);
+    			attr_dev(img2, "alt", "twitter");
+    			attr_dev(img2, "target", "_blank");
     			attr_dev(img2, "class", "svelte-1vgpxsg");
-    			add_location(img2, file, 55, 12, 2877);
-    			attr_dev(div6, "class", "imgBx svelte-1vgpxsg");
-    			add_location(div6, file, 54, 8, 2845);
-    			attr_dev(div7, "class", "content svelte-1vgpxsg");
-    			add_location(div7, file, 45, 4, 1731);
-    			attr_dev(section0, "class", "about svelte-1vgpxsg");
-    			attr_dev(section0, "id", "about");
-    			add_location(section0, file, 40, 0, 1539);
-    			attr_dev(h22, "class", "svelte-1vgpxsg");
-    			add_location(h22, file, 62, 8, 3056);
-    			attr_dev(p3, "class", "svelte-1vgpxsg");
-    			add_location(p3, file, 63, 8, 3086);
-    			attr_dev(div8, "class", "title svelte-1vgpxsg");
-    			add_location(div8, file, 61, 4, 3028);
-    			if (img3.src !== (img3_src_value = "images/webdevelopment.png")) attr_dev(img3, "src", img3_src_value);
-    			attr_dev(img3, "alt", "Web Development icon");
-    			attr_dev(img3, "class", "svelte-1vgpxsg");
-    			add_location(img3, file, 67, 12, 3331);
-    			attr_dev(h23, "class", "svelte-1vgpxsg");
-    			add_location(h23, file, 68, 12, 3408);
-    			attr_dev(p4, "class", "svelte-1vgpxsg");
-    			add_location(p4, file, 69, 12, 3445);
-    			attr_dev(div9, "class", "servicesBx svelte-1vgpxsg");
-    			add_location(div9, file, 66, 8, 3294);
-    			if (img4.src !== (img4_src_value = "images/webdesign.png")) attr_dev(img4, "src", img4_src_value);
-    			attr_dev(img4, "alt", "Web Development icon");
-    			attr_dev(img4, "class", "svelte-1vgpxsg");
-    			add_location(img4, file, 72, 12, 3657);
-    			attr_dev(h24, "class", "svelte-1vgpxsg");
-    			add_location(h24, file, 73, 12, 3729);
-    			attr_dev(p5, "class", "svelte-1vgpxsg");
-    			add_location(p5, file, 74, 12, 3761);
-    			attr_dev(div10, "class", "servicesBx svelte-1vgpxsg");
-    			add_location(div10, file, 71, 8, 3620);
-    			if (img5.src !== (img5_src_value = "images/frontend.png")) attr_dev(img5, "src", img5_src_value);
-    			attr_dev(img5, "alt", "Frontend icon");
-    			attr_dev(img5, "class", "svelte-1vgpxsg");
-    			add_location(img5, file, 77, 12, 3976);
-    			attr_dev(h25, "class", "svelte-1vgpxsg");
-    			add_location(h25, file, 78, 12, 4040);
-    			attr_dev(p6, "class", "svelte-1vgpxsg");
-    			add_location(p6, file, 79, 12, 4070);
-    			attr_dev(div11, "class", "servicesBx svelte-1vgpxsg");
-    			add_location(div11, file, 76, 8, 3939);
-    			if (img6.src !== (img6_src_value = "images/backend.png")) attr_dev(img6, "src", img6_src_value);
-    			attr_dev(img6, "alt", "Backend icon");
-    			attr_dev(img6, "class", "svelte-1vgpxsg");
-    			add_location(img6, file, 82, 12, 4294);
-    			attr_dev(h26, "class", "svelte-1vgpxsg");
-    			add_location(h26, file, 83, 12, 4356);
-    			attr_dev(p7, "class", "svelte-1vgpxsg");
-    			add_location(p7, file, 84, 12, 4385);
-    			attr_dev(div12, "class", "servicesBx svelte-1vgpxsg");
-    			add_location(div12, file, 81, 8, 4257);
-    			if (img7.src !== (img7_src_value = "images/deployment.png")) attr_dev(img7, "src", img7_src_value);
-    			attr_dev(img7, "alt", "Deployment icon");
-    			attr_dev(img7, "class", "svelte-1vgpxsg");
-    			add_location(img7, file, 87, 12, 4614);
-    			attr_dev(h27, "class", "svelte-1vgpxsg");
-    			add_location(h27, file, 88, 12, 4682);
-    			attr_dev(p8, "class", "svelte-1vgpxsg");
-    			add_location(p8, file, 89, 12, 4714);
-    			attr_dev(div13, "class", "servicesBx svelte-1vgpxsg");
-    			add_location(div13, file, 86, 8, 4577);
-    			if (img8.src !== (img8_src_value = "images/administrator.png")) attr_dev(img8, "src", img8_src_value);
-    			attr_dev(img8, "alt", "Administrator icon");
-    			attr_dev(img8, "class", "svelte-1vgpxsg");
-    			add_location(img8, file, 92, 10, 4890);
-    			attr_dev(h28, "class", "svelte-1vgpxsg");
-    			add_location(h28, file, 93, 10, 4962);
-    			attr_dev(p9, "class", "svelte-1vgpxsg");
-    			add_location(p9, file, 94, 8, 5002);
-    			attr_dev(div14, "class", "servicesBx svelte-1vgpxsg");
-    			add_location(div14, file, 91, 8, 4855);
-    			attr_dev(div15, "class", "content svelte-1vgpxsg");
-    			add_location(div15, file, 65, 4, 3264);
-    			attr_dev(section1, "class", "services svelte-1vgpxsg");
-    			attr_dev(section1, "id", "services");
-    			add_location(section1, file, 60, 0, 2983);
-    			attr_dev(h29, "class", "svelte-1vgpxsg");
-    			add_location(h29, file, 101, 8, 5306);
-    			attr_dev(p10, "class", "svelte-1vgpxsg");
-    			add_location(p10, file, 102, 8, 5335);
-    			attr_dev(div16, "class", "title svelte-1vgpxsg");
-    			add_location(div16, file, 100, 4, 5278);
-    			if (img9.src !== (img9_src_value = "images/img1.jpg")) attr_dev(img9, "src", img9_src_value);
-    			attr_dev(img9, "alt", "work-1");
-    			attr_dev(img9, "class", "svelte-1vgpxsg");
-    			add_location(img9, file, 107, 16, 5604);
-    			attr_dev(div17, "class", "imgBx svelte-1vgpxsg");
-    			add_location(div17, file, 106, 12, 5552);
-    			attr_dev(h30, "class", "svelte-1vgpxsg");
-    			add_location(h30, file, 111, 16, 5838);
-    			attr_dev(a2, "href", "https://fl4viooliveira.github.io/bkg_grid_layout/");
-    			attr_dev(a2, "target", "_blank");
+    			add_location(img2, file, 34, 61, 1316);
+    			attr_dev(a2, "href", "https://twitter.com/fl4viooliveira");
     			attr_dev(a2, "class", "svelte-1vgpxsg");
-    			add_location(a2, file, 110, 16, 5730);
-    			attr_dev(div18, "class", "textBx svelte-1vgpxsg");
-    			add_location(div18, file, 109, 12, 5692);
-    			attr_dev(div19, "class", "workBx svelte-1vgpxsg");
-    			add_location(div19, file, 105, 8, 5519);
-    			if (img10.src !== (img10_src_value = "images/img2.jpg")) attr_dev(img10, "src", img10_src_value);
-    			attr_dev(img10, "alt", "work-2");
-    			attr_dev(img10, "class", "svelte-1vgpxsg");
-    			add_location(img10, file, 117, 16, 5991);
-    			attr_dev(div20, "class", "imgBx svelte-1vgpxsg");
-    			add_location(div20, file, 116, 12, 5955);
-    			attr_dev(h31, "class", "svelte-1vgpxsg");
-    			add_location(h31, file, 121, 20, 6210);
-    			attr_dev(a3, "href", "https://fl4viooliveira.github.io/animated_form/");
-    			attr_dev(a3, "target", "_blank");
+    			add_location(a2, file, 34, 16, 1271);
+    			attr_dev(li1, "class", "svelte-1vgpxsg");
+    			add_location(li1, file, 34, 12, 1267);
+    			if (img3.src !== (img3_src_value = "images/instagram.png")) attr_dev(img3, "src", img3_src_value);
+    			attr_dev(img3, "alt", "instagram");
+    			attr_dev(img3, "class", "svelte-1vgpxsg");
+    			add_location(img3, file, 35, 29, 1415);
+    			attr_dev(a3, "href", "#0");
     			attr_dev(a3, "class", "svelte-1vgpxsg");
-    			add_location(a3, file, 120, 16, 6100);
-    			attr_dev(div21, "class", "textBx svelte-1vgpxsg");
-    			add_location(div21, file, 119, 12, 6063);
-    			attr_dev(div22, "class", "workBx svelte-1vgpxsg");
-    			add_location(div22, file, 115, 8, 5922);
-    			if (img11.src !== (img11_src_value = "images/img3.jpg")) attr_dev(img11, "src", img11_src_value);
-    			attr_dev(img11, "alt", "work-3");
+    			add_location(a3, file, 35, 16, 1402);
+    			attr_dev(li2, "class", "svelte-1vgpxsg");
+    			add_location(li2, file, 35, 12, 1398);
+    			attr_dev(ul0, "class", "sci svelte-1vgpxsg");
+    			add_location(ul0, file, 32, 8, 1153);
+    			attr_dev(canvas, "class", "contentBx svelte-1vgpxsg");
+    			add_location(canvas, file, 23, 4, 472);
+    			attr_dev(section0, "class", "banner svelte-1vgpxsg");
+    			attr_dev(section0, "id", "home");
+    			add_location(section0, file, 19, 0, 352);
+    			attr_dev(h21, "class", "svelte-1vgpxsg");
+    			add_location(h21, file, 42, 8, 1608);
+    			attr_dev(p1, "class", "svelte-1vgpxsg");
+    			add_location(p1, file, 43, 8, 1634);
+    			attr_dev(div3, "class", "title white svelte-1vgpxsg");
+    			add_location(div3, file, 41, 4, 1574);
+    			attr_dev(br0, "class", "svelte-1vgpxsg");
+    			add_location(br0, file, 48, 515, 2309);
+    			attr_dev(br1, "class", "svelte-1vgpxsg");
+    			add_location(br1, file, 48, 519, 2313);
+    			attr_dev(br2, "class", "svelte-1vgpxsg");
+    			add_location(br2, file, 49, 76, 2394);
+    			attr_dev(br3, "class", "svelte-1vgpxsg");
+    			add_location(br3, file, 50, 199, 2599);
+    			attr_dev(br4, "class", "svelte-1vgpxsg");
+    			add_location(br4, file, 50, 203, 2603);
+    			attr_dev(p2, "class", "svelte-1vgpxsg");
+    			add_location(p2, file, 47, 12, 1790);
+    			attr_dev(div4, "class", "textBx svelte-1vgpxsg");
+    			add_location(div4, file, 46, 8, 1757);
+    			if (img4.src !== (img4_src_value = "images/flavio_pc.PNG")) attr_dev(img4, "src", img4_src_value);
+    			attr_dev(img4, "alt", "Flavio");
+    			attr_dev(img4, "class", "svelte-1vgpxsg");
+    			add_location(img4, file, 55, 12, 2873);
+    			attr_dev(div5, "class", "imgBx svelte-1vgpxsg");
+    			add_location(div5, file, 54, 8, 2841);
+    			attr_dev(div6, "class", "content svelte-1vgpxsg");
+    			add_location(div6, file, 45, 4, 1727);
+    			attr_dev(section1, "class", "about svelte-1vgpxsg");
+    			attr_dev(section1, "id", "about");
+    			add_location(section1, file, 40, 0, 1535);
+    			attr_dev(h22, "class", "svelte-1vgpxsg");
+    			add_location(h22, file, 62, 8, 3052);
+    			attr_dev(p3, "class", "svelte-1vgpxsg");
+    			add_location(p3, file, 63, 8, 3082);
+    			attr_dev(div7, "class", "title svelte-1vgpxsg");
+    			add_location(div7, file, 61, 4, 3024);
+    			if (img5.src !== (img5_src_value = "images/webdevelopment.png")) attr_dev(img5, "src", img5_src_value);
+    			attr_dev(img5, "alt", "Web Development icon");
+    			attr_dev(img5, "class", "svelte-1vgpxsg");
+    			add_location(img5, file, 67, 12, 3327);
+    			attr_dev(h23, "class", "svelte-1vgpxsg");
+    			add_location(h23, file, 68, 12, 3404);
+    			attr_dev(p4, "class", "svelte-1vgpxsg");
+    			add_location(p4, file, 69, 12, 3441);
+    			attr_dev(div8, "class", "servicesBx svelte-1vgpxsg");
+    			add_location(div8, file, 66, 8, 3290);
+    			if (img6.src !== (img6_src_value = "images/webdesign.png")) attr_dev(img6, "src", img6_src_value);
+    			attr_dev(img6, "alt", "Web Development icon");
+    			attr_dev(img6, "class", "svelte-1vgpxsg");
+    			add_location(img6, file, 72, 12, 3653);
+    			attr_dev(h24, "class", "svelte-1vgpxsg");
+    			add_location(h24, file, 73, 12, 3725);
+    			attr_dev(p5, "class", "svelte-1vgpxsg");
+    			add_location(p5, file, 74, 12, 3757);
+    			attr_dev(div9, "class", "servicesBx svelte-1vgpxsg");
+    			add_location(div9, file, 71, 8, 3616);
+    			if (img7.src !== (img7_src_value = "images/frontend.png")) attr_dev(img7, "src", img7_src_value);
+    			attr_dev(img7, "alt", "Frontend icon");
+    			attr_dev(img7, "class", "svelte-1vgpxsg");
+    			add_location(img7, file, 77, 12, 3972);
+    			attr_dev(h25, "class", "svelte-1vgpxsg");
+    			add_location(h25, file, 78, 12, 4036);
+    			attr_dev(p6, "class", "svelte-1vgpxsg");
+    			add_location(p6, file, 79, 12, 4066);
+    			attr_dev(div10, "class", "servicesBx svelte-1vgpxsg");
+    			add_location(div10, file, 76, 8, 3935);
+    			if (img8.src !== (img8_src_value = "images/backend.png")) attr_dev(img8, "src", img8_src_value);
+    			attr_dev(img8, "alt", "Backend icon");
+    			attr_dev(img8, "class", "svelte-1vgpxsg");
+    			add_location(img8, file, 82, 12, 4290);
+    			attr_dev(h26, "class", "svelte-1vgpxsg");
+    			add_location(h26, file, 83, 12, 4352);
+    			attr_dev(p7, "class", "svelte-1vgpxsg");
+    			add_location(p7, file, 84, 12, 4381);
+    			attr_dev(div11, "class", "servicesBx svelte-1vgpxsg");
+    			add_location(div11, file, 81, 8, 4253);
+    			if (img9.src !== (img9_src_value = "images/deployment.png")) attr_dev(img9, "src", img9_src_value);
+    			attr_dev(img9, "alt", "Deployment icon");
+    			attr_dev(img9, "class", "svelte-1vgpxsg");
+    			add_location(img9, file, 87, 12, 4610);
+    			attr_dev(h27, "class", "svelte-1vgpxsg");
+    			add_location(h27, file, 88, 12, 4678);
+    			attr_dev(p8, "class", "svelte-1vgpxsg");
+    			add_location(p8, file, 89, 12, 4710);
+    			attr_dev(div12, "class", "servicesBx svelte-1vgpxsg");
+    			add_location(div12, file, 86, 8, 4573);
+    			if (img10.src !== (img10_src_value = "images/administrator.png")) attr_dev(img10, "src", img10_src_value);
+    			attr_dev(img10, "alt", "Administrator icon");
+    			attr_dev(img10, "class", "svelte-1vgpxsg");
+    			add_location(img10, file, 92, 10, 4886);
+    			attr_dev(h28, "class", "svelte-1vgpxsg");
+    			add_location(h28, file, 93, 10, 4958);
+    			attr_dev(p9, "class", "svelte-1vgpxsg");
+    			add_location(p9, file, 94, 8, 4998);
+    			attr_dev(div13, "class", "servicesBx svelte-1vgpxsg");
+    			add_location(div13, file, 91, 8, 4851);
+    			attr_dev(div14, "class", "content svelte-1vgpxsg");
+    			add_location(div14, file, 65, 4, 3260);
+    			attr_dev(section2, "class", "services svelte-1vgpxsg");
+    			attr_dev(section2, "id", "services");
+    			add_location(section2, file, 60, 0, 2979);
+    			attr_dev(h29, "class", "svelte-1vgpxsg");
+    			add_location(h29, file, 101, 8, 5302);
+    			attr_dev(p10, "class", "svelte-1vgpxsg");
+    			add_location(p10, file, 102, 8, 5331);
+    			attr_dev(div15, "class", "title svelte-1vgpxsg");
+    			add_location(div15, file, 100, 4, 5274);
+    			if (img11.src !== (img11_src_value = "images/img1.jpg")) attr_dev(img11, "src", img11_src_value);
+    			attr_dev(img11, "alt", "work-1");
     			attr_dev(img11, "class", "svelte-1vgpxsg");
-    			add_location(img11, file, 127, 16, 6365);
-    			attr_dev(div23, "class", "imgBx svelte-1vgpxsg");
-    			add_location(div23, file, 126, 12, 6329);
-    			attr_dev(h32, "class", "svelte-1vgpxsg");
-    			add_location(h32, file, 131, 20, 6583);
-    			attr_dev(a4, "href", "https://fl4viooliveira.github.io/profile_card/");
+    			add_location(img11, file, 107, 16, 5600);
+    			attr_dev(div16, "class", "imgBx svelte-1vgpxsg");
+    			add_location(div16, file, 106, 12, 5548);
+    			attr_dev(h30, "class", "svelte-1vgpxsg");
+    			add_location(h30, file, 111, 16, 5834);
+    			attr_dev(a4, "href", "https://fl4viooliveira.github.io/bkg_grid_layout/");
     			attr_dev(a4, "target", "_blank");
     			attr_dev(a4, "class", "svelte-1vgpxsg");
-    			add_location(a4, file, 130, 16, 6474);
-    			attr_dev(div24, "class", "textBx svelte-1vgpxsg");
-    			add_location(div24, file, 129, 12, 6437);
-    			attr_dev(div25, "class", "workBx svelte-1vgpxsg");
-    			add_location(div25, file, 125, 8, 6296);
-    			if (img12.src !== (img12_src_value = "images/img4.jpg")) attr_dev(img12, "src", img12_src_value);
-    			attr_dev(img12, "alt", "work-4");
+    			add_location(a4, file, 110, 16, 5726);
+    			attr_dev(div17, "class", "textBx svelte-1vgpxsg");
+    			add_location(div17, file, 109, 12, 5688);
+    			attr_dev(div18, "class", "workBx svelte-1vgpxsg");
+    			add_location(div18, file, 105, 8, 5515);
+    			if (img12.src !== (img12_src_value = "images/img2.jpg")) attr_dev(img12, "src", img12_src_value);
+    			attr_dev(img12, "alt", "work-2");
     			attr_dev(img12, "class", "svelte-1vgpxsg");
-    			add_location(img12, file, 137, 16, 6737);
-    			attr_dev(div26, "class", "imgBx svelte-1vgpxsg");
-    			add_location(div26, file, 136, 12, 6701);
-    			attr_dev(h33, "class", "svelte-1vgpxsg");
-    			add_location(h33, file, 141, 20, 6961);
-    			attr_dev(a5, "href", "https://fl4viooliveira.github.io/blogr_landing_page/");
+    			add_location(img12, file, 117, 16, 5987);
+    			attr_dev(div19, "class", "imgBx svelte-1vgpxsg");
+    			add_location(div19, file, 116, 12, 5951);
+    			attr_dev(h31, "class", "svelte-1vgpxsg");
+    			add_location(h31, file, 121, 20, 6206);
+    			attr_dev(a5, "href", "https://fl4viooliveira.github.io/animated_form/");
     			attr_dev(a5, "target", "_blank");
     			attr_dev(a5, "class", "svelte-1vgpxsg");
-    			add_location(a5, file, 140, 16, 6846);
-    			attr_dev(div27, "class", "textBx svelte-1vgpxsg");
-    			add_location(div27, file, 139, 12, 6809);
-    			attr_dev(div28, "class", "workBx svelte-1vgpxsg");
-    			add_location(div28, file, 135, 8, 6668);
-    			attr_dev(div29, "class", "content svelte-1vgpxsg");
-    			add_location(div29, file, 104, 4, 5489);
-    			attr_dev(section2, "class", "work svelte-1vgpxsg");
-    			attr_dev(section2, "id", "work");
-    			add_location(section2, file, 99, 0, 5241);
+    			add_location(a5, file, 120, 16, 6096);
+    			attr_dev(div20, "class", "textBx svelte-1vgpxsg");
+    			add_location(div20, file, 119, 12, 6059);
+    			attr_dev(div21, "class", "workBx svelte-1vgpxsg");
+    			add_location(div21, file, 115, 8, 5918);
+    			if (img13.src !== (img13_src_value = "images/img3.jpg")) attr_dev(img13, "src", img13_src_value);
+    			attr_dev(img13, "alt", "work-3");
+    			attr_dev(img13, "class", "svelte-1vgpxsg");
+    			add_location(img13, file, 127, 16, 6361);
+    			attr_dev(div22, "class", "imgBx svelte-1vgpxsg");
+    			add_location(div22, file, 126, 12, 6325);
+    			attr_dev(h32, "class", "svelte-1vgpxsg");
+    			add_location(h32, file, 131, 20, 6579);
+    			attr_dev(a6, "href", "https://fl4viooliveira.github.io/profile_card/");
+    			attr_dev(a6, "target", "_blank");
+    			attr_dev(a6, "class", "svelte-1vgpxsg");
+    			add_location(a6, file, 130, 16, 6470);
+    			attr_dev(div23, "class", "textBx svelte-1vgpxsg");
+    			add_location(div23, file, 129, 12, 6433);
+    			attr_dev(div24, "class", "workBx svelte-1vgpxsg");
+    			add_location(div24, file, 125, 8, 6292);
+    			if (img14.src !== (img14_src_value = "images/img4.jpg")) attr_dev(img14, "src", img14_src_value);
+    			attr_dev(img14, "alt", "work-4");
+    			attr_dev(img14, "class", "svelte-1vgpxsg");
+    			add_location(img14, file, 137, 16, 6733);
+    			attr_dev(div25, "class", "imgBx svelte-1vgpxsg");
+    			add_location(div25, file, 136, 12, 6697);
+    			attr_dev(h33, "class", "svelte-1vgpxsg");
+    			add_location(h33, file, 141, 20, 6957);
+    			attr_dev(a7, "href", "https://fl4viooliveira.github.io/blogr_landing_page/");
+    			attr_dev(a7, "target", "_blank");
+    			attr_dev(a7, "class", "svelte-1vgpxsg");
+    			add_location(a7, file, 140, 16, 6842);
+    			attr_dev(div26, "class", "textBx svelte-1vgpxsg");
+    			add_location(div26, file, 139, 12, 6805);
+    			attr_dev(div27, "class", "workBx svelte-1vgpxsg");
+    			add_location(div27, file, 135, 8, 6664);
+    			attr_dev(div28, "class", "content svelte-1vgpxsg");
+    			add_location(div28, file, 104, 4, 5485);
+    			attr_dev(section3, "class", "work svelte-1vgpxsg");
+    			attr_dev(section3, "id", "work");
+    			add_location(section3, file, 99, 0, 5237);
     			attr_dev(h210, "class", "svelte-1vgpxsg");
-    			add_location(h210, file, 182, 8, 8127);
+    			add_location(h210, file, 182, 8, 8123);
     			attr_dev(p11, "class", "svelte-1vgpxsg");
-    			add_location(p11, file, 183, 8, 8155);
-    			attr_dev(div30, "class", "title white svelte-1vgpxsg");
-    			add_location(div30, file, 181, 4, 8093);
+    			add_location(p11, file, 183, 8, 8151);
+    			attr_dev(div29, "class", "title white svelte-1vgpxsg");
+    			add_location(div29, file, 181, 4, 8089);
     			attr_dev(input0, "type", "text");
     			attr_dev(input0, "name", "first_name");
     			attr_dev(input0, "placeholder", "First Name");
     			attr_dev(input0, "class", "svelte-1vgpxsg");
-    			add_location(input0, file, 189, 20, 8480);
-    			attr_dev(div31, "class", "col50 svelte-1vgpxsg");
-    			add_location(div31, file, 188, 16, 8440);
+    			add_location(input0, file, 189, 20, 8476);
+    			attr_dev(div30, "class", "col50 svelte-1vgpxsg");
+    			add_location(div30, file, 188, 16, 8436);
     			attr_dev(input1, "type", "text");
     			attr_dev(input1, "name", "last_name");
     			attr_dev(input1, "placeholder", "Last Name");
     			attr_dev(input1, "class", "svelte-1vgpxsg");
-    			add_location(input1, file, 192, 20, 8622);
-    			attr_dev(div32, "class", "col50 svelte-1vgpxsg");
-    			add_location(div32, file, 191, 16, 8582);
-    			attr_dev(div33, "class", "row svelte-1vgpxsg");
-    			add_location(div33, file, 187, 12, 8406);
+    			add_location(input1, file, 192, 20, 8618);
+    			attr_dev(div31, "class", "col50 svelte-1vgpxsg");
+    			add_location(div31, file, 191, 16, 8578);
+    			attr_dev(div32, "class", "row svelte-1vgpxsg");
+    			add_location(div32, file, 187, 12, 8402);
     			attr_dev(input2, "type", "email");
     			attr_dev(input2, "name", "email");
     			attr_dev(input2, "placeholder", "Email");
     			attr_dev(input2, "class", "svelte-1vgpxsg");
-    			add_location(input2, file, 197, 20, 8811);
-    			attr_dev(div34, "class", "col50 svelte-1vgpxsg");
-    			add_location(div34, file, 196, 16, 8771);
+    			add_location(input2, file, 197, 20, 8807);
+    			attr_dev(div33, "class", "col50 svelte-1vgpxsg");
+    			add_location(div33, file, 196, 16, 8767);
     			attr_dev(input3, "type", "text");
     			attr_dev(input3, "name", "subject");
     			attr_dev(input3, "placeholder", "Subject");
     			attr_dev(input3, "class", "svelte-1vgpxsg");
-    			add_location(input3, file, 200, 20, 8944);
-    			attr_dev(div35, "class", "col50 svelte-1vgpxsg");
-    			add_location(div35, file, 199, 16, 8904);
-    			attr_dev(div36, "class", "row svelte-1vgpxsg");
-    			add_location(div36, file, 195, 12, 8737);
+    			add_location(input3, file, 200, 20, 8940);
+    			attr_dev(div34, "class", "col50 svelte-1vgpxsg");
+    			add_location(div34, file, 199, 16, 8900);
+    			attr_dev(div35, "class", "row svelte-1vgpxsg");
+    			add_location(div35, file, 195, 12, 8733);
     			attr_dev(textarea, "name", "message");
     			attr_dev(textarea, "placeholder", "Message");
     			attr_dev(textarea, "class", "svelte-1vgpxsg");
-    			add_location(textarea, file, 205, 20, 9130);
-    			attr_dev(div37, "class", "col100 svelte-1vgpxsg");
-    			add_location(div37, file, 204, 16, 9089);
-    			attr_dev(div38, "class", "row svelte-1vgpxsg");
-    			add_location(div38, file, 203, 12, 9055);
+    			add_location(textarea, file, 205, 20, 9126);
+    			attr_dev(div36, "class", "col100 svelte-1vgpxsg");
+    			add_location(div36, file, 204, 16, 9085);
+    			attr_dev(div37, "class", "row svelte-1vgpxsg");
+    			add_location(div37, file, 203, 12, 9051);
     			attr_dev(input4, "type", "submit");
     			input4.value = "Send";
     			attr_dev(input4, "class", "svelte-1vgpxsg");
-    			add_location(input4, file, 211, 24, 9351);
+    			add_location(input4, file, 211, 24, 9347);
     			attr_dev(button, "class", "svelte-1vgpxsg");
-    			add_location(button, file, 210, 20, 9318);
-    			attr_dev(div39, "class", "col100 svelte-1vgpxsg");
-    			add_location(div39, file, 209, 16, 9277);
-    			attr_dev(div40, "class", "row svelte-1vgpxsg");
-    			add_location(div40, file, 208, 12, 9243);
-    			attr_dev(div41, "class", "contactForm svelte-1vgpxsg");
-    			add_location(div41, file, 186, 8, 8368);
+    			add_location(button, file, 210, 20, 9314);
+    			attr_dev(div38, "class", "col100 svelte-1vgpxsg");
+    			add_location(div38, file, 209, 16, 9273);
+    			attr_dev(div39, "class", "row svelte-1vgpxsg");
+    			add_location(div39, file, 208, 12, 9239);
+    			attr_dev(div40, "class", "contactForm svelte-1vgpxsg");
+    			add_location(div40, file, 186, 8, 8364);
     			attr_dev(form, "action", "https://getform.io/f/04feb2e1-24e2-4e73-98b3-837225c11041");
     			attr_dev(form, "method", "POST");
     			attr_dev(form, "class", "svelte-1vgpxsg");
-    			add_location(form, file, 185, 4, 8272);
-    			attr_dev(section3, "class", "contact svelte-1vgpxsg");
-    			attr_dev(section3, "id", "contact");
-    			add_location(section3, file, 180, 0, 8050);
+    			add_location(form, file, 185, 4, 8268);
+    			attr_dev(section4, "class", "contact svelte-1vgpxsg");
+    			attr_dev(section4, "id", "contact");
+    			add_location(section4, file, 180, 0, 8046);
     			attr_dev(p12, "class", "svelte-1vgpxsg");
-    			add_location(p12, file, 220, 4, 9525);
-    			attr_dev(div42, "class", "copyright svelte-1vgpxsg");
-    			add_location(div42, file, 219, 0, 9497);
-    			attr_dev(a6, "href", "#home");
-    			attr_dev(a6, "class", "svelte-1vgpxsg");
-    			toggle_class(a6, "active", /*active*/ ctx[1]);
-    			add_location(a6, file, 225, 12, 9689);
-    			attr_dev(li1, "class", "svelte-1vgpxsg");
-    			add_location(li1, file, 225, 8, 9685);
-    			attr_dev(a7, "href", "#about");
-    			attr_dev(a7, "class", "svelte-1vgpxsg");
-    			toggle_class(a7, "active", /*active*/ ctx[1]);
-    			add_location(a7, file, 226, 12, 9768);
-    			attr_dev(li2, "class", "svelte-1vgpxsg");
-    			add_location(li2, file, 226, 8, 9764);
-    			attr_dev(a8, "href", "#services");
+    			add_location(p12, file, 220, 4, 9521);
+    			attr_dev(div41, "class", "copyright svelte-1vgpxsg");
+    			add_location(div41, file, 219, 0, 9493);
+    			attr_dev(a8, "href", "#home");
     			attr_dev(a8, "class", "svelte-1vgpxsg");
     			toggle_class(a8, "active", /*active*/ ctx[1]);
-    			add_location(a8, file, 227, 12, 9849);
+    			add_location(a8, file, 225, 12, 9685);
     			attr_dev(li3, "class", "svelte-1vgpxsg");
-    			add_location(li3, file, 227, 8, 9845);
-    			attr_dev(a9, "href", "#work");
+    			add_location(li3, file, 225, 8, 9681);
+    			attr_dev(a9, "href", "#about");
     			attr_dev(a9, "class", "svelte-1vgpxsg");
     			toggle_class(a9, "active", /*active*/ ctx[1]);
-    			add_location(a9, file, 228, 12, 9936);
+    			add_location(a9, file, 226, 12, 9764);
     			attr_dev(li4, "class", "svelte-1vgpxsg");
-    			add_location(li4, file, 228, 8, 9932);
-    			attr_dev(a10, "href", "#contact");
+    			add_location(li4, file, 226, 8, 9760);
+    			attr_dev(a10, "href", "#services");
     			attr_dev(a10, "class", "svelte-1vgpxsg");
     			toggle_class(a10, "active", /*active*/ ctx[1]);
-    			add_location(a10, file, 229, 12, 10015);
+    			add_location(a10, file, 227, 12, 9845);
     			attr_dev(li5, "class", "svelte-1vgpxsg");
-    			add_location(li5, file, 229, 8, 10011);
+    			add_location(li5, file, 227, 8, 9841);
+    			attr_dev(a11, "href", "#work");
+    			attr_dev(a11, "class", "svelte-1vgpxsg");
+    			toggle_class(a11, "active", /*active*/ ctx[1]);
+    			add_location(a11, file, 228, 12, 9932);
+    			attr_dev(li6, "class", "svelte-1vgpxsg");
+    			add_location(li6, file, 228, 8, 9928);
+    			attr_dev(a12, "href", "#contact");
+    			attr_dev(a12, "class", "svelte-1vgpxsg");
+    			toggle_class(a12, "active", /*active*/ ctx[1]);
+    			add_location(a12, file, 229, 12, 10011);
+    			attr_dev(li7, "class", "svelte-1vgpxsg");
+    			add_location(li7, file, 229, 8, 10007);
     			attr_dev(ul1, "class", "menu svelte-1vgpxsg");
-    			add_location(ul1, file, 224, 4, 9659);
-    			attr_dev(div43, "class", "sidebar svelte-1vgpxsg");
-    			toggle_class(div43, "active", /*active*/ ctx[1]);
-    			add_location(div43, file, 223, 0, 9587);
+    			add_location(ul1, file, 224, 4, 9655);
+    			attr_dev(div42, "class", "sidebar svelte-1vgpxsg");
+    			toggle_class(div42, "active", /*active*/ ctx[1]);
+    			add_location(div42, file, 223, 0, 9583);
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -30084,14 +30410,14 @@ var app = (function () {
     			insert_dev(target, t0, anchor);
     			insert_dev(target, div0, anchor);
     			insert_dev(target, t1, anchor);
-    			insert_dev(target, canvas, anchor);
-    			append_dev(canvas, div1);
+    			insert_dev(target, section0, anchor);
+    			append_dev(section0, div1);
     			append_dev(div1, img0);
-    			append_dev(canvas, t2);
-    			append_dev(canvas, div3);
-    			append_dev(div3, h5);
-    			append_dev(div3, t4);
-    			append_dev(div3, div2);
+    			append_dev(section0, t2);
+    			append_dev(section0, canvas);
+    			append_dev(canvas, h5);
+    			append_dev(canvas, t4);
+    			append_dev(canvas, div2);
     			append_dev(div2, h40);
     			append_dev(h40, span);
     			append_dev(h40, t6);
@@ -30103,183 +30429,191 @@ var app = (function () {
     			append_dev(div2, p0);
     			append_dev(div2, t13);
     			append_dev(div2, a0);
-    			append_dev(div3, t15);
-    			append_dev(div3, ul0);
+    			append_dev(canvas, t15);
+    			append_dev(canvas, ul0);
     			append_dev(ul0, li0);
     			append_dev(li0, a1);
     			append_dev(a1, img1);
+    			append_dev(ul0, t16);
+    			append_dev(ul0, li1);
+    			append_dev(li1, a2);
+    			append_dev(a2, img2);
+    			append_dev(ul0, t17);
+    			append_dev(ul0, li2);
+    			append_dev(li2, a3);
+    			append_dev(a3, img3);
     			/*canvas_binding*/ ctx[3](canvas);
-    			insert_dev(target, t16, anchor);
-    			insert_dev(target, section0, anchor);
-    			append_dev(section0, div4);
-    			append_dev(div4, h21);
-    			append_dev(div4, t18);
-    			append_dev(div4, p1);
-    			append_dev(section0, t20);
-    			append_dev(section0, div7);
-    			append_dev(div7, div5);
-    			append_dev(div5, p2);
-    			append_dev(p2, t21);
+    			insert_dev(target, t18, anchor);
+    			insert_dev(target, section1, anchor);
+    			append_dev(section1, div3);
+    			append_dev(div3, h21);
+    			append_dev(div3, t20);
+    			append_dev(div3, p1);
+    			append_dev(section1, t22);
+    			append_dev(section1, div6);
+    			append_dev(div6, div4);
+    			append_dev(div4, p2);
+    			append_dev(p2, t23);
     			append_dev(p2, br0);
     			append_dev(p2, br1);
-    			append_dev(p2, t22);
+    			append_dev(p2, t24);
     			append_dev(p2, br2);
-    			append_dev(p2, t23);
+    			append_dev(p2, t25);
     			append_dev(p2, br3);
     			append_dev(p2, br4);
-    			append_dev(p2, t24);
-    			append_dev(div7, t25);
-    			append_dev(div7, div6);
-    			append_dev(div6, img2);
-    			insert_dev(target, t26, anchor);
-    			insert_dev(target, section1, anchor);
-    			append_dev(section1, div8);
-    			append_dev(div8, h22);
-    			append_dev(div8, t28);
-    			append_dev(div8, p3);
-    			append_dev(section1, t30);
-    			append_dev(section1, div15);
-    			append_dev(div15, div9);
-    			append_dev(div9, img3);
-    			append_dev(div9, t31);
-    			append_dev(div9, h23);
-    			append_dev(div9, t33);
-    			append_dev(div9, p4);
-    			append_dev(div15, t35);
-    			append_dev(div15, div10);
-    			append_dev(div10, img4);
-    			append_dev(div10, t36);
-    			append_dev(div10, h24);
-    			append_dev(div10, t38);
-    			append_dev(div10, p5);
-    			append_dev(div15, t40);
-    			append_dev(div15, div11);
-    			append_dev(div11, img5);
-    			append_dev(div11, t41);
-    			append_dev(div11, h25);
-    			append_dev(div11, t43);
-    			append_dev(div11, p6);
-    			append_dev(div15, t45);
-    			append_dev(div15, div12);
-    			append_dev(div12, img6);
-    			append_dev(div12, t46);
-    			append_dev(div12, h26);
-    			append_dev(div12, t48);
-    			append_dev(div12, p7);
-    			append_dev(div15, t50);
-    			append_dev(div15, div13);
-    			append_dev(div13, img7);
-    			append_dev(div13, t51);
-    			append_dev(div13, h27);
-    			append_dev(div13, t53);
-    			append_dev(div13, p8);
-    			append_dev(div15, t55);
-    			append_dev(div15, div14);
-    			append_dev(div14, img8);
-    			append_dev(div14, t56);
-    			append_dev(div14, h28);
-    			append_dev(div14, t58);
-    			append_dev(div14, p9);
-    			insert_dev(target, t60, anchor);
+    			append_dev(p2, t26);
+    			append_dev(div6, t27);
+    			append_dev(div6, div5);
+    			append_dev(div5, img4);
+    			insert_dev(target, t28, anchor);
     			insert_dev(target, section2, anchor);
-    			append_dev(section2, div16);
-    			append_dev(div16, h29);
-    			append_dev(div16, t62);
-    			append_dev(div16, p10);
-    			append_dev(section2, t64);
-    			append_dev(section2, div29);
-    			append_dev(div29, div19);
-    			append_dev(div19, div17);
-    			append_dev(div17, img9);
-    			append_dev(div19, t65);
-    			append_dev(div19, div18);
-    			append_dev(div18, a2);
-    			append_dev(a2, h30);
-    			append_dev(div29, t67);
-    			append_dev(div29, div22);
-    			append_dev(div22, div20);
-    			append_dev(div20, img10);
-    			append_dev(div22, t68);
-    			append_dev(div22, div21);
-    			append_dev(div21, a3);
-    			append_dev(a3, h31);
-    			append_dev(div29, t70);
-    			append_dev(div29, div25);
-    			append_dev(div25, div23);
-    			append_dev(div23, img11);
-    			append_dev(div25, t71);
-    			append_dev(div25, div24);
-    			append_dev(div24, a4);
-    			append_dev(a4, h32);
-    			append_dev(div29, t73);
-    			append_dev(div29, div28);
-    			append_dev(div28, div26);
-    			append_dev(div26, img12);
-    			append_dev(div28, t74);
-    			append_dev(div28, div27);
-    			append_dev(div27, a5);
-    			append_dev(a5, h33);
-    			insert_dev(target, t76, anchor);
+    			append_dev(section2, div7);
+    			append_dev(div7, h22);
+    			append_dev(div7, t30);
+    			append_dev(div7, p3);
+    			append_dev(section2, t32);
+    			append_dev(section2, div14);
+    			append_dev(div14, div8);
+    			append_dev(div8, img5);
+    			append_dev(div8, t33);
+    			append_dev(div8, h23);
+    			append_dev(div8, t35);
+    			append_dev(div8, p4);
+    			append_dev(div14, t37);
+    			append_dev(div14, div9);
+    			append_dev(div9, img6);
+    			append_dev(div9, t38);
+    			append_dev(div9, h24);
+    			append_dev(div9, t40);
+    			append_dev(div9, p5);
+    			append_dev(div14, t42);
+    			append_dev(div14, div10);
+    			append_dev(div10, img7);
+    			append_dev(div10, t43);
+    			append_dev(div10, h25);
+    			append_dev(div10, t45);
+    			append_dev(div10, p6);
+    			append_dev(div14, t47);
+    			append_dev(div14, div11);
+    			append_dev(div11, img8);
+    			append_dev(div11, t48);
+    			append_dev(div11, h26);
+    			append_dev(div11, t50);
+    			append_dev(div11, p7);
+    			append_dev(div14, t52);
+    			append_dev(div14, div12);
+    			append_dev(div12, img9);
+    			append_dev(div12, t53);
+    			append_dev(div12, h27);
+    			append_dev(div12, t55);
+    			append_dev(div12, p8);
+    			append_dev(div14, t57);
+    			append_dev(div14, div13);
+    			append_dev(div13, img10);
+    			append_dev(div13, t58);
+    			append_dev(div13, h28);
+    			append_dev(div13, t60);
+    			append_dev(div13, p9);
+    			insert_dev(target, t62, anchor);
     			insert_dev(target, section3, anchor);
-    			append_dev(section3, div30);
-    			append_dev(div30, h210);
-    			append_dev(div30, t78);
-    			append_dev(div30, p11);
-    			append_dev(section3, t80);
-    			append_dev(section3, form);
-    			append_dev(form, div41);
-    			append_dev(div41, div33);
-    			append_dev(div33, div31);
-    			append_dev(div31, input0);
-    			append_dev(div33, t81);
-    			append_dev(div33, div32);
-    			append_dev(div32, input1);
-    			append_dev(div41, t82);
-    			append_dev(div41, div36);
-    			append_dev(div36, div34);
-    			append_dev(div34, input2);
-    			append_dev(div36, t83);
-    			append_dev(div36, div35);
-    			append_dev(div35, input3);
-    			append_dev(div41, t84);
-    			append_dev(div41, div38);
-    			append_dev(div38, div37);
-    			append_dev(div37, textarea);
-    			append_dev(div41, t85);
-    			append_dev(div41, div40);
+    			append_dev(section3, div15);
+    			append_dev(div15, h29);
+    			append_dev(div15, t64);
+    			append_dev(div15, p10);
+    			append_dev(section3, t66);
+    			append_dev(section3, div28);
+    			append_dev(div28, div18);
+    			append_dev(div18, div16);
+    			append_dev(div16, img11);
+    			append_dev(div18, t67);
+    			append_dev(div18, div17);
+    			append_dev(div17, a4);
+    			append_dev(a4, h30);
+    			append_dev(div28, t69);
+    			append_dev(div28, div21);
+    			append_dev(div21, div19);
+    			append_dev(div19, img12);
+    			append_dev(div21, t70);
+    			append_dev(div21, div20);
+    			append_dev(div20, a5);
+    			append_dev(a5, h31);
+    			append_dev(div28, t72);
+    			append_dev(div28, div24);
+    			append_dev(div24, div22);
+    			append_dev(div22, img13);
+    			append_dev(div24, t73);
+    			append_dev(div24, div23);
+    			append_dev(div23, a6);
+    			append_dev(a6, h32);
+    			append_dev(div28, t75);
+    			append_dev(div28, div27);
+    			append_dev(div27, div25);
+    			append_dev(div25, img14);
+    			append_dev(div27, t76);
+    			append_dev(div27, div26);
+    			append_dev(div26, a7);
+    			append_dev(a7, h33);
+    			insert_dev(target, t78, anchor);
+    			insert_dev(target, section4, anchor);
+    			append_dev(section4, div29);
+    			append_dev(div29, h210);
+    			append_dev(div29, t80);
+    			append_dev(div29, p11);
+    			append_dev(section4, t82);
+    			append_dev(section4, form);
+    			append_dev(form, div40);
+    			append_dev(div40, div32);
+    			append_dev(div32, div30);
+    			append_dev(div30, input0);
+    			append_dev(div32, t83);
+    			append_dev(div32, div31);
+    			append_dev(div31, input1);
+    			append_dev(div40, t84);
+    			append_dev(div40, div35);
+    			append_dev(div35, div33);
+    			append_dev(div33, input2);
+    			append_dev(div35, t85);
+    			append_dev(div35, div34);
+    			append_dev(div34, input3);
+    			append_dev(div40, t86);
+    			append_dev(div40, div37);
+    			append_dev(div37, div36);
+    			append_dev(div36, textarea);
+    			append_dev(div40, t87);
     			append_dev(div40, div39);
-    			append_dev(div39, button);
+    			append_dev(div39, div38);
+    			append_dev(div38, button);
     			append_dev(button, input4);
-    			insert_dev(target, t86, anchor);
-    			insert_dev(target, div42, anchor);
-    			append_dev(div42, p12);
     			insert_dev(target, t88, anchor);
-    			insert_dev(target, div43, anchor);
-    			append_dev(div43, ul1);
-    			append_dev(ul1, li1);
-    			append_dev(li1, a6);
-    			append_dev(ul1, t90);
-    			append_dev(ul1, li2);
-    			append_dev(li2, a7);
-    			append_dev(ul1, t92);
+    			insert_dev(target, div41, anchor);
+    			append_dev(div41, p12);
+    			insert_dev(target, t90, anchor);
+    			insert_dev(target, div42, anchor);
+    			append_dev(div42, ul1);
     			append_dev(ul1, li3);
     			append_dev(li3, a8);
-    			append_dev(ul1, t94);
+    			append_dev(ul1, t92);
     			append_dev(ul1, li4);
     			append_dev(li4, a9);
-    			append_dev(ul1, t96);
+    			append_dev(ul1, t94);
     			append_dev(ul1, li5);
     			append_dev(li5, a10);
+    			append_dev(ul1, t96);
+    			append_dev(ul1, li6);
+    			append_dev(li6, a11);
+    			append_dev(ul1, t98);
+    			append_dev(ul1, li7);
+    			append_dev(li7, a12);
 
     			if (!mounted) {
     				dispose = [
     					listen_dev(div0, "click", /*click_handler*/ ctx[2], false, false, false),
-    					listen_dev(a6, "click", /*click_handler_1*/ ctx[4], false, false, false),
-    					listen_dev(a7, "click", /*click_handler_2*/ ctx[5], false, false, false),
-    					listen_dev(a8, "click", /*click_handler_3*/ ctx[6], false, false, false),
-    					listen_dev(a9, "click", /*click_handler_4*/ ctx[7], false, false, false),
-    					listen_dev(a10, "click", /*click_handler_5*/ ctx[8], false, false, false),
-    					listen_dev(div43, "click", /*click_handler_6*/ ctx[9], false, false, false)
+    					listen_dev(a8, "click", /*click_handler_1*/ ctx[4], false, false, false),
+    					listen_dev(a9, "click", /*click_handler_2*/ ctx[5], false, false, false),
+    					listen_dev(a10, "click", /*click_handler_3*/ ctx[6], false, false, false),
+    					listen_dev(a11, "click", /*click_handler_4*/ ctx[7], false, false, false),
+    					listen_dev(a12, "click", /*click_handler_5*/ ctx[8], false, false, false),
+    					listen_dev(div42, "click", /*click_handler_6*/ ctx[9], false, false, false)
     				];
 
     				mounted = true;
@@ -30288,14 +30622,6 @@ var app = (function () {
     		p: function update(ctx, [dirty]) {
     			if (dirty & /*active*/ 2) {
     				toggle_class(div0, "active", /*active*/ ctx[1]);
-    			}
-
-    			if (dirty & /*active*/ 2) {
-    				toggle_class(a6, "active", /*active*/ ctx[1]);
-    			}
-
-    			if (dirty & /*active*/ 2) {
-    				toggle_class(a7, "active", /*active*/ ctx[1]);
     			}
 
     			if (dirty & /*active*/ 2) {
@@ -30311,7 +30637,15 @@ var app = (function () {
     			}
 
     			if (dirty & /*active*/ 2) {
-    				toggle_class(div43, "active", /*active*/ ctx[1]);
+    				toggle_class(a11, "active", /*active*/ ctx[1]);
+    			}
+
+    			if (dirty & /*active*/ 2) {
+    				toggle_class(a12, "active", /*active*/ ctx[1]);
+    			}
+
+    			if (dirty & /*active*/ 2) {
+    				toggle_class(div42, "active", /*active*/ ctx[1]);
     			}
     		},
     		i: noop,
@@ -30320,20 +30654,20 @@ var app = (function () {
     			if (detaching) detach_dev(t0);
     			if (detaching) detach_dev(div0);
     			if (detaching) detach_dev(t1);
-    			if (detaching) detach_dev(canvas);
-    			/*canvas_binding*/ ctx[3](null);
-    			if (detaching) detach_dev(t16);
     			if (detaching) detach_dev(section0);
-    			if (detaching) detach_dev(t26);
+    			/*canvas_binding*/ ctx[3](null);
+    			if (detaching) detach_dev(t18);
     			if (detaching) detach_dev(section1);
-    			if (detaching) detach_dev(t60);
+    			if (detaching) detach_dev(t28);
     			if (detaching) detach_dev(section2);
-    			if (detaching) detach_dev(t76);
+    			if (detaching) detach_dev(t62);
     			if (detaching) detach_dev(section3);
-    			if (detaching) detach_dev(t86);
-    			if (detaching) detach_dev(div42);
+    			if (detaching) detach_dev(t78);
+    			if (detaching) detach_dev(section4);
     			if (detaching) detach_dev(t88);
-    			if (detaching) detach_dev(div43);
+    			if (detaching) detach_dev(div41);
+    			if (detaching) detach_dev(t90);
+    			if (detaching) detach_dev(div42);
     			mounted = false;
     			run_all(dispose);
     		}
