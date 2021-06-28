@@ -24,14 +24,29 @@ function rotateObject(object, degreeX = 0, degreeY = 0, degreeZ = 0) {
 const monitor = new THREE.Group();
 scene.add(monitor);
 
-// Screen
-const screen = new THREE.Mesh(
-  new THREE.BoxGeometry(5, 3, 0.1),
+// Header
+const header = new THREE.Mesh(
+  new THREE.BoxGeometry(5, 0.6, 0.3),
+  new THREE.MeshBasicMaterial({ color: "#fcc2fb" })
+);
+header.position.y = 2;
+monitor.add(header);
+
+// Main
+const main = new THREE.Mesh(
+  new THREE.BoxGeometry(3.08, 3, 0.3),
   new THREE.MeshBasicMaterial({ color: "#57b6fa" })
 );
-// screen.position.z = -1;
-// screen.position.x = 2.5;
-monitor.add(screen);
+main.position.x = -0.95;
+monitor.add(main);
+
+// Menu
+const menu = new THREE.Mesh(
+  new THREE.BoxGeometry(1.7, 3, 0.3),
+  new THREE.MeshBasicMaterial({ color: "#00fc0d" })
+);
+menu.position.x = 1.65;
+monitor.add(menu);
 
 // Base Cylinder
 const baseCylinder = new THREE.Mesh(
