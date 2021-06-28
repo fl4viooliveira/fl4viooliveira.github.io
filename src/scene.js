@@ -10,8 +10,17 @@ const canvas = document.querySelector("canvas.webgl");
 // Scene
 const scene = new THREE.Scene();
 
-// Objects
+// Light
+const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+scene.add(ambientLight);
 
+const pointLight = new THREE.PointLight(0xffffff, 0.5);
+pointLight.position.x = 2;
+pointLight.position.y = 3;
+pointLight.position.z = 4;
+scene.add(pointLight);
+
+// Rounded Edges Function
 function createBoxWithRoundedEdges(width, height, depth, radius0, smoothness) {
   let shape = new THREE.Shape();
   let eps = 0.00001;
@@ -42,7 +51,7 @@ function createBoxWithRoundedEdges(width, height, depth, radius0, smoothness) {
   return geometry;
 }
 
-// usage:
+// Objects
 
 // Monitor container
 const monitor = new THREE.Group();
@@ -51,43 +60,63 @@ scene.add(monitor);
 // Header
 const header = new THREE.Mesh(
   createBoxWithRoundedEdges(5, 0.6, 0.3, 0.1, 5),
-  // new THREE.BoxGeometry(5, 0.6, 0.3),
-  new THREE.MeshBasicMaterial({ color: "#fcc2fb" })
+  new THREE.MeshStandardMaterial({
+    color: "#fcc2fb",
+    roughness: 0.7,
+    metalness: 0.6,
+  })
 );
-header.position.y = 2;
+header.position.y = 1.58;
 monitor.add(header);
 
 // Main
 const main = new THREE.Mesh(
-  new THREE.BoxGeometry(3.08, 3, 0.3),
-  new THREE.MeshBasicMaterial({ color: "#57b6fa" })
+  createBoxWithRoundedEdges(3.08, 2.2, 0.3, 0.1, 5),
+  new THREE.MeshStandardMaterial({
+    color: "#57b6fa",
+    roughness: 0.7,
+    metalness: 0.6,
+  })
 );
 main.position.x = -0.95;
 monitor.add(main);
 
 // Menu
 const menu = new THREE.Mesh(
-  new THREE.BoxGeometry(1.7, 3, 0.3),
-  new THREE.MeshBasicMaterial({ color: "#00fc0d" })
+  createBoxWithRoundedEdges(1.7, 2.2, 0.3, 0.1, 5),
+  new THREE.MeshStandardMaterial({
+    color: "#00fc0d",
+    roughness: 0.7,
+    metalness: 0.6,
+  })
 );
 menu.position.x = 1.65;
 monitor.add(menu);
 
-// Base Cylinder
-const baseCylinder = new THREE.Mesh(
-  new THREE.CylinderGeometry(0.3, 0.3, 0.4, 10),
-  new THREE.MeshBasicMaterial({ color: 0xffff00 })
+// Footer
+const footer = new THREE.Mesh(
+  createBoxWithRoundedEdges(1.7, 1, 0.3, 0.1, 5),
+  new THREE.MeshStandardMaterial({
+    color: "#ffcc12",
+    roughness: 0.7,
+    metalness: 0.6,
+  })
 );
-baseCylinder.position.y = -1.67;
-monitor.add(baseCylinder);
+footer.position.x = -1.65;
+footer.position.y = -1.8;
+monitor.add(footer);
 
-// Base Box
-const baseBox = new THREE.Mesh(
-  new THREE.BoxGeometry(1.5, 0.08, 1),
-  new THREE.MeshBasicMaterial({ color: 0xffff00 })
+const footer2 = new THREE.Mesh(
+  createBoxWithRoundedEdges(3.08, 1, 0.3, 0.1, 5),
+  new THREE.MeshStandardMaterial({
+    color: "#ff6d12",
+    roughness: 0.7,
+    metalness: 0.6,
+  })
 );
-baseBox.position.y = -1.9;
-monitor.add(baseBox);
+footer2.position.x = 0.95;
+footer2.position.y = -1.8;
+monitor.add(footer2);
 
 // Sizes
 const sizes = {

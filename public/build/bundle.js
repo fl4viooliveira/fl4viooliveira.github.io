@@ -25913,268 +25913,6 @@ var app = (function () {
 
     Scene.prototype.isScene = true;
 
-    class CylinderGeometry extends BufferGeometry {
-
-    	constructor( radiusTop = 1, radiusBottom = 1, height = 1, radialSegments = 8, heightSegments = 1, openEnded = false, thetaStart = 0, thetaLength = Math.PI * 2 ) {
-
-    		super();
-    		this.type = 'CylinderGeometry';
-
-    		this.parameters = {
-    			radiusTop: radiusTop,
-    			radiusBottom: radiusBottom,
-    			height: height,
-    			radialSegments: radialSegments,
-    			heightSegments: heightSegments,
-    			openEnded: openEnded,
-    			thetaStart: thetaStart,
-    			thetaLength: thetaLength
-    		};
-
-    		const scope = this;
-
-    		radialSegments = Math.floor( radialSegments );
-    		heightSegments = Math.floor( heightSegments );
-
-    		// buffers
-
-    		const indices = [];
-    		const vertices = [];
-    		const normals = [];
-    		const uvs = [];
-
-    		// helper variables
-
-    		let index = 0;
-    		const indexArray = [];
-    		const halfHeight = height / 2;
-    		let groupStart = 0;
-
-    		// generate geometry
-
-    		generateTorso();
-
-    		if ( openEnded === false ) {
-
-    			if ( radiusTop > 0 ) generateCap( true );
-    			if ( radiusBottom > 0 ) generateCap( false );
-
-    		}
-
-    		// build geometry
-
-    		this.setIndex( indices );
-    		this.setAttribute( 'position', new Float32BufferAttribute( vertices, 3 ) );
-    		this.setAttribute( 'normal', new Float32BufferAttribute( normals, 3 ) );
-    		this.setAttribute( 'uv', new Float32BufferAttribute( uvs, 2 ) );
-
-    		function generateTorso() {
-
-    			const normal = new Vector3();
-    			const vertex = new Vector3();
-
-    			let groupCount = 0;
-
-    			// this will be used to calculate the normal
-    			const slope = ( radiusBottom - radiusTop ) / height;
-
-    			// generate vertices, normals and uvs
-
-    			for ( let y = 0; y <= heightSegments; y ++ ) {
-
-    				const indexRow = [];
-
-    				const v = y / heightSegments;
-
-    				// calculate the radius of the current row
-
-    				const radius = v * ( radiusBottom - radiusTop ) + radiusTop;
-
-    				for ( let x = 0; x <= radialSegments; x ++ ) {
-
-    					const u = x / radialSegments;
-
-    					const theta = u * thetaLength + thetaStart;
-
-    					const sinTheta = Math.sin( theta );
-    					const cosTheta = Math.cos( theta );
-
-    					// vertex
-
-    					vertex.x = radius * sinTheta;
-    					vertex.y = - v * height + halfHeight;
-    					vertex.z = radius * cosTheta;
-    					vertices.push( vertex.x, vertex.y, vertex.z );
-
-    					// normal
-
-    					normal.set( sinTheta, slope, cosTheta ).normalize();
-    					normals.push( normal.x, normal.y, normal.z );
-
-    					// uv
-
-    					uvs.push( u, 1 - v );
-
-    					// save index of vertex in respective row
-
-    					indexRow.push( index ++ );
-
-    				}
-
-    				// now save vertices of the row in our index array
-
-    				indexArray.push( indexRow );
-
-    			}
-
-    			// generate indices
-
-    			for ( let x = 0; x < radialSegments; x ++ ) {
-
-    				for ( let y = 0; y < heightSegments; y ++ ) {
-
-    					// we use the index array to access the correct indices
-
-    					const a = indexArray[ y ][ x ];
-    					const b = indexArray[ y + 1 ][ x ];
-    					const c = indexArray[ y + 1 ][ x + 1 ];
-    					const d = indexArray[ y ][ x + 1 ];
-
-    					// faces
-
-    					indices.push( a, b, d );
-    					indices.push( b, c, d );
-
-    					// update group counter
-
-    					groupCount += 6;
-
-    				}
-
-    			}
-
-    			// add a group to the geometry. this will ensure multi material support
-
-    			scope.addGroup( groupStart, groupCount, 0 );
-
-    			// calculate new start value for groups
-
-    			groupStart += groupCount;
-
-    		}
-
-    		function generateCap( top ) {
-
-    			// save the index of the first center vertex
-    			const centerIndexStart = index;
-
-    			const uv = new Vector2();
-    			const vertex = new Vector3();
-
-    			let groupCount = 0;
-
-    			const radius = ( top === true ) ? radiusTop : radiusBottom;
-    			const sign = ( top === true ) ? 1 : - 1;
-
-    			// first we generate the center vertex data of the cap.
-    			// because the geometry needs one set of uvs per face,
-    			// we must generate a center vertex per face/segment
-
-    			for ( let x = 1; x <= radialSegments; x ++ ) {
-
-    				// vertex
-
-    				vertices.push( 0, halfHeight * sign, 0 );
-
-    				// normal
-
-    				normals.push( 0, sign, 0 );
-
-    				// uv
-
-    				uvs.push( 0.5, 0.5 );
-
-    				// increase index
-
-    				index ++;
-
-    			}
-
-    			// save the index of the last center vertex
-    			const centerIndexEnd = index;
-
-    			// now we generate the surrounding vertices, normals and uvs
-
-    			for ( let x = 0; x <= radialSegments; x ++ ) {
-
-    				const u = x / radialSegments;
-    				const theta = u * thetaLength + thetaStart;
-
-    				const cosTheta = Math.cos( theta );
-    				const sinTheta = Math.sin( theta );
-
-    				// vertex
-
-    				vertex.x = radius * sinTheta;
-    				vertex.y = halfHeight * sign;
-    				vertex.z = radius * cosTheta;
-    				vertices.push( vertex.x, vertex.y, vertex.z );
-
-    				// normal
-
-    				normals.push( 0, sign, 0 );
-
-    				// uv
-
-    				uv.x = ( cosTheta * 0.5 ) + 0.5;
-    				uv.y = ( sinTheta * 0.5 * sign ) + 0.5;
-    				uvs.push( uv.x, uv.y );
-
-    				// increase index
-
-    				index ++;
-
-    			}
-
-    			// generate indices
-
-    			for ( let x = 0; x < radialSegments; x ++ ) {
-
-    				const c = centerIndexStart + x;
-    				const i = centerIndexEnd + x;
-
-    				if ( top === true ) {
-
-    					// face top
-
-    					indices.push( i, i + 1, c );
-
-    				} else {
-
-    					// face bottom
-
-    					indices.push( i + 1, i, c );
-
-    				}
-
-    				groupCount += 3;
-
-    			}
-
-    			// add a group to the geometry. this will ensure multi material support
-
-    			scope.addGroup( groupStart, groupCount, top === true ? 1 : 2 );
-
-    			// calculate new start value for groups
-
-    			groupStart += groupCount;
-
-    		}
-
-    	}
-
-    }
-
     /**
      * Port from https://github.com/mapbox/earcut (v2.2.2)
      */
@@ -27991,6 +27729,185 @@ var app = (function () {
     	return data;
 
     }
+
+    /**
+     * parameters = {
+     *  color: <hex>,
+     *  roughness: <float>,
+     *  metalness: <float>,
+     *  opacity: <float>,
+     *
+     *  map: new THREE.Texture( <Image> ),
+     *
+     *  lightMap: new THREE.Texture( <Image> ),
+     *  lightMapIntensity: <float>
+     *
+     *  aoMap: new THREE.Texture( <Image> ),
+     *  aoMapIntensity: <float>
+     *
+     *  emissive: <hex>,
+     *  emissiveIntensity: <float>
+     *  emissiveMap: new THREE.Texture( <Image> ),
+     *
+     *  bumpMap: new THREE.Texture( <Image> ),
+     *  bumpScale: <float>,
+     *
+     *  normalMap: new THREE.Texture( <Image> ),
+     *  normalMapType: THREE.TangentSpaceNormalMap,
+     *  normalScale: <Vector2>,
+     *
+     *  displacementMap: new THREE.Texture( <Image> ),
+     *  displacementScale: <float>,
+     *  displacementBias: <float>,
+     *
+     *  roughnessMap: new THREE.Texture( <Image> ),
+     *
+     *  metalnessMap: new THREE.Texture( <Image> ),
+     *
+     *  alphaMap: new THREE.Texture( <Image> ),
+     *
+     *  envMap: new THREE.CubeTexture( [posx, negx, posy, negy, posz, negz] ),
+     *  envMapIntensity: <float>
+     *
+     *  refractionRatio: <float>,
+     *
+     *  wireframe: <boolean>,
+     *  wireframeLinewidth: <float>,
+     *
+     *  morphTargets: <bool>,
+     *  morphNormals: <bool>,
+     *
+     *  flatShading: <bool>
+     * }
+     */
+
+    class MeshStandardMaterial extends Material {
+
+    	constructor( parameters ) {
+
+    		super();
+
+    		this.defines = { 'STANDARD': '' };
+
+    		this.type = 'MeshStandardMaterial';
+
+    		this.color = new Color( 0xffffff ); // diffuse
+    		this.roughness = 1.0;
+    		this.metalness = 0.0;
+
+    		this.map = null;
+
+    		this.lightMap = null;
+    		this.lightMapIntensity = 1.0;
+
+    		this.aoMap = null;
+    		this.aoMapIntensity = 1.0;
+
+    		this.emissive = new Color( 0x000000 );
+    		this.emissiveIntensity = 1.0;
+    		this.emissiveMap = null;
+
+    		this.bumpMap = null;
+    		this.bumpScale = 1;
+
+    		this.normalMap = null;
+    		this.normalMapType = TangentSpaceNormalMap;
+    		this.normalScale = new Vector2( 1, 1 );
+
+    		this.displacementMap = null;
+    		this.displacementScale = 1;
+    		this.displacementBias = 0;
+
+    		this.roughnessMap = null;
+
+    		this.metalnessMap = null;
+
+    		this.alphaMap = null;
+
+    		this.envMap = null;
+    		this.envMapIntensity = 1.0;
+
+    		this.refractionRatio = 0.98;
+
+    		this.wireframe = false;
+    		this.wireframeLinewidth = 1;
+    		this.wireframeLinecap = 'round';
+    		this.wireframeLinejoin = 'round';
+
+    		this.morphTargets = false;
+    		this.morphNormals = false;
+
+    		this.flatShading = false;
+
+    		this.vertexTangents = false;
+
+    		this.setValues( parameters );
+
+    	}
+
+    	copy( source ) {
+
+    		super.copy( source );
+
+    		this.defines = { 'STANDARD': '' };
+
+    		this.color.copy( source.color );
+    		this.roughness = source.roughness;
+    		this.metalness = source.metalness;
+
+    		this.map = source.map;
+
+    		this.lightMap = source.lightMap;
+    		this.lightMapIntensity = source.lightMapIntensity;
+
+    		this.aoMap = source.aoMap;
+    		this.aoMapIntensity = source.aoMapIntensity;
+
+    		this.emissive.copy( source.emissive );
+    		this.emissiveMap = source.emissiveMap;
+    		this.emissiveIntensity = source.emissiveIntensity;
+
+    		this.bumpMap = source.bumpMap;
+    		this.bumpScale = source.bumpScale;
+
+    		this.normalMap = source.normalMap;
+    		this.normalMapType = source.normalMapType;
+    		this.normalScale.copy( source.normalScale );
+
+    		this.displacementMap = source.displacementMap;
+    		this.displacementScale = source.displacementScale;
+    		this.displacementBias = source.displacementBias;
+
+    		this.roughnessMap = source.roughnessMap;
+
+    		this.metalnessMap = source.metalnessMap;
+
+    		this.alphaMap = source.alphaMap;
+
+    		this.envMap = source.envMap;
+    		this.envMapIntensity = source.envMapIntensity;
+
+    		this.refractionRatio = source.refractionRatio;
+
+    		this.wireframe = source.wireframe;
+    		this.wireframeLinewidth = source.wireframeLinewidth;
+    		this.wireframeLinecap = source.wireframeLinecap;
+    		this.wireframeLinejoin = source.wireframeLinejoin;
+
+    		this.morphTargets = source.morphTargets;
+    		this.morphNormals = source.morphNormals;
+
+    		this.flatShading = source.flatShading;
+
+    		this.vertexTangents = source.vertexTangents;
+
+    		return this;
+
+    	}
+
+    }
+
+    MeshStandardMaterial.prototype.isMeshStandardMaterial = true;
 
     const Cache = {
 
@@ -30443,6 +30360,302 @@ var app = (function () {
     }
 
     Light.prototype.isLight = true;
+
+    const _projScreenMatrix$1 = /*@__PURE__*/ new Matrix4();
+    const _lightPositionWorld$1 = /*@__PURE__*/ new Vector3();
+    const _lookTarget$1 = /*@__PURE__*/ new Vector3();
+
+    class LightShadow {
+
+    	constructor( camera ) {
+
+    		this.camera = camera;
+
+    		this.bias = 0;
+    		this.normalBias = 0;
+    		this.radius = 1;
+
+    		this.mapSize = new Vector2( 512, 512 );
+
+    		this.map = null;
+    		this.mapPass = null;
+    		this.matrix = new Matrix4();
+
+    		this.autoUpdate = true;
+    		this.needsUpdate = false;
+
+    		this._frustum = new Frustum();
+    		this._frameExtents = new Vector2( 1, 1 );
+
+    		this._viewportCount = 1;
+
+    		this._viewports = [
+
+    			new Vector4( 0, 0, 1, 1 )
+
+    		];
+
+    	}
+
+    	getViewportCount() {
+
+    		return this._viewportCount;
+
+    	}
+
+    	getFrustum() {
+
+    		return this._frustum;
+
+    	}
+
+    	updateMatrices( light ) {
+
+    		const shadowCamera = this.camera;
+    		const shadowMatrix = this.matrix;
+
+    		_lightPositionWorld$1.setFromMatrixPosition( light.matrixWorld );
+    		shadowCamera.position.copy( _lightPositionWorld$1 );
+
+    		_lookTarget$1.setFromMatrixPosition( light.target.matrixWorld );
+    		shadowCamera.lookAt( _lookTarget$1 );
+    		shadowCamera.updateMatrixWorld();
+
+    		_projScreenMatrix$1.multiplyMatrices( shadowCamera.projectionMatrix, shadowCamera.matrixWorldInverse );
+    		this._frustum.setFromProjectionMatrix( _projScreenMatrix$1 );
+
+    		shadowMatrix.set(
+    			0.5, 0.0, 0.0, 0.5,
+    			0.0, 0.5, 0.0, 0.5,
+    			0.0, 0.0, 0.5, 0.5,
+    			0.0, 0.0, 0.0, 1.0
+    		);
+
+    		shadowMatrix.multiply( shadowCamera.projectionMatrix );
+    		shadowMatrix.multiply( shadowCamera.matrixWorldInverse );
+
+    	}
+
+    	getViewport( viewportIndex ) {
+
+    		return this._viewports[ viewportIndex ];
+
+    	}
+
+    	getFrameExtents() {
+
+    		return this._frameExtents;
+
+    	}
+
+    	dispose() {
+
+    		if ( this.map ) {
+
+    			this.map.dispose();
+
+    		}
+
+    		if ( this.mapPass ) {
+
+    			this.mapPass.dispose();
+
+    		}
+
+    	}
+
+    	copy( source ) {
+
+    		this.camera = source.camera.clone();
+
+    		this.bias = source.bias;
+    		this.radius = source.radius;
+
+    		this.mapSize.copy( source.mapSize );
+
+    		return this;
+
+    	}
+
+    	clone() {
+
+    		return new this.constructor().copy( this );
+
+    	}
+
+    	toJSON() {
+
+    		const object = {};
+
+    		if ( this.bias !== 0 ) object.bias = this.bias;
+    		if ( this.normalBias !== 0 ) object.normalBias = this.normalBias;
+    		if ( this.radius !== 1 ) object.radius = this.radius;
+    		if ( this.mapSize.x !== 512 || this.mapSize.y !== 512 ) object.mapSize = this.mapSize.toArray();
+
+    		object.camera = this.camera.toJSON( false ).object;
+    		delete object.camera.matrix;
+
+    		return object;
+
+    	}
+
+    }
+
+    const _projScreenMatrix = /*@__PURE__*/ new Matrix4();
+    const _lightPositionWorld = /*@__PURE__*/ new Vector3();
+    const _lookTarget = /*@__PURE__*/ new Vector3();
+
+    class PointLightShadow extends LightShadow {
+
+    	constructor() {
+
+    		super( new PerspectiveCamera( 90, 1, 0.5, 500 ) );
+
+    		this._frameExtents = new Vector2( 4, 2 );
+
+    		this._viewportCount = 6;
+
+    		this._viewports = [
+    			// These viewports map a cube-map onto a 2D texture with the
+    			// following orientation:
+    			//
+    			//  xzXZ
+    			//   y Y
+    			//
+    			// X - Positive x direction
+    			// x - Negative x direction
+    			// Y - Positive y direction
+    			// y - Negative y direction
+    			// Z - Positive z direction
+    			// z - Negative z direction
+
+    			// positive X
+    			new Vector4( 2, 1, 1, 1 ),
+    			// negative X
+    			new Vector4( 0, 1, 1, 1 ),
+    			// positive Z
+    			new Vector4( 3, 1, 1, 1 ),
+    			// negative Z
+    			new Vector4( 1, 1, 1, 1 ),
+    			// positive Y
+    			new Vector4( 3, 0, 1, 1 ),
+    			// negative Y
+    			new Vector4( 1, 0, 1, 1 )
+    		];
+
+    		this._cubeDirections = [
+    			new Vector3( 1, 0, 0 ), new Vector3( - 1, 0, 0 ), new Vector3( 0, 0, 1 ),
+    			new Vector3( 0, 0, - 1 ), new Vector3( 0, 1, 0 ), new Vector3( 0, - 1, 0 )
+    		];
+
+    		this._cubeUps = [
+    			new Vector3( 0, 1, 0 ), new Vector3( 0, 1, 0 ), new Vector3( 0, 1, 0 ),
+    			new Vector3( 0, 1, 0 ), new Vector3( 0, 0, 1 ),	new Vector3( 0, 0, - 1 )
+    		];
+
+    	}
+
+    	updateMatrices( light, viewportIndex = 0 ) {
+
+    		const camera = this.camera;
+    		const shadowMatrix = this.matrix;
+
+    		const far = light.distance || camera.far;
+
+    		if ( far !== camera.far ) {
+
+    			camera.far = far;
+    			camera.updateProjectionMatrix();
+
+    		}
+
+    		_lightPositionWorld.setFromMatrixPosition( light.matrixWorld );
+    		camera.position.copy( _lightPositionWorld );
+
+    		_lookTarget.copy( camera.position );
+    		_lookTarget.add( this._cubeDirections[ viewportIndex ] );
+    		camera.up.copy( this._cubeUps[ viewportIndex ] );
+    		camera.lookAt( _lookTarget );
+    		camera.updateMatrixWorld();
+
+    		shadowMatrix.makeTranslation( - _lightPositionWorld.x, - _lightPositionWorld.y, - _lightPositionWorld.z );
+
+    		_projScreenMatrix.multiplyMatrices( camera.projectionMatrix, camera.matrixWorldInverse );
+    		this._frustum.setFromProjectionMatrix( _projScreenMatrix );
+
+    	}
+
+    }
+
+    PointLightShadow.prototype.isPointLightShadow = true;
+
+    class PointLight extends Light {
+
+    	constructor( color, intensity, distance = 0, decay = 1 ) {
+
+    		super( color, intensity );
+
+    		this.type = 'PointLight';
+
+    		this.distance = distance;
+    		this.decay = decay; // for physically correct lights, should be 2.
+
+    		this.shadow = new PointLightShadow();
+
+    	}
+
+    	get power() {
+
+    		// intensity = power per solid angle.
+    		// ref: equation (15) from https://seblagarde.files.wordpress.com/2015/07/course_notes_moving_frostbite_to_pbr_v32.pdf
+    		return this.intensity * 4 * Math.PI;
+
+    	}
+
+    	set power( power ) {
+
+    		// intensity = power per solid angle.
+    		// ref: equation (15) from https://seblagarde.files.wordpress.com/2015/07/course_notes_moving_frostbite_to_pbr_v32.pdf
+    		this.intensity = power / ( 4 * Math.PI );
+
+    	}
+
+    	dispose() {
+
+    		this.shadow.dispose();
+
+    	}
+
+    	copy( source ) {
+
+    		super.copy( source );
+
+    		this.distance = source.distance;
+    		this.decay = source.decay;
+
+    		this.shadow = source.shadow.clone();
+
+    		return this;
+
+    	}
+
+    }
+
+    PointLight.prototype.isPointLight = true;
+
+    class AmbientLight extends Light {
+
+    	constructor( color, intensity ) {
+
+    		super( color, intensity );
+
+    		this.type = 'AmbientLight';
+
+    	}
+
+    }
+
+    AmbientLight.prototype.isAmbientLight = true;
 
     class LoaderUtils {
 
@@ -33375,8 +33588,17 @@ var app = (function () {
     // Scene
     const scene = new Scene();
 
-    // Objects
+    // Light
+    const ambientLight = new AmbientLight(0xffffff, 0.5);
+    scene.add(ambientLight);
 
+    const pointLight = new PointLight(0xffffff, 0.5);
+    pointLight.position.x = 2;
+    pointLight.position.y = 3;
+    pointLight.position.z = 4;
+    scene.add(pointLight);
+
+    // Rounded Edges Function
     function createBoxWithRoundedEdges(width, height, depth, radius0, smoothness) {
       let shape = new Shape();
       let eps = 0.00001;
@@ -33407,7 +33629,7 @@ var app = (function () {
       return geometry;
     }
 
-    // usage:
+    // Objects
 
     // Monitor container
     const monitor = new Group();
@@ -33416,43 +33638,63 @@ var app = (function () {
     // Header
     const header = new Mesh(
       createBoxWithRoundedEdges(5, 0.6, 0.3, 0.1, 5),
-      // new THREE.BoxGeometry(5, 0.6, 0.3),
-      new MeshBasicMaterial({ color: "#fcc2fb" })
+      new MeshStandardMaterial({
+        color: "#fcc2fb",
+        roughness: 0.7,
+        metalness: 0.6,
+      })
     );
-    header.position.y = 2;
+    header.position.y = 1.58;
     monitor.add(header);
 
     // Main
     const main = new Mesh(
-      new BoxGeometry(3.08, 3, 0.3),
-      new MeshBasicMaterial({ color: "#57b6fa" })
+      createBoxWithRoundedEdges(3.08, 2.2, 0.3, 0.1, 5),
+      new MeshStandardMaterial({
+        color: "#57b6fa",
+        roughness: 0.7,
+        metalness: 0.6,
+      })
     );
     main.position.x = -0.95;
     monitor.add(main);
 
     // Menu
     const menu = new Mesh(
-      new BoxGeometry(1.7, 3, 0.3),
-      new MeshBasicMaterial({ color: "#00fc0d" })
+      createBoxWithRoundedEdges(1.7, 2.2, 0.3, 0.1, 5),
+      new MeshStandardMaterial({
+        color: "#00fc0d",
+        roughness: 0.7,
+        metalness: 0.6,
+      })
     );
     menu.position.x = 1.65;
     monitor.add(menu);
 
-    // Base Cylinder
-    const baseCylinder = new Mesh(
-      new CylinderGeometry(0.3, 0.3, 0.4, 10),
-      new MeshBasicMaterial({ color: 0xffff00 })
+    // Footer
+    const footer = new Mesh(
+      createBoxWithRoundedEdges(1.7, 1, 0.3, 0.1, 5),
+      new MeshStandardMaterial({
+        color: "#ffcc12",
+        roughness: 0.7,
+        metalness: 0.6,
+      })
     );
-    baseCylinder.position.y = -1.67;
-    monitor.add(baseCylinder);
+    footer.position.x = -1.65;
+    footer.position.y = -1.8;
+    monitor.add(footer);
 
-    // Base Box
-    const baseBox = new Mesh(
-      new BoxGeometry(1.5, 0.08, 1),
-      new MeshBasicMaterial({ color: 0xffff00 })
+    const footer2 = new Mesh(
+      createBoxWithRoundedEdges(3.08, 1, 0.3, 0.1, 5),
+      new MeshStandardMaterial({
+        color: "#ff6d12",
+        roughness: 0.7,
+        metalness: 0.6,
+      })
     );
-    baseBox.position.y = -1.9;
-    monitor.add(baseBox);
+    footer2.position.x = 0.95;
+    footer2.position.y = -1.8;
+    monitor.add(footer2);
 
     // Sizes
     const sizes = {
