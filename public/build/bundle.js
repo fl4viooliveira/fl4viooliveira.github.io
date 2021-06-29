@@ -33592,7 +33592,7 @@ var app = (function () {
     const ambientLight = new AmbientLight(0xffffff, 0.5);
     scene.add(ambientLight);
 
-    const pointLight = new PointLight(0xffffff, 0.5);
+    const pointLight = new PointLight(0xffffff, 0.9);
     pointLight.position.x = 2;
     pointLight.position.y = 3;
     pointLight.position.z = 4;
@@ -33647,6 +33647,20 @@ var app = (function () {
     header.position.y = 1.58;
     monitor.add(header);
 
+    // Search
+    const search = new Mesh(
+      createBoxWithRoundedEdges(1, 0.4, 0.2, 0.07, 5),
+      new MeshStandardMaterial({
+        color: "#e0f6ff",
+        roughness: 0.7,
+        metalness: 0.6,
+      })
+    );
+    search.position.x = 1.58;
+    search.position.y = 1.58;
+    search.position.z = 0.12;
+    monitor.add(search);
+
     // Main
     const main = new Mesh(
       createBoxWithRoundedEdges(3.08, 2.2, 0.3, 0.1, 5),
@@ -33663,7 +33677,7 @@ var app = (function () {
     const menu = new Mesh(
       createBoxWithRoundedEdges(1.7, 2.2, 0.3, 0.1, 5),
       new MeshStandardMaterial({
-        color: "#00fc0d",
+        color: "#fcc2fb",
         roughness: 0.7,
         metalness: 0.6,
       })
@@ -33675,7 +33689,7 @@ var app = (function () {
     const footer = new Mesh(
       createBoxWithRoundedEdges(1.7, 1, 0.3, 0.1, 5),
       new MeshStandardMaterial({
-        color: "#ffcc12",
+        color: "#fcc2fb",
         roughness: 0.7,
         metalness: 0.6,
       })
@@ -33687,7 +33701,7 @@ var app = (function () {
     const footer2 = new Mesh(
       createBoxWithRoundedEdges(3.08, 1, 0.3, 0.1, 5),
       new MeshStandardMaterial({
-        color: "#ff6d12",
+        color: "#57b6fa",
         roughness: 0.7,
         metalness: 0.6,
       })
