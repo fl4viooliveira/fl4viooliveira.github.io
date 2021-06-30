@@ -83,6 +83,34 @@ search.position.y = 1.58;
 search.position.z = 0.12;
 monitor.add(search);
 
+//magnifier
+const magnifier = new THREE.Mesh(
+  new THREE.TorusGeometry(0.07, 0.02, 16, 100),
+  new THREE.MeshStandardMaterial({
+    color: "#57b6fa",
+    roughness: 0.7,
+    metalness: 0.6,
+  })
+);
+magnifier.position.x = 1.25;
+magnifier.position.y = 1.62;
+magnifier.position.z = 0.24;
+monitor.add(magnifier);
+
+const magnifierStick = new THREE.Mesh(
+  new THREE.CylinderGeometry(0.02, 0.02, 0.1, 16),
+  new THREE.MeshStandardMaterial({
+    color: "#57b6fa",
+    roughness: 0.7,
+    metalness: 0.6,
+  })
+);
+magnifierStick.position.x = 1.31;
+magnifierStick.position.y = 1.51;
+magnifierStick.position.z = 0.24;
+magnifierStick.rotation.z = 0.45;
+monitor.add(magnifierStick);
+
 // Main
 const main = new THREE.Mesh(
   createBoxWithRoundedEdges(3.08, 2.2, 0.3, 0.1, 5),
