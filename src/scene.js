@@ -95,6 +95,47 @@ const main = new THREE.Mesh(
 main.position.x = -0.95;
 monitor.add(main);
 
+// Img
+const img = new THREE.Mesh(
+  createBoxWithRoundedEdges(2.7, 1.82, 0.2, 0.1, 5),
+  new THREE.MeshStandardMaterial({
+    color: "#e0f6ff",
+    roughness: 0.7,
+    metalness: 0.6,
+  })
+);
+img.position.x = -0.95;
+img.position.z = 0.12;
+monitor.add(img);
+
+const triangleShape = new THREE.Shape();
+triangleShape.moveTo(-0.4, -0.8);
+// triangleShape.lineTo(0, 0);
+triangleShape.lineTo(-1.3, 0.3);
+triangleShape.lineTo(-2.2, -0.8);
+const triangleGeometry = new THREE.ShapeGeometry(triangleShape);
+const triangleMaterial = new THREE.MeshStandardMaterial({
+  color: "#57b6fa",
+  roughness: 0.7,
+  metalness: 0.6,
+});
+const meshTriangle1 = new THREE.Mesh(triangleGeometry, triangleMaterial);
+meshTriangle1.position.z = 0.23;
+monitor.add(meshTriangle1);
+
+const sun = new THREE.Mesh(
+  new THREE.CircleGeometry(0.3, 32),
+  new THREE.MeshStandardMaterial({
+    color: "#57b6fa",
+    roughness: 0.7,
+    metalness: 0.6,
+  })
+);
+sun.position.x = -0.09;
+sun.position.y = 0.44;
+sun.position.z = 0.23;
+monitor.add(sun);
+
 // Menu
 const menu = new THREE.Mesh(
   createBoxWithRoundedEdges(1.7, 2.2, 0.3, 0.1, 5),
@@ -154,7 +195,7 @@ scene.add(camera);
 let renderer;
 
 export const createScene = (webgl) => {
-  renderer = new THREE.WebGLRenderer({ canvas: webgl, alpha: true });
+  renderer = new THREE.WebGLRenderer({ canvas: webgl, alpha: false });
   renderer.setSize(sizes.width, sizes.height);
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
   // Controls

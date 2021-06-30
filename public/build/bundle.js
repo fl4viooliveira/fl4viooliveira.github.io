@@ -25913,6 +25913,84 @@ var app = (function () {
 
     Scene.prototype.isScene = true;
 
+    class CircleGeometry extends BufferGeometry {
+
+    	constructor( radius = 1, segments = 8, thetaStart = 0, thetaLength = Math.PI * 2 ) {
+
+    		super();
+
+    		this.type = 'CircleGeometry';
+
+    		this.parameters = {
+    			radius: radius,
+    			segments: segments,
+    			thetaStart: thetaStart,
+    			thetaLength: thetaLength
+    		};
+
+    		segments = Math.max( 3, segments );
+
+    		// buffers
+
+    		const indices = [];
+    		const vertices = [];
+    		const normals = [];
+    		const uvs = [];
+
+    		// helper variables
+
+    		const vertex = new Vector3();
+    		const uv = new Vector2();
+
+    		// center point
+
+    		vertices.push( 0, 0, 0 );
+    		normals.push( 0, 0, 1 );
+    		uvs.push( 0.5, 0.5 );
+
+    		for ( let s = 0, i = 3; s <= segments; s ++, i += 3 ) {
+
+    			const segment = thetaStart + s / segments * thetaLength;
+
+    			// vertex
+
+    			vertex.x = radius * Math.cos( segment );
+    			vertex.y = radius * Math.sin( segment );
+
+    			vertices.push( vertex.x, vertex.y, vertex.z );
+
+    			// normal
+
+    			normals.push( 0, 0, 1 );
+
+    			// uvs
+
+    			uv.x = ( vertices[ i ] / radius + 1 ) / 2;
+    			uv.y = ( vertices[ i + 1 ] / radius + 1 ) / 2;
+
+    			uvs.push( uv.x, uv.y );
+
+    		}
+
+    		// indices
+
+    		for ( let i = 1; i <= segments; i ++ ) {
+
+    			indices.push( i, i + 1, 0 );
+
+    		}
+
+    		// build geometry
+
+    		this.setIndex( indices );
+    		this.setAttribute( 'position', new Float32BufferAttribute( vertices, 3 ) );
+    		this.setAttribute( 'normal', new Float32BufferAttribute( normals, 3 ) );
+    		this.setAttribute( 'uv', new Float32BufferAttribute( uvs, 2 ) );
+
+    	}
+
+    }
+
     /**
      * Port from https://github.com/mapbox/earcut (v2.2.2)
      */
@@ -33673,6 +33751,47 @@ var app = (function () {
     main.position.x = -0.95;
     monitor.add(main);
 
+    // Img
+    const img = new Mesh(
+      createBoxWithRoundedEdges(2.7, 1.82, 0.2, 0.1, 5),
+      new MeshStandardMaterial({
+        color: "#e0f6ff",
+        roughness: 0.7,
+        metalness: 0.6,
+      })
+    );
+    img.position.x = -0.95;
+    img.position.z = 0.12;
+    monitor.add(img);
+
+    const triangleShape = new Shape();
+    triangleShape.moveTo(-0.4, -0.8);
+    // triangleShape.lineTo(0, 0);
+    triangleShape.lineTo(-1.3, 0.3);
+    triangleShape.lineTo(-2.2, -0.8);
+    const triangleGeometry = new ShapeGeometry(triangleShape);
+    const triangleMaterial = new MeshStandardMaterial({
+      color: "#57b6fa",
+      roughness: 0.7,
+      metalness: 0.6,
+    });
+    const meshTriangle1 = new Mesh(triangleGeometry, triangleMaterial);
+    meshTriangle1.position.z = 0.23;
+    monitor.add(meshTriangle1);
+
+    const sun = new Mesh(
+      new CircleGeometry(0.3, 32),
+      new MeshStandardMaterial({
+        color: "#57b6fa",
+        roughness: 0.7,
+        metalness: 0.6,
+      })
+    );
+    sun.position.x = -0.09;
+    sun.position.y = 0.44;
+    sun.position.z = 0.23;
+    monitor.add(sun);
+
     // Menu
     const menu = new Mesh(
       createBoxWithRoundedEdges(1.7, 2.2, 0.3, 0.1, 5),
@@ -33732,7 +33851,7 @@ var app = (function () {
     let renderer;
 
     const createScene = (webgl) => {
-      renderer = new WebGLRenderer({ canvas: webgl, alpha: true });
+      renderer = new WebGLRenderer({ canvas: webgl, alpha: false });
       renderer.setSize(sizes.width, sizes.height);
       renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
       // Controls
