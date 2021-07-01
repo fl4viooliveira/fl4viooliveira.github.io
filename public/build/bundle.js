@@ -34090,7 +34090,7 @@ var app = (function () {
       const menuHead = new Mesh(
         new CylinderGeometry(0.05, 0.05, 0.3, 32),
         new MeshStandardMaterial({
-          color: "#57b6fa",
+          color: "#e0f6ff",
           roughness: 0.7,
           metalness: 0.6,
         })
@@ -34208,6 +34208,53 @@ var app = (function () {
     );
     menu.position.x = 1.65;
     monitor.add(menu);
+
+    // Side menu
+    for (let i = 0; i < 3; i++) {
+      // Icon
+      const menuIcon = new Mesh(
+        new CylinderGeometry(0.05, 0.05, 0.3, 32),
+        new MeshStandardMaterial({
+          color: "#57b6fa",
+          roughness: 0.7,
+          metalness: 0.6,
+        })
+      );
+      menuIcon.position.x = 0.98;
+      menuIcon.position.y = 0.87 - i / 1.5;
+      menuIcon.position.z = 0.07;
+      menuIcon.rotation.x = 1.57;
+
+      // Lines
+      const lines = new Mesh(
+        new CylinderGeometry(0.05, 0.05, 0.7, 32),
+        new MeshStandardMaterial({
+          color: "#e0f6ff",
+          roughness: 0.7,
+          metalness: 0.6,
+        })
+      );
+      lines.position.x = 1.45;
+      lines.position.y = 0.87 - i / 1.5;
+      lines.position.z = 0.18;
+      lines.rotation.z = 1.57;
+
+      // Lines 2
+      const lines2 = new Mesh(
+        new CylinderGeometry(0.05, 0.05, 0.4, 32),
+        new MeshStandardMaterial({
+          color: "#e0f6ff",
+          roughness: 0.7,
+          metalness: 0.6,
+        })
+      );
+      lines2.position.x = 2.08;
+      lines2.position.y = 0.87 - i / 1.5;
+      lines2.position.z = 0.18;
+      lines2.rotation.z = 1.57;
+
+      monitor.add(menuIcon, lines, lines2);
+    }
 
     // Footer
     const footer = new Mesh(
