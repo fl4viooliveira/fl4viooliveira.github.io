@@ -34085,6 +34085,23 @@ var app = (function () {
     header.position.y = 1.58;
     monitor.add(header);
 
+    // Menu Head
+    for (let i = 0; i < 3; i++) {
+      const menuHead = new Mesh(
+        new CylinderGeometry(0.05, 0.05, 0.3, 32),
+        new MeshStandardMaterial({
+          color: "#57b6fa",
+          roughness: 0.7,
+          metalness: 0.6,
+        })
+      );
+      menuHead.position.x = -1.8 + i / 2;
+      menuHead.position.y = 1.56;
+      menuHead.position.z = 0.18;
+      menuHead.rotation.z = 1.57;
+      monitor.add(menuHead);
+    }
+
     // Search
     const search = new Mesh(
       createBoxWithRoundedEdges(1, 0.4, 0.2, 0.07, 5),

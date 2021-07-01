@@ -69,6 +69,23 @@ const header = new THREE.Mesh(
 header.position.y = 1.58;
 monitor.add(header);
 
+// Menu Head
+for (let i = 0; i < 3; i++) {
+  const menuHead = new THREE.Mesh(
+    new THREE.CylinderGeometry(0.05, 0.05, 0.3, 32),
+    new THREE.MeshStandardMaterial({
+      color: "#57b6fa",
+      roughness: 0.7,
+      metalness: 0.6,
+    })
+  );
+  menuHead.position.x = -1.8 + i / 2;
+  menuHead.position.y = 1.56;
+  menuHead.position.z = 0.18;
+  menuHead.rotation.z = 1.57;
+  monitor.add(menuHead);
+}
+
 // Search
 const search = new THREE.Mesh(
   createBoxWithRoundedEdges(1, 0.4, 0.2, 0.07, 5),
