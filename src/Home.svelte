@@ -21,9 +21,10 @@
     <div class="imgSidebar">
         <img src="images/bg.jpg" alt="">
     </div>
-    <canvas bind:this={webgl} class="contentBx">
+    <div class = "contentBx">
+    <canvas bind:this={webgl} class="contentBx" id="canvas1"></canvas>
       <h5 class="logoText">Fl4v.io</h5>
-        <div>
+        <div class="frontPageText">
             <h4><span>Hello</span>, I'm</h4>
             <h2>Flavio Oliveira</h2>
             <h4>A developer with a versatile coding skillset.</h4>
@@ -35,7 +36,7 @@
             <li><a href="https://twitter.com/fl4viooliveira"><img src="images/twitter.png" alt="twitter" target="_blank"></a></li>
             <li><a href="#0"><img src="images/instagram.png" alt="instagram"></a></li>
         </ul>
-    </canvas>
+    </div>
 </section>
 <!-- About-Us Page -->
 <section class="about" id="about">
@@ -276,6 +277,7 @@
 		left: 0;
 		width: 500px;
 		height: 100%; 
+        background: #000;
 	}
 	.banner .imgSidebar img {
 		position: absolute;
@@ -296,6 +298,9 @@
 		align-items: center;
 		padding: 100px;
 	}
+    #canvas1{
+        
+    }
     .logoText{
         position: absolute;
         top: 40px;
@@ -311,6 +316,7 @@
         font-size: 1.5em;
         color: #333;
         font-weight: 300;
+        z-index: 3;
     }
     .banner .contentBx h4 span{
         color:#00bcd4;

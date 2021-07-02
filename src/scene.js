@@ -5,19 +5,19 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
  * Base
  */
 // Canvas
-const canvas = document.querySelector("canvas.webgl");
+const canvas = document.querySelector("canvas#canvas1");
 
 // Scene
 const scene = new THREE.Scene();
 
 // Light
-const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+const ambientLight = new THREE.AmbientLight(0xffffff, 0.9);
 scene.add(ambientLight);
 
-const pointLight = new THREE.PointLight(0xffffff, 0.9);
+const pointLight = new THREE.PointLight(0xffffff, 0.8);
 pointLight.position.x = 2;
 pointLight.position.y = 3;
-pointLight.position.z = 4;
+pointLight.position.z = 7;
 scene.add(pointLight);
 
 // Rounded Edges Function
@@ -271,6 +271,20 @@ const sizes = {
   height: window.innerHeight,
 };
 
+window.addEventListener("resize", () => {
+  // Update sizes
+  sizes.width = window.innerWidth;
+  sizes.height = window.innerHeight;
+
+  // Update camera
+  camera.aspect = sizes.width / sizes.height;
+  camera.updateProjectionMatrix();
+
+  // Update renderer
+  renderer.setSize(sizes.width, sizes.height);
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+});
+
 // Camera
 const camera = new THREE.PerspectiveCamera(
   75,
@@ -287,7 +301,7 @@ scene.add(camera);
 let renderer;
 
 export const createScene = (webgl) => {
-  renderer = new THREE.WebGLRenderer({ canvas: webgl, alpha: false });
+  renderer = new THREE.WebGLRenderer({ canvas: webgl, alpha: true });
   renderer.setSize(sizes.width, sizes.height);
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
   // Controls
@@ -314,17 +328,3 @@ export const createScene = (webgl) => {
 
   tick();
 };
-
-window.addEventListener("resize", () => {
-  // Update sizes
-  sizes.width = window.innerWidth;
-  sizes.height = window.innerHeight;
-
-  // Update camera
-  camera.aspect = sizes.width / sizes.height;
-  camera.updateProjectionMatrix();
-
-  // Update renderer
-  renderer.setSize(sizes.width, sizes.height);
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-});
