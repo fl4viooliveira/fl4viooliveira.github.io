@@ -298,9 +298,8 @@
 		align-items: center;
 		padding: 100px;
 	}
-    #canvas1{
-        
-    }
+    /* #canvas1{
+    } */
     .logoText{
         position: absolute;
         top: 40px;
@@ -316,7 +315,7 @@
         font-size: 1.5em;
         color: #333;
         font-weight: 300;
-        z-index: 3;
+        width: 33%;
     }
     .banner .contentBx h4 span{
         color:#00bcd4;
@@ -327,11 +326,13 @@
         font-size: 3em;
         color:#333;
         line-height: 1em;
+        width: 33%;
     }
     p{
         font-size: 1.1em;
         margin: 20px 0;
         font-weight: 300;
+        width: 33%;
     }
     .btn{
         background: #00bcd4;

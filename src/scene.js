@@ -5,7 +5,7 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
  * Base
  */
 // Canvas
-const canvas = document.querySelector("canvas#canvas1");
+const canvas = document.querySelector("#canvas1");
 
 // Scene
 const scene = new THREE.Scene();
@@ -56,6 +56,9 @@ function createBoxWithRoundedEdges(width, height, depth, radius0, smoothness) {
 // Monitor container
 const monitor = new THREE.Group();
 scene.add(monitor);
+monitor.position.x = 3.4;
+monitor.position.z = -1.4;
+monitor.rotation.y = -0.55;
 
 // Header
 const header = new THREE.Mesh(
@@ -271,20 +274,6 @@ const sizes = {
   height: window.innerHeight,
 };
 
-window.addEventListener("resize", () => {
-  // Update sizes
-  sizes.width = window.innerWidth;
-  sizes.height = window.innerHeight;
-
-  // Update camera
-  camera.aspect = sizes.width / sizes.height;
-  camera.updateProjectionMatrix();
-
-  // Update renderer
-  renderer.setSize(sizes.width, sizes.height);
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-});
-
 // Camera
 const camera = new THREE.PerspectiveCamera(
   75,
@@ -328,3 +317,17 @@ export const createScene = (webgl) => {
 
   tick();
 };
+
+window.addEventListener("resize", () => {
+  // Update sizes
+  sizes.width = window.innerWidth;
+  sizes.height = window.innerHeight;
+
+  // Update camera
+  camera.aspect = sizes.width / sizes.height;
+  camera.updateProjectionMatrix();
+
+  // Update renderer
+  renderer.setSize(sizes.width, sizes.height);
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+});
