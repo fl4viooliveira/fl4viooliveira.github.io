@@ -1,4 +1,13 @@
 <script>
+    import {onMount} from 'svelte';
+    import {createScene} from "./scene.js"
+
+    let webgl;
+
+    onMount(() => {
+        createScene(webgl)
+    });
+
     let active = false
 </script>
 
@@ -9,18 +18,19 @@
 <div class="toggle" class:active on:click={() => active= !active}></div>
 <!-- Home Page -->
 <section class="banner" id="home">
-    <div class="imgSidebar">
+    <!-- <div class="imgSidebar">
         <img src="images/bg.jpg" alt="">
-    </div>
+    </div> -->
     <div class="contentBx">
+        <canvas bind:this={webgl} id="canvas1"></canvas>
       <h5 class="logoText">Fl4v.io</h5>
-        <div>
+        <!-- <div>
             <h4><span>Hello</span>, I'm</h4>
             <h2>Flavio Oliveira</h2>
             <h4>A developer with a versatile coding skillset.</h4>
             <p>We are a developer with a broad and versatile coding skillset. We can help startups and enterprises with prototypes and ideas by efficiently building those things into reality. Our expertise lies in building MVPs, enterprise software, scalable microservices, REST and Socket APIs and deployments in AWS, Azure, DigitalOcean and others. </p>
             <a href="#about" class="btn">About Me</a>
-        </div>
+        </div> -->
         <ul class="sci">
           <!--<li><a href="#0"><img src="images/facebook.png" alt="facebook"></a></li>-->
             <li><a href="https://twitter.com/fl4viooliveira"><img src="images/twitter.png" alt="twitter" target="_blank"></a></li>
@@ -261,31 +271,37 @@
 		width: 100%;
 		min-height: 100vh;
 	}
-	.banner .imgSidebar{
+	/* .banner .imgSidebar{
 		position: absolute;
 		top: 0;
 		left: 0;
 		width: 500px;
 		height: 100%; 
-	}
-	.banner .imgSidebar img {
+	} */
+	/* .banner .imgSidebar img {
 		position: absolute;
 		top: 0;
 		left: 0;
 		width: 100%;
 		height: 100%;
 		object-fit: cover;
-	}
+	} */
+    #canvas1 {
+        width: 100vw;
+        height: 100vh;
+        
+        
+    }
 	.banner .contentBx, .sidebar{
 		position: absolute;
 		top: 0;
 		right: 0;
-		width: calc(100% - 500px);
+		width: 100vw ;
 		height: 100%;
 		display: flex;
 		justify-content: center;
 		align-items: center;
-		padding: 100px;
+		/* padding: 100px; */
 	}
     .logoText{
         position: absolute;
