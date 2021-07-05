@@ -289,8 +289,6 @@
     #canvas1 {
         width: 100vw;
         height: 100vh;
-        
-        
     }
 	.banner .contentBx, .sidebar{
 		position: absolute;

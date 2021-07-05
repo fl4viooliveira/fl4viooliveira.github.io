@@ -1,3 +1,4 @@
+import { get_store_value } from "svelte/internal";
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 
@@ -9,6 +10,8 @@ const canvas = document.querySelector("#canvas1");
 
 // Scene
 const scene = new THREE.Scene();
+// scene.position.x = 1;
+// scene.position.z = -0.5;
 
 // Light
 const ambientLight = new THREE.AmbientLight(0xffffff, 0.9);
@@ -56,9 +59,9 @@ function createBoxWithRoundedEdges(width, height, depth, radius0, smoothness) {
 // Monitor container
 const monitor = new THREE.Group();
 scene.add(monitor);
-// monitor.position.x = 3.4;
-monitor.position.z = -1.4;
-monitor.rotation.y = -0.55;
+// monitor.position.x = 1.0;
+// monitor.position.z = -1.0;
+// monitor.rotation.y = -0.48;
 
 // Header
 const header = new THREE.Mesh(
@@ -267,6 +270,57 @@ const footer2 = new THREE.Mesh(
 footer2.position.x = 0.95;
 footer2.position.y = -1.8;
 monitor.add(footer2);
+// -----------------------------------------
+
+// Elements out of monitor
+const randomElements = new THREE.Group();
+scene.add(randomElements);
+
+// Text
+// TODO
+const loader = new THREE.FontLoader();
+
+loader.load("fonts/Hack_Regular.json", function (font) {
+  const fontGeometry = new THREE.TextGeometry("Front End!", {
+    font: font,
+    size: 80,
+    height: 5,
+    curveSegments: 12,
+    bevelThickness: 10,
+    bevelSize: 8,
+    bevelOffset: 0,
+    bevelSegments: 5,
+  });
+});
+
+const elementGeometry1 = new THREE.TorusGeometry(0.05, 0.01, 16, 100);
+const elementMaterial = new THREE.MeshStandardMaterial({
+  color: "#57b6fa",
+  roughness: 0.7,
+  metalness: 0.6,
+});
+
+for (let i = 0; i < 5; i++) {
+  const angle = Math.random() * Math.PI * 1;
+  const radius = 1.2 + Math.random() * 1;
+  const x = Math.cos(angle) * radius;
+  const y = Math.cos(angle) * radius;
+  const z = Math.sin(angle) * radius;
+
+  // Create the mesh
+  const element1 = new THREE.Mesh(elementGeometry1, elementMaterial);
+
+  // Position
+  element1.position.set(x, y, z);
+
+  // Rotation
+  element1.rotation.z = (Math.random() - 0.5) * 0.4;
+  element1.rotation.x = (Math.random() - 0.5) * 0.4;
+  element1.rotation.y = (Math.random() - 0.5) * 0.4;
+
+  // Add to the graves container
+  randomElements.add(element1);
+}
 
 // Sizes
 const sizes = {
