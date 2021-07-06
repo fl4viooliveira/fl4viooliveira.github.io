@@ -308,8 +308,8 @@
         font-size: 1.2em;
         text-transform: uppercase;
         letter-spacing: 1px;
-        background: #333;
-        color: #fff;
+        background: rgb(255, 255, 255);
+        color: rgb(0, 0, 0);
         padding: 0 5px;
     }
     .banner .contentBx h4{
@@ -387,6 +387,7 @@
     .sci li{
         margin-right: 10px;
         list-style: none;
+        background: white;
     }
     .sci li img{
         transform: scale(0.5);

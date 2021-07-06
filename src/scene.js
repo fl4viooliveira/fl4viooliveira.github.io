@@ -278,19 +278,56 @@ scene.add(randomElements);
 
 // Text
 // TODO
-const loader = new THREE.FontLoader();
 
-loader.load("fonts/Hack_Regular.json", function (font) {
-  const fontGeometry = new THREE.TextGeometry("Front End!", {
+const textureLoader = new THREE.TextureLoader();
+const matcapTexture = textureLoader.load("textures/matcaps/4.png");
+const matcapTexture2 = textureLoader.load("textures/matcaps/7.png");
+
+const fontLoader = new THREE.FontLoader();
+
+fontLoader.load("fonts/helvetiker_regular.typeface.json", (font) => {
+  const parameters = {
     font: font,
-    size: 80,
-    height: 5,
+    size: 0.7,
+    height: 0.2,
     curveSegments: 12,
-    bevelThickness: 10,
-    bevelSize: 8,
+    bevelEnabled: true,
+    bevelThickness: 0.03,
+    bevelSize: 0.02,
     bevelOffset: 0,
     bevelSegments: 5,
-  });
+  };
+  const textGeometry = new THREE.TextGeometry(".js", parameters);
+  const text2Geometry = new THREE.TextGeometry(".py", parameters);
+  // textGeometry.center();
+
+  const material = new THREE.MeshMatcapMaterial({ matcap: matcapTexture });
+  const material2 = new THREE.MeshMatcapMaterial({ matcap: matcapTexture2 });
+
+  for (let i = 0; i < 100; i++) {
+    const text = new THREE.Mesh(textGeometry, material);
+    const text2 = new THREE.Mesh(text2Geometry, material2);
+
+    text.position.x = (Math.random() - 0.5) * 20;
+    text.position.y = (Math.random() - 0.5) * 20;
+    text.position.z = (Math.random() - 0.5) * 20;
+
+    text2.position.x = (Math.random() - 0.5) * 20;
+    text2.position.y = (Math.random() - 0.5) * 20;
+    text2.position.z = (Math.random() - 0.5) * 20;
+
+    text.rotation.x = Math.random() * Math.PI;
+    text.rotation.y = Math.random() * Math.PI;
+
+    text2.rotation.x = Math.random() * Math.PI;
+    text2.rotation.y = Math.random() * Math.PI;
+
+    const scale = Math.random();
+    text.scale.set(scale, scale, scale);
+    text2.scale.set(scale, scale, scale);
+
+    scene.add(text, text2);
+  }
 });
 
 const elementGeometry1 = new THREE.TorusGeometry(0.05, 0.01, 16, 100);
@@ -300,27 +337,27 @@ const elementMaterial = new THREE.MeshStandardMaterial({
   metalness: 0.6,
 });
 
-for (let i = 0; i < 5; i++) {
-  const angle = Math.random() * Math.PI * 1;
-  const radius = 1.2 + Math.random() * 1;
-  const x = Math.cos(angle) * radius;
-  const y = Math.cos(angle) * radius;
-  const z = Math.sin(angle) * radius;
+// for (let i = 0; i < 5; i++) {
+//   const angle = Math.random() * Math.PI * 1;
+//   const radius = 1.2 + Math.random() * 1;
+//   const x = Math.cos(angle) * radius;
+//   const y = Math.cos(angle) * radius;
+//   const z = Math.sin(angle) * radius;
 
-  // Create the mesh
-  const element1 = new THREE.Mesh(elementGeometry1, elementMaterial);
+//   // Create the mesh
+//   const element1 = new THREE.Mesh(elementGeometry1, elementMaterial);
 
-  // Position
-  element1.position.set(x, y, z);
+//   // Position
+//   element1.position.set(x, y, z);
 
-  // Rotation
-  element1.rotation.z = (Math.random() - 0.5) * 0.4;
-  element1.rotation.x = (Math.random() - 0.5) * 0.4;
-  element1.rotation.y = (Math.random() - 0.5) * 0.4;
+//   // Rotation
+//   element1.rotation.z = (Math.random() - 0.5) * 0.4;
+//   element1.rotation.x = (Math.random() - 0.5) * 0.4;
+//   element1.rotation.y = (Math.random() - 0.5) * 0.4;
 
-  // Add to the graves container
-  randomElements.add(element1);
-}
+//   // Add elements
+//   randomElements.add(element1);
+// }
 
 // Sizes
 const sizes = {
@@ -335,16 +372,16 @@ const camera = new THREE.PerspectiveCamera(
   0.1,
   100
 );
-camera.position.z = 4;
-// camera.position.x = 0.5;
-// camera.position.y = 1;
+camera.position.x = 1;
+camera.position.y = 1;
+camera.position.z = 8;
 scene.add(camera);
 
 // Renderer
 let renderer;
 
 export const createScene = (webgl) => {
-  renderer = new THREE.WebGLRenderer({ canvas: webgl, alpha: true });
+  renderer = new THREE.WebGLRenderer({ canvas: webgl, alpha: false });
   renderer.setSize(sizes.width, sizes.height);
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
   // Controls

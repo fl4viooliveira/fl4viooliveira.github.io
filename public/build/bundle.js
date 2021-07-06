@@ -357,7 +357,7 @@ var app = (function () {
         $inject_state() { }
     }
 
-    function loader$1 (urls, test, callback) {
+    function loader (urls, test, callback) {
       let remaining = urls.length;
 
       function maybeCallback () {
@@ -493,7 +493,7 @@ var app = (function () {
     	function init() {
     		const mainProperty = properties[0];
 
-    		loader$1(
+    		loader(
     			[
     				{
     					type: "script",
@@ -538,7 +538,7 @@ var app = (function () {
 
     	$$self.$capture_state = () => ({
     		onMount,
-    		loader: loader$1,
+    		loader,
     		gaStore,
     		properties,
     		configurations,
@@ -28397,6 +28397,112 @@ var app = (function () {
 
     MeshStandardMaterial.prototype.isMeshStandardMaterial = true;
 
+    /**
+     * parameters = {
+     *  color: <hex>,
+     *  opacity: <float>,
+     *
+     *  matcap: new THREE.Texture( <Image> ),
+     *
+     *  map: new THREE.Texture( <Image> ),
+     *
+     *  bumpMap: new THREE.Texture( <Image> ),
+     *  bumpScale: <float>,
+     *
+     *  normalMap: new THREE.Texture( <Image> ),
+     *  normalMapType: THREE.TangentSpaceNormalMap,
+     *  normalScale: <Vector2>,
+     *
+     *  displacementMap: new THREE.Texture( <Image> ),
+     *  displacementScale: <float>,
+     *  displacementBias: <float>,
+     *
+     *  alphaMap: new THREE.Texture( <Image> ),
+     *
+     *  morphTargets: <bool>,
+     *  morphNormals: <bool>
+     *
+     *  flatShading: <bool>
+     * }
+     */
+
+    class MeshMatcapMaterial extends Material {
+
+    	constructor( parameters ) {
+
+    		super();
+
+    		this.defines = { 'MATCAP': '' };
+
+    		this.type = 'MeshMatcapMaterial';
+
+    		this.color = new Color( 0xffffff ); // diffuse
+
+    		this.matcap = null;
+
+    		this.map = null;
+
+    		this.bumpMap = null;
+    		this.bumpScale = 1;
+
+    		this.normalMap = null;
+    		this.normalMapType = TangentSpaceNormalMap;
+    		this.normalScale = new Vector2( 1, 1 );
+
+    		this.displacementMap = null;
+    		this.displacementScale = 1;
+    		this.displacementBias = 0;
+
+    		this.alphaMap = null;
+
+    		this.morphTargets = false;
+    		this.morphNormals = false;
+
+    		this.flatShading = false;
+
+    		this.setValues( parameters );
+
+    	}
+
+
+    	copy( source ) {
+
+    		super.copy( source );
+
+    		this.defines = { 'MATCAP': '' };
+
+    		this.color.copy( source.color );
+
+    		this.matcap = source.matcap;
+
+    		this.map = source.map;
+
+    		this.bumpMap = source.bumpMap;
+    		this.bumpScale = source.bumpScale;
+
+    		this.normalMap = source.normalMap;
+    		this.normalMapType = source.normalMapType;
+    		this.normalScale.copy( source.normalScale );
+
+    		this.displacementMap = source.displacementMap;
+    		this.displacementScale = source.displacementScale;
+    		this.displacementBias = source.displacementBias;
+
+    		this.alphaMap = source.alphaMap;
+
+    		this.morphTargets = source.morphTargets;
+    		this.morphNormals = source.morphNormals;
+
+    		this.flatShading = source.flatShading;
+
+    		return this;
+
+    	}
+
+    }
+
+    MeshMatcapMaterial.prototype.isMeshMatcapMaterial = true;
+
     const Cache = {
 
     	enabled: false,
@@ -35110,49 +35216,86 @@ var app = (function () {
 
     // Text
     // TODO
-    const loader = new FontLoader();
 
-    loader.load("fonts/Hack_Regular.json", function (font) {
-      new TextGeometry("Front End!", {
+    const textureLoader = new TextureLoader();
+    const matcapTexture = textureLoader.load("textures/matcaps/4.png");
+    const matcapTexture2 = textureLoader.load("textures/matcaps/7.png");
+
+    const fontLoader = new FontLoader();
+
+    fontLoader.load("fonts/helvetiker_regular.typeface.json", (font) => {
+      const parameters = {
         font: font,
-        size: 80,
-        height: 5,
+        size: 0.7,
+        height: 0.2,
         curveSegments: 12,
-        bevelThickness: 10,
-        bevelSize: 8,
+        bevelEnabled: true,
+        bevelThickness: 0.03,
+        bevelSize: 0.02,
         bevelOffset: 0,
         bevelSegments: 5,
-      });
+      };
+      const textGeometry = new TextGeometry(".js", parameters);
+      const text2Geometry = new TextGeometry(".py", parameters);
+      // textGeometry.center();
+
+      const material = new MeshMatcapMaterial({ matcap: matcapTexture });
+      const material2 = new MeshMatcapMaterial({ matcap: matcapTexture2 });
+
+      for (let i = 0; i < 100; i++) {
+        const text = new Mesh(textGeometry, material);
+        const text2 = new Mesh(text2Geometry, material2);
+
+        text.position.x = (Math.random() - 0.5) * 20;
+        text.position.y = (Math.random() - 0.5) * 20;
+        text.position.z = (Math.random() - 0.5) * 20;
+
+        text2.position.x = (Math.random() - 0.5) * 20;
+        text2.position.y = (Math.random() - 0.5) * 20;
+        text2.position.z = (Math.random() - 0.5) * 20;
+
+        text.rotation.x = Math.random() * Math.PI;
+        text.rotation.y = Math.random() * Math.PI;
+
+        text2.rotation.x = Math.random() * Math.PI;
+        text2.rotation.y = Math.random() * Math.PI;
+
+        const scale = Math.random();
+        text.scale.set(scale, scale, scale);
+        text2.scale.set(scale, scale, scale);
+
+        scene.add(text, text2);
+      }
     });
 
-    const elementGeometry1 = new TorusGeometry(0.05, 0.01, 16, 100);
-    const elementMaterial = new MeshStandardMaterial({
+    new TorusGeometry(0.05, 0.01, 16, 100);
+    new MeshStandardMaterial({
       color: "#57b6fa",
       roughness: 0.7,
       metalness: 0.6,
     });
 
-    for (let i = 0; i < 5; i++) {
-      const angle = Math.random() * Math.PI * 1;
-      const radius = 1.2 + Math.random() * 1;
-      const x = Math.cos(angle) * radius;
-      const y = Math.cos(angle) * radius;
-      const z = Math.sin(angle) * radius;
+    // for (let i = 0; i < 5; i++) {
+    //   const angle = Math.random() * Math.PI * 1;
+    //   const radius = 1.2 + Math.random() * 1;
+    //   const x = Math.cos(angle) * radius;
+    //   const y = Math.cos(angle) * radius;
+    //   const z = Math.sin(angle) * radius;
 
-      // Create the mesh
-      const element1 = new Mesh(elementGeometry1, elementMaterial);
+    //   // Create the mesh
+    //   const element1 = new THREE.Mesh(elementGeometry1, elementMaterial);
 
-      // Position
-      element1.position.set(x, y, z);
+    //   // Position
+    //   element1.position.set(x, y, z);
 
-      // Rotation
-      element1.rotation.z = (Math.random() - 0.5) * 0.4;
-      element1.rotation.x = (Math.random() - 0.5) * 0.4;
-      element1.rotation.y = (Math.random() - 0.5) * 0.4;
+    //   // Rotation
+    //   element1.rotation.z = (Math.random() - 0.5) * 0.4;
+    //   element1.rotation.x = (Math.random() - 0.5) * 0.4;
+    //   element1.rotation.y = (Math.random() - 0.5) * 0.4;
 
-      // Add to the graves container
-      randomElements.add(element1);
-    }
+    //   // Add elements
+    //   randomElements.add(element1);
+    // }
 
     // Sizes
     const sizes = {
@@ -35167,16 +35310,16 @@ var app = (function () {
       0.1,
       100
     );
-    camera.position.z = 4;
-    // camera.position.x = 0.5;
-    // camera.position.y = 1;
+    camera.position.x = 1;
+    camera.position.y = 1;
+    camera.position.z = 8;
     scene.add(camera);
 
     // Renderer
     let renderer;
 
     const createScene = (webgl) => {
-      renderer = new WebGLRenderer({ canvas: webgl, alpha: true });
+      renderer = new WebGLRenderer({ canvas: webgl, alpha: false });
       renderer.setSize(sizes.width, sizes.height);
       renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
       // Controls
@@ -35619,310 +35762,310 @@ var app = (function () {
     			a9 = element("a");
     			a9.textContent = "Contact";
     			document.title = "Flavio Oliveira";
-    			attr_dev(div0, "class", "toggle svelte-hn96bu");
+    			attr_dev(div0, "class", "toggle svelte-1omu1an");
     			toggle_class(div0, "active", /*active*/ ctx[1]);
     			add_location(div0, file, 17, 0, 260);
     			attr_dev(canvas, "id", "canvas1");
-    			attr_dev(canvas, "class", "svelte-hn96bu");
+    			attr_dev(canvas, "class", "svelte-1omu1an");
     			add_location(canvas, file, 24, 8, 513);
-    			attr_dev(h5, "class", "logoText svelte-hn96bu");
+    			attr_dev(h5, "class", "logoText svelte-1omu1an");
     			add_location(h5, file, 25, 6, 568);
     			if (img0.src !== (img0_src_value = "images/twitter.png")) attr_dev(img0, "src", img0_src_value);
     			attr_dev(img0, "alt", "twitter");
     			attr_dev(img0, "target", "_blank");
-    			attr_dev(img0, "class", "svelte-hn96bu");
+    			attr_dev(img0, "class", "svelte-1omu1an");
     			add_location(img0, file, 35, 61, 1375);
     			attr_dev(a0, "href", "https://twitter.com/fl4viooliveira");
-    			attr_dev(a0, "class", "svelte-hn96bu");
+    			attr_dev(a0, "class", "svelte-1omu1an");
     			add_location(a0, file, 35, 16, 1330);
-    			attr_dev(li0, "class", "svelte-hn96bu");
+    			attr_dev(li0, "class", "svelte-1omu1an");
     			add_location(li0, file, 35, 12, 1326);
-    			attr_dev(ul0, "class", "sci svelte-hn96bu");
+    			attr_dev(ul0, "class", "sci svelte-1omu1an");
     			add_location(ul0, file, 33, 8, 1207);
-    			attr_dev(div1, "class", "contentBx svelte-hn96bu");
+    			attr_dev(div1, "class", "contentBx svelte-1omu1an");
     			add_location(div1, file, 23, 4, 481);
-    			attr_dev(section0, "class", "banner svelte-hn96bu");
+    			attr_dev(section0, "class", "banner svelte-1omu1an");
     			attr_dev(section0, "id", "home");
     			add_location(section0, file, 19, 0, 352);
-    			attr_dev(h20, "class", "svelte-hn96bu");
+    			attr_dev(h20, "class", "svelte-1omu1an");
     			add_location(h20, file, 43, 8, 1671);
-    			attr_dev(p0, "class", "svelte-hn96bu");
+    			attr_dev(p0, "class", "svelte-1omu1an");
     			add_location(p0, file, 44, 8, 1697);
-    			attr_dev(div2, "class", "title white svelte-hn96bu");
+    			attr_dev(div2, "class", "title white svelte-1omu1an");
     			add_location(div2, file, 42, 4, 1637);
-    			attr_dev(br0, "class", "svelte-hn96bu");
+    			attr_dev(br0, "class", "svelte-1omu1an");
     			add_location(br0, file, 49, 515, 2372);
-    			attr_dev(br1, "class", "svelte-hn96bu");
+    			attr_dev(br1, "class", "svelte-1omu1an");
     			add_location(br1, file, 49, 519, 2376);
-    			attr_dev(br2, "class", "svelte-hn96bu");
+    			attr_dev(br2, "class", "svelte-1omu1an");
     			add_location(br2, file, 50, 76, 2457);
-    			attr_dev(br3, "class", "svelte-hn96bu");
+    			attr_dev(br3, "class", "svelte-1omu1an");
     			add_location(br3, file, 51, 199, 2662);
-    			attr_dev(br4, "class", "svelte-hn96bu");
+    			attr_dev(br4, "class", "svelte-1omu1an");
     			add_location(br4, file, 51, 203, 2666);
-    			attr_dev(p1, "class", "svelte-hn96bu");
+    			attr_dev(p1, "class", "svelte-1omu1an");
     			add_location(p1, file, 48, 12, 1853);
-    			attr_dev(div3, "class", "textBx svelte-hn96bu");
+    			attr_dev(div3, "class", "textBx svelte-1omu1an");
     			add_location(div3, file, 47, 8, 1820);
     			if (img1.src !== (img1_src_value = "images/flavio_pc.PNG")) attr_dev(img1, "src", img1_src_value);
     			attr_dev(img1, "alt", "Flavio");
-    			attr_dev(img1, "class", "svelte-hn96bu");
+    			attr_dev(img1, "class", "svelte-1omu1an");
     			add_location(img1, file, 56, 12, 2936);
-    			attr_dev(div4, "class", "imgBx svelte-hn96bu");
+    			attr_dev(div4, "class", "imgBx svelte-1omu1an");
     			add_location(div4, file, 55, 8, 2904);
-    			attr_dev(div5, "class", "content svelte-hn96bu");
+    			attr_dev(div5, "class", "content svelte-1omu1an");
     			add_location(div5, file, 46, 4, 1790);
-    			attr_dev(section1, "class", "about svelte-hn96bu");
+    			attr_dev(section1, "class", "about svelte-1omu1an");
     			attr_dev(section1, "id", "about");
     			add_location(section1, file, 41, 0, 1598);
-    			attr_dev(h21, "class", "svelte-hn96bu");
+    			attr_dev(h21, "class", "svelte-1omu1an");
     			add_location(h21, file, 63, 8, 3115);
-    			attr_dev(p2, "class", "svelte-hn96bu");
+    			attr_dev(p2, "class", "svelte-1omu1an");
     			add_location(p2, file, 64, 8, 3145);
-    			attr_dev(div6, "class", "title svelte-hn96bu");
+    			attr_dev(div6, "class", "title svelte-1omu1an");
     			add_location(div6, file, 62, 4, 3087);
     			if (img2.src !== (img2_src_value = "images/webdevelopment.png")) attr_dev(img2, "src", img2_src_value);
     			attr_dev(img2, "alt", "Web Development icon");
-    			attr_dev(img2, "class", "svelte-hn96bu");
+    			attr_dev(img2, "class", "svelte-1omu1an");
     			add_location(img2, file, 68, 12, 3390);
-    			attr_dev(h22, "class", "svelte-hn96bu");
+    			attr_dev(h22, "class", "svelte-1omu1an");
     			add_location(h22, file, 69, 12, 3467);
-    			attr_dev(p3, "class", "svelte-hn96bu");
+    			attr_dev(p3, "class", "svelte-1omu1an");
     			add_location(p3, file, 70, 12, 3504);
-    			attr_dev(div7, "class", "servicesBx svelte-hn96bu");
+    			attr_dev(div7, "class", "servicesBx svelte-1omu1an");
     			add_location(div7, file, 67, 8, 3353);
     			if (img3.src !== (img3_src_value = "images/webdesign.png")) attr_dev(img3, "src", img3_src_value);
     			attr_dev(img3, "alt", "Web Development icon");
-    			attr_dev(img3, "class", "svelte-hn96bu");
+    			attr_dev(img3, "class", "svelte-1omu1an");
     			add_location(img3, file, 73, 12, 3716);
-    			attr_dev(h23, "class", "svelte-hn96bu");
+    			attr_dev(h23, "class", "svelte-1omu1an");
     			add_location(h23, file, 74, 12, 3788);
-    			attr_dev(p4, "class", "svelte-hn96bu");
+    			attr_dev(p4, "class", "svelte-1omu1an");
     			add_location(p4, file, 75, 12, 3820);
-    			attr_dev(div8, "class", "servicesBx svelte-hn96bu");
+    			attr_dev(div8, "class", "servicesBx svelte-1omu1an");
     			add_location(div8, file, 72, 8, 3679);
     			if (img4.src !== (img4_src_value = "images/frontend.png")) attr_dev(img4, "src", img4_src_value);
     			attr_dev(img4, "alt", "Frontend icon");
-    			attr_dev(img4, "class", "svelte-hn96bu");
+    			attr_dev(img4, "class", "svelte-1omu1an");
     			add_location(img4, file, 78, 12, 4035);
-    			attr_dev(h24, "class", "svelte-hn96bu");
+    			attr_dev(h24, "class", "svelte-1omu1an");
     			add_location(h24, file, 79, 12, 4099);
-    			attr_dev(p5, "class", "svelte-hn96bu");
+    			attr_dev(p5, "class", "svelte-1omu1an");
     			add_location(p5, file, 80, 12, 4129);
-    			attr_dev(div9, "class", "servicesBx svelte-hn96bu");
+    			attr_dev(div9, "class", "servicesBx svelte-1omu1an");
     			add_location(div9, file, 77, 8, 3998);
     			if (img5.src !== (img5_src_value = "images/backend.png")) attr_dev(img5, "src", img5_src_value);
     			attr_dev(img5, "alt", "Backend icon");
-    			attr_dev(img5, "class", "svelte-hn96bu");
+    			attr_dev(img5, "class", "svelte-1omu1an");
     			add_location(img5, file, 83, 12, 4353);
-    			attr_dev(h25, "class", "svelte-hn96bu");
+    			attr_dev(h25, "class", "svelte-1omu1an");
     			add_location(h25, file, 84, 12, 4415);
-    			attr_dev(p6, "class", "svelte-hn96bu");
+    			attr_dev(p6, "class", "svelte-1omu1an");
     			add_location(p6, file, 85, 12, 4444);
-    			attr_dev(div10, "class", "servicesBx svelte-hn96bu");
+    			attr_dev(div10, "class", "servicesBx svelte-1omu1an");
     			add_location(div10, file, 82, 8, 4316);
     			if (img6.src !== (img6_src_value = "images/deployment.png")) attr_dev(img6, "src", img6_src_value);
     			attr_dev(img6, "alt", "Deployment icon");
-    			attr_dev(img6, "class", "svelte-hn96bu");
+    			attr_dev(img6, "class", "svelte-1omu1an");
     			add_location(img6, file, 88, 12, 4673);
-    			attr_dev(h26, "class", "svelte-hn96bu");
+    			attr_dev(h26, "class", "svelte-1omu1an");
     			add_location(h26, file, 89, 12, 4741);
-    			attr_dev(p7, "class", "svelte-hn96bu");
+    			attr_dev(p7, "class", "svelte-1omu1an");
     			add_location(p7, file, 90, 12, 4773);
-    			attr_dev(div11, "class", "servicesBx svelte-hn96bu");
+    			attr_dev(div11, "class", "servicesBx svelte-1omu1an");
     			add_location(div11, file, 87, 8, 4636);
     			if (img7.src !== (img7_src_value = "images/administrator.png")) attr_dev(img7, "src", img7_src_value);
     			attr_dev(img7, "alt", "Administrator icon");
-    			attr_dev(img7, "class", "svelte-hn96bu");
+    			attr_dev(img7, "class", "svelte-1omu1an");
     			add_location(img7, file, 93, 10, 4949);
-    			attr_dev(h27, "class", "svelte-hn96bu");
+    			attr_dev(h27, "class", "svelte-1omu1an");
     			add_location(h27, file, 94, 10, 5021);
-    			attr_dev(p8, "class", "svelte-hn96bu");
+    			attr_dev(p8, "class", "svelte-1omu1an");
     			add_location(p8, file, 95, 8, 5061);
-    			attr_dev(div12, "class", "servicesBx svelte-hn96bu");
+    			attr_dev(div12, "class", "servicesBx svelte-1omu1an");
     			add_location(div12, file, 92, 8, 4914);
-    			attr_dev(div13, "class", "content svelte-hn96bu");
+    			attr_dev(div13, "class", "content svelte-1omu1an");
     			add_location(div13, file, 66, 4, 3323);
-    			attr_dev(section2, "class", "services svelte-hn96bu");
+    			attr_dev(section2, "class", "services svelte-1omu1an");
     			attr_dev(section2, "id", "services");
     			add_location(section2, file, 61, 0, 3042);
-    			attr_dev(h28, "class", "svelte-hn96bu");
+    			attr_dev(h28, "class", "svelte-1omu1an");
     			add_location(h28, file, 102, 8, 5365);
-    			attr_dev(p9, "class", "svelte-hn96bu");
+    			attr_dev(p9, "class", "svelte-1omu1an");
     			add_location(p9, file, 103, 8, 5394);
-    			attr_dev(div14, "class", "title svelte-hn96bu");
+    			attr_dev(div14, "class", "title svelte-1omu1an");
     			add_location(div14, file, 101, 4, 5337);
     			if (img8.src !== (img8_src_value = "images/img1.jpg")) attr_dev(img8, "src", img8_src_value);
     			attr_dev(img8, "alt", "work-1");
-    			attr_dev(img8, "class", "svelte-hn96bu");
+    			attr_dev(img8, "class", "svelte-1omu1an");
     			add_location(img8, file, 108, 16, 5663);
-    			attr_dev(div15, "class", "imgBx svelte-hn96bu");
+    			attr_dev(div15, "class", "imgBx svelte-1omu1an");
     			add_location(div15, file, 107, 12, 5611);
-    			attr_dev(h30, "class", "svelte-hn96bu");
+    			attr_dev(h30, "class", "svelte-1omu1an");
     			add_location(h30, file, 112, 16, 5897);
     			attr_dev(a1, "href", "https://fl4viooliveira.github.io/bkg_grid_layout/");
     			attr_dev(a1, "target", "_blank");
-    			attr_dev(a1, "class", "svelte-hn96bu");
+    			attr_dev(a1, "class", "svelte-1omu1an");
     			add_location(a1, file, 111, 16, 5789);
-    			attr_dev(div16, "class", "textBx svelte-hn96bu");
+    			attr_dev(div16, "class", "textBx svelte-1omu1an");
     			add_location(div16, file, 110, 12, 5751);
-    			attr_dev(div17, "class", "workBx svelte-hn96bu");
+    			attr_dev(div17, "class", "workBx svelte-1omu1an");
     			add_location(div17, file, 106, 8, 5578);
     			if (img9.src !== (img9_src_value = "images/img2.jpg")) attr_dev(img9, "src", img9_src_value);
     			attr_dev(img9, "alt", "work-2");
-    			attr_dev(img9, "class", "svelte-hn96bu");
+    			attr_dev(img9, "class", "svelte-1omu1an");
     			add_location(img9, file, 118, 16, 6050);
-    			attr_dev(div18, "class", "imgBx svelte-hn96bu");
+    			attr_dev(div18, "class", "imgBx svelte-1omu1an");
     			add_location(div18, file, 117, 12, 6014);
-    			attr_dev(h31, "class", "svelte-hn96bu");
+    			attr_dev(h31, "class", "svelte-1omu1an");
     			add_location(h31, file, 122, 20, 6269);
     			attr_dev(a2, "href", "https://fl4viooliveira.github.io/animated_form/");
     			attr_dev(a2, "target", "_blank");
-    			attr_dev(a2, "class", "svelte-hn96bu");
+    			attr_dev(a2, "class", "svelte-1omu1an");
     			add_location(a2, file, 121, 16, 6159);
-    			attr_dev(div19, "class", "textBx svelte-hn96bu");
+    			attr_dev(div19, "class", "textBx svelte-1omu1an");
     			add_location(div19, file, 120, 12, 6122);
-    			attr_dev(div20, "class", "workBx svelte-hn96bu");
+    			attr_dev(div20, "class", "workBx svelte-1omu1an");
     			add_location(div20, file, 116, 8, 5981);
     			if (img10.src !== (img10_src_value = "images/img3.jpg")) attr_dev(img10, "src", img10_src_value);
     			attr_dev(img10, "alt", "work-3");
-    			attr_dev(img10, "class", "svelte-hn96bu");
+    			attr_dev(img10, "class", "svelte-1omu1an");
     			add_location(img10, file, 128, 16, 6424);
-    			attr_dev(div21, "class", "imgBx svelte-hn96bu");
+    			attr_dev(div21, "class", "imgBx svelte-1omu1an");
     			add_location(div21, file, 127, 12, 6388);
-    			attr_dev(h32, "class", "svelte-hn96bu");
+    			attr_dev(h32, "class", "svelte-1omu1an");
     			add_location(h32, file, 132, 20, 6642);
     			attr_dev(a3, "href", "https://fl4viooliveira.github.io/profile_card/");
     			attr_dev(a3, "target", "_blank");
-    			attr_dev(a3, "class", "svelte-hn96bu");
+    			attr_dev(a3, "class", "svelte-1omu1an");
     			add_location(a3, file, 131, 16, 6533);
-    			attr_dev(div22, "class", "textBx svelte-hn96bu");
+    			attr_dev(div22, "class", "textBx svelte-1omu1an");
     			add_location(div22, file, 130, 12, 6496);
-    			attr_dev(div23, "class", "workBx svelte-hn96bu");
+    			attr_dev(div23, "class", "workBx svelte-1omu1an");
     			add_location(div23, file, 126, 8, 6355);
     			if (img11.src !== (img11_src_value = "images/img4.jpg")) attr_dev(img11, "src", img11_src_value);
     			attr_dev(img11, "alt", "work-4");
-    			attr_dev(img11, "class", "svelte-hn96bu");
+    			attr_dev(img11, "class", "svelte-1omu1an");
     			add_location(img11, file, 138, 16, 6796);
-    			attr_dev(div24, "class", "imgBx svelte-hn96bu");
+    			attr_dev(div24, "class", "imgBx svelte-1omu1an");
     			add_location(div24, file, 137, 12, 6760);
-    			attr_dev(h33, "class", "svelte-hn96bu");
+    			attr_dev(h33, "class", "svelte-1omu1an");
     			add_location(h33, file, 142, 20, 7020);
     			attr_dev(a4, "href", "https://fl4viooliveira.github.io/blogr_landing_page/");
     			attr_dev(a4, "target", "_blank");
-    			attr_dev(a4, "class", "svelte-hn96bu");
+    			attr_dev(a4, "class", "svelte-1omu1an");
     			add_location(a4, file, 141, 16, 6905);
-    			attr_dev(div25, "class", "textBx svelte-hn96bu");
+    			attr_dev(div25, "class", "textBx svelte-1omu1an");
     			add_location(div25, file, 140, 12, 6868);
-    			attr_dev(div26, "class", "workBx svelte-hn96bu");
+    			attr_dev(div26, "class", "workBx svelte-1omu1an");
     			add_location(div26, file, 136, 8, 6727);
-    			attr_dev(div27, "class", "content svelte-hn96bu");
+    			attr_dev(div27, "class", "content svelte-1omu1an");
     			add_location(div27, file, 105, 4, 5548);
-    			attr_dev(section3, "class", "work svelte-hn96bu");
+    			attr_dev(section3, "class", "work svelte-1omu1an");
     			attr_dev(section3, "id", "work");
     			add_location(section3, file, 100, 0, 5300);
-    			attr_dev(h29, "class", "svelte-hn96bu");
+    			attr_dev(h29, "class", "svelte-1omu1an");
     			add_location(h29, file, 183, 8, 8186);
-    			attr_dev(p10, "class", "svelte-hn96bu");
+    			attr_dev(p10, "class", "svelte-1omu1an");
     			add_location(p10, file, 184, 8, 8214);
-    			attr_dev(div28, "class", "title white svelte-hn96bu");
+    			attr_dev(div28, "class", "title white svelte-1omu1an");
     			add_location(div28, file, 182, 4, 8152);
     			attr_dev(input0, "type", "text");
     			attr_dev(input0, "name", "first_name");
     			attr_dev(input0, "placeholder", "First Name");
-    			attr_dev(input0, "class", "svelte-hn96bu");
+    			attr_dev(input0, "class", "svelte-1omu1an");
     			add_location(input0, file, 190, 20, 8539);
-    			attr_dev(div29, "class", "col50 svelte-hn96bu");
+    			attr_dev(div29, "class", "col50 svelte-1omu1an");
     			add_location(div29, file, 189, 16, 8499);
     			attr_dev(input1, "type", "text");
     			attr_dev(input1, "name", "last_name");
     			attr_dev(input1, "placeholder", "Last Name");
-    			attr_dev(input1, "class", "svelte-hn96bu");
+    			attr_dev(input1, "class", "svelte-1omu1an");
     			add_location(input1, file, 193, 20, 8681);
-    			attr_dev(div30, "class", "col50 svelte-hn96bu");
+    			attr_dev(div30, "class", "col50 svelte-1omu1an");
     			add_location(div30, file, 192, 16, 8641);
-    			attr_dev(div31, "class", "row svelte-hn96bu");
+    			attr_dev(div31, "class", "row svelte-1omu1an");
     			add_location(div31, file, 188, 12, 8465);
     			attr_dev(input2, "type", "email");
     			attr_dev(input2, "name", "email");
     			attr_dev(input2, "placeholder", "Email");
-    			attr_dev(input2, "class", "svelte-hn96bu");
+    			attr_dev(input2, "class", "svelte-1omu1an");
     			add_location(input2, file, 198, 20, 8870);
-    			attr_dev(div32, "class", "col50 svelte-hn96bu");
+    			attr_dev(div32, "class", "col50 svelte-1omu1an");
     			add_location(div32, file, 197, 16, 8830);
     			attr_dev(input3, "type", "text");
     			attr_dev(input3, "name", "subject");
     			attr_dev(input3, "placeholder", "Subject");
-    			attr_dev(input3, "class", "svelte-hn96bu");
+    			attr_dev(input3, "class", "svelte-1omu1an");
     			add_location(input3, file, 201, 20, 9003);
-    			attr_dev(div33, "class", "col50 svelte-hn96bu");
+    			attr_dev(div33, "class", "col50 svelte-1omu1an");
     			add_location(div33, file, 200, 16, 8963);
-    			attr_dev(div34, "class", "row svelte-hn96bu");
+    			attr_dev(div34, "class", "row svelte-1omu1an");
     			add_location(div34, file, 196, 12, 8796);
     			attr_dev(textarea, "name", "message");
     			attr_dev(textarea, "placeholder", "Message");
-    			attr_dev(textarea, "class", "svelte-hn96bu");
+    			attr_dev(textarea, "class", "svelte-1omu1an");
     			add_location(textarea, file, 206, 20, 9189);
-    			attr_dev(div35, "class", "col100 svelte-hn96bu");
+    			attr_dev(div35, "class", "col100 svelte-1omu1an");
     			add_location(div35, file, 205, 16, 9148);
-    			attr_dev(div36, "class", "row svelte-hn96bu");
+    			attr_dev(div36, "class", "row svelte-1omu1an");
     			add_location(div36, file, 204, 12, 9114);
     			attr_dev(input4, "type", "submit");
     			input4.value = "Send";
-    			attr_dev(input4, "class", "svelte-hn96bu");
+    			attr_dev(input4, "class", "svelte-1omu1an");
     			add_location(input4, file, 212, 24, 9410);
-    			attr_dev(button, "class", "svelte-hn96bu");
+    			attr_dev(button, "class", "svelte-1omu1an");
     			add_location(button, file, 211, 20, 9377);
-    			attr_dev(div37, "class", "col100 svelte-hn96bu");
+    			attr_dev(div37, "class", "col100 svelte-1omu1an");
     			add_location(div37, file, 210, 16, 9336);
-    			attr_dev(div38, "class", "row svelte-hn96bu");
+    			attr_dev(div38, "class", "row svelte-1omu1an");
     			add_location(div38, file, 209, 12, 9302);
-    			attr_dev(div39, "class", "contactForm svelte-hn96bu");
+    			attr_dev(div39, "class", "contactForm svelte-1omu1an");
     			add_location(div39, file, 187, 8, 8427);
     			attr_dev(form, "action", "https://getform.io/f/04feb2e1-24e2-4e73-98b3-837225c11041");
     			attr_dev(form, "method", "POST");
-    			attr_dev(form, "class", "svelte-hn96bu");
+    			attr_dev(form, "class", "svelte-1omu1an");
     			add_location(form, file, 186, 4, 8331);
-    			attr_dev(section4, "class", "contact svelte-hn96bu");
+    			attr_dev(section4, "class", "contact svelte-1omu1an");
     			attr_dev(section4, "id", "contact");
     			add_location(section4, file, 181, 0, 8109);
-    			attr_dev(p11, "class", "svelte-hn96bu");
+    			attr_dev(p11, "class", "svelte-1omu1an");
     			add_location(p11, file, 221, 4, 9584);
-    			attr_dev(div40, "class", "copyright svelte-hn96bu");
+    			attr_dev(div40, "class", "copyright svelte-1omu1an");
     			add_location(div40, file, 220, 0, 9556);
     			attr_dev(a5, "href", "#home");
-    			attr_dev(a5, "class", "svelte-hn96bu");
+    			attr_dev(a5, "class", "svelte-1omu1an");
     			toggle_class(a5, "active", /*active*/ ctx[1]);
     			add_location(a5, file, 226, 12, 9748);
-    			attr_dev(li1, "class", "svelte-hn96bu");
+    			attr_dev(li1, "class", "svelte-1omu1an");
     			add_location(li1, file, 226, 8, 9744);
     			attr_dev(a6, "href", "#about");
-    			attr_dev(a6, "class", "svelte-hn96bu");
+    			attr_dev(a6, "class", "svelte-1omu1an");
     			toggle_class(a6, "active", /*active*/ ctx[1]);
     			add_location(a6, file, 227, 12, 9827);
-    			attr_dev(li2, "class", "svelte-hn96bu");
+    			attr_dev(li2, "class", "svelte-1omu1an");
     			add_location(li2, file, 227, 8, 9823);
     			attr_dev(a7, "href", "#services");
-    			attr_dev(a7, "class", "svelte-hn96bu");
+    			attr_dev(a7, "class", "svelte-1omu1an");
     			toggle_class(a7, "active", /*active*/ ctx[1]);
     			add_location(a7, file, 228, 12, 9908);
-    			attr_dev(li3, "class", "svelte-hn96bu");
+    			attr_dev(li3, "class", "svelte-1omu1an");
     			add_location(li3, file, 228, 8, 9904);
     			attr_dev(a8, "href", "#work");
-    			attr_dev(a8, "class", "svelte-hn96bu");
+    			attr_dev(a8, "class", "svelte-1omu1an");
     			toggle_class(a8, "active", /*active*/ ctx[1]);
     			add_location(a8, file, 229, 12, 9995);
-    			attr_dev(li4, "class", "svelte-hn96bu");
+    			attr_dev(li4, "class", "svelte-1omu1an");
     			add_location(li4, file, 229, 8, 9991);
     			attr_dev(a9, "href", "#contact");
-    			attr_dev(a9, "class", "svelte-hn96bu");
+    			attr_dev(a9, "class", "svelte-1omu1an");
     			toggle_class(a9, "active", /*active*/ ctx[1]);
     			add_location(a9, file, 230, 12, 10074);
-    			attr_dev(li5, "class", "svelte-hn96bu");
+    			attr_dev(li5, "class", "svelte-1omu1an");
     			add_location(li5, file, 230, 8, 10070);
-    			attr_dev(ul1, "class", "menu svelte-hn96bu");
+    			attr_dev(ul1, "class", "menu svelte-1omu1an");
     			add_location(ul1, file, 225, 4, 9718);
-    			attr_dev(div41, "class", "sidebar svelte-hn96bu");
+    			attr_dev(div41, "class", "sidebar svelte-1omu1an");
     			toggle_class(div41, "active", /*active*/ ctx[1]);
     			add_location(div41, file, 224, 0, 9646);
     		},
