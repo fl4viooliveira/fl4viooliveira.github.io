@@ -286,10 +286,6 @@
 		height: 100%;
 		object-fit: cover;
 	} */
-    #canvas1 {
-        width: 100vw;
-        height: 100vh;
-    }
 	.banner .contentBx, .sidebar{
 		position: absolute;
 		top: 0;
@@ -310,7 +306,8 @@
         letter-spacing: 1px;
         background: rgb(255, 255, 255);
         color: rgb(0, 0, 0);
-        padding: 0 5px;
+        padding: 2px 8px;
+        border-radius: 8px;
     }
     .banner .contentBx h4{
         font-size: 1.5em;

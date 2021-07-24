@@ -66,10 +66,10 @@ scene.add(monitor);
 // Header
 
 const textureLoad = new THREE.TextureLoader();
-const matcapTexture5 = textureLoad.load("textures/matcaps/2.png");
-const matcapTexture6 = textureLoad.load("textures/matcaps/6.png");
-const matcapTexture7 = textureLoad.load("textures/matcaps/3.png");
-const matcapTexture8 = textureLoad.load("textures/matcaps/4.png");
+const matcapTexture5 = textureLoad.load("textures/matcaps/3.png");
+const matcapTexture6 = textureLoad.load("textures/matcaps/4.png");
+const matcapTexture7 = textureLoad.load("textures/matcaps/2.png");
+const matcapTexture8 = textureLoad.load("textures/matcaps/6.png");
 
 const header = new THREE.Mesh(
   createBoxWithRoundedEdges(5, 0.6, 0.3, 0.1, 5),
@@ -356,16 +356,16 @@ fontLoader.load("fonts/helvetiker_regular.typeface.json", (font) => {
     text4.position.y = (Math.random() - 0.5) * 20;
     text4.position.z = (Math.random() - 0.5) * 20;
 
-    text.rotation.x = Math.random() * Math.PI;
+    // text.rotation.x = Math.random() * Math.PI;
     text.rotation.y = Math.random() * Math.PI;
 
-    text2.rotation.x = Math.random() * Math.PI;
+    // text2.rotation.x = Math.random() * Math.PI;
     text2.rotation.y = Math.random() * Math.PI;
 
-    text3.rotation.x = Math.random() * Math.PI;
+    // text3.rotation.x = Math.random() * Math.PI;
     text3.rotation.y = Math.random() * Math.PI;
 
-    text4.rotation.x = Math.random() * Math.PI;
+    // text4.rotation.x = Math.random() * Math.PI;
     text4.rotation.y = Math.random() * Math.PI;
 
     const scale = Math.random();
@@ -374,7 +374,7 @@ fontLoader.load("fonts/helvetiker_regular.typeface.json", (font) => {
     text3.scale.set(scale, scale, scale);
     text4.scale.set(scale, scale, scale);
 
-    scene.add(text, text2, text3, text4);
+    randomElements.add(text, text2, text3, text4);
   }
 });
 
@@ -398,21 +398,32 @@ const camera = new THREE.PerspectiveCamera(
   0.1,
   100
 );
-camera.position.x = 1;
-camera.position.y = 1;
-camera.position.z = 8;
+camera.position.x = 3;
+camera.position.y = -1.5;
+camera.position.z = 5;
 scene.add(camera);
+
+// Pivot point
+const pivotPoint = new THREE.Object3D();
+monitor.add(pivotPoint);
+pivotPoint.add(randomElements);
 
 // Renderer
 let renderer;
 
 export const createScene = (webgl) => {
-  renderer = new THREE.WebGLRenderer({ canvas: webgl, alpha: false });
+  renderer = new THREE.WebGLRenderer({
+    canvas: webgl,
+    alpha: false,
+    antialias: true,
+  });
   renderer.setSize(sizes.width, sizes.height);
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
   // Controls
   const controls = new OrbitControls(camera, webgl);
   controls.enabled = true;
+  // controls.autoRotate = true;
+  // controls.autoRotateSpeed = 0.5;
 
   // Animate
   const clock = new THREE.Clock();
@@ -428,11 +439,17 @@ export const createScene = (webgl) => {
     renderer.setClearColor(0x000000, 0);
     // renderer.setClearColor("#ffffff");
 
+    pivotPoint.rotation.y += 0.003;
+
     // Call tick again on the next frame
     window.requestAnimationFrame(tick);
   };
 
   tick();
+
+  // Animate randomElements
+
+  // ----------------------------------------
 };
 
 window.addEventListener("resize", () => {
