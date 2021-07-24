@@ -35415,7 +35415,7 @@ var app = (function () {
     );
     camera.position.x = 3;
     camera.position.y = -1.5;
-    camera.position.z = 5;
+    camera.position.z = 7.7;
     scene.add(camera);
 
     // Pivot point
