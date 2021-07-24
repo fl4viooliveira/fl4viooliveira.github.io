@@ -35220,6 +35220,8 @@ var app = (function () {
     const textureLoader = new TextureLoader();
     const matcapTexture = textureLoader.load("textures/matcaps/4.png");
     const matcapTexture2 = textureLoader.load("textures/matcaps/7.png");
+    const matcapTexture3 = textureLoader.load("textures/matcaps/8.png");
+    const matcapTexture4 = textureLoader.load("textures/matcaps/3.png");
 
     const fontLoader = new FontLoader();
 
@@ -35237,14 +35239,20 @@ var app = (function () {
       };
       const textGeometry = new TextGeometry(".js", parameters);
       const text2Geometry = new TextGeometry(".py", parameters);
+      const text3Geometry = new TextGeometry(".html", parameters);
+      const text4Geometry = new TextGeometry(".css", parameters);
       // textGeometry.center();
 
       const material = new MeshMatcapMaterial({ matcap: matcapTexture });
       const material2 = new MeshMatcapMaterial({ matcap: matcapTexture2 });
+      const material3 = new MeshMatcapMaterial({ matcap: matcapTexture3 });
+      const material4 = new MeshMatcapMaterial({ matcap: matcapTexture4 });
 
-      for (let i = 0; i < 100; i++) {
+      for (let i = 0; i < 50; i++) {
         const text = new Mesh(textGeometry, material);
         const text2 = new Mesh(text2Geometry, material2);
+        const text3 = new Mesh(text3Geometry, material3);
+        const text4 = new Mesh(text4Geometry, material4);
 
         text.position.x = (Math.random() - 0.5) * 20;
         text.position.y = (Math.random() - 0.5) * 20;
@@ -35254,17 +35262,33 @@ var app = (function () {
         text2.position.y = (Math.random() - 0.5) * 20;
         text2.position.z = (Math.random() - 0.5) * 20;
 
+        text3.position.x = (Math.random() - 0.5) * 20;
+        text3.position.y = (Math.random() - 0.5) * 20;
+        text3.position.z = (Math.random() - 0.5) * 20;
+
+        text4.position.x = (Math.random() - 0.5) * 20;
+        text4.position.y = (Math.random() - 0.5) * 20;
+        text4.position.z = (Math.random() - 0.5) * 20;
+
         text.rotation.x = Math.random() * Math.PI;
         text.rotation.y = Math.random() * Math.PI;
 
         text2.rotation.x = Math.random() * Math.PI;
         text2.rotation.y = Math.random() * Math.PI;
 
+        text3.rotation.x = Math.random() * Math.PI;
+        text3.rotation.y = Math.random() * Math.PI;
+
+        text4.rotation.x = Math.random() * Math.PI;
+        text4.rotation.y = Math.random() * Math.PI;
+
         const scale = Math.random();
         text.scale.set(scale, scale, scale);
         text2.scale.set(scale, scale, scale);
+        text3.scale.set(scale, scale, scale);
+        text4.scale.set(scale, scale, scale);
 
-        scene.add(text, text2);
+        scene.add(text, text2, text3, text4);
       }
     });
 
@@ -35274,28 +35298,6 @@ var app = (function () {
       roughness: 0.7,
       metalness: 0.6,
     });
-
-    // for (let i = 0; i < 5; i++) {
-    //   const angle = Math.random() * Math.PI * 1;
-    //   const radius = 1.2 + Math.random() * 1;
-    //   const x = Math.cos(angle) * radius;
-    //   const y = Math.cos(angle) * radius;
-    //   const z = Math.sin(angle) * radius;
-
-    //   // Create the mesh
-    //   const element1 = new THREE.Mesh(elementGeometry1, elementMaterial);
-
-    //   // Position
-    //   element1.position.set(x, y, z);
-
-    //   // Rotation
-    //   element1.rotation.z = (Math.random() - 0.5) * 0.4;
-    //   element1.rotation.x = (Math.random() - 0.5) * 0.4;
-    //   element1.rotation.y = (Math.random() - 0.5) * 0.4;
-
-    //   // Add elements
-    //   randomElements.add(element1);
-    // }
 
     // Sizes
     const sizes = {
