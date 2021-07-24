@@ -35002,13 +35002,21 @@ var app = (function () {
     // monitor.rotation.y = -0.48;
 
     // Header
+
+    const textureLoad = new TextureLoader();
+    const matcapTexture5 = textureLoad.load("textures/matcaps/2.png");
+    const matcapTexture6 = textureLoad.load("textures/matcaps/6.png");
+    const matcapTexture7 = textureLoad.load("textures/matcaps/3.png");
+    const matcapTexture8 = textureLoad.load("textures/matcaps/4.png");
+
     const header = new Mesh(
       createBoxWithRoundedEdges(5, 0.6, 0.3, 0.1, 5),
-      new MeshStandardMaterial({
-        color: "#fcc2fb",
-        roughness: 0.7,
-        metalness: 0.6,
-      })
+      new MeshMatcapMaterial({ matcap: matcapTexture5 })
+      // new THREE.MeshStandardMaterial({
+      //   color: "#fcc2fb",
+      //   roughness: 0.7,
+      //   metalness: 0.6,
+      // })
     );
     header.position.y = 1.58;
     monitor.add(header);
@@ -35017,11 +35025,12 @@ var app = (function () {
     for (let i = 0; i < 3; i++) {
       const menuHead = new Mesh(
         new CylinderGeometry(0.05, 0.05, 0.3, 32),
-        new MeshStandardMaterial({
-          color: "#e0f6ff",
-          roughness: 0.7,
-          metalness: 0.6,
-        })
+        new MeshMatcapMaterial({ matcap: matcapTexture7 })
+        // new THREE.MeshStandardMaterial({
+        //   color: "#e0f6ff",
+        //   roughness: 0.7,
+        //   metalness: 0.6,
+        // })
       );
       menuHead.position.x = -1.8 + i / 2;
       menuHead.position.y = 1.56;
@@ -35033,11 +35042,12 @@ var app = (function () {
     // Search
     const search = new Mesh(
       createBoxWithRoundedEdges(1, 0.4, 0.2, 0.07, 5),
-      new MeshStandardMaterial({
-        color: "#e0f6ff",
-        roughness: 0.7,
-        metalness: 0.6,
-      })
+      new MeshMatcapMaterial({ matcap: matcapTexture7 })
+      // new THREE.MeshStandardMaterial({
+      //   color: "#e0f6ff",
+      //   roughness: 0.7,
+      //   metalness: 0.6,
+      // })
     );
     search.position.x = 1.58;
     search.position.y = 1.58;
@@ -35047,11 +35057,12 @@ var app = (function () {
     //magnifier
     const magnifier = new Mesh(
       new TorusGeometry(0.07, 0.02, 16, 100),
-      new MeshStandardMaterial({
-        color: "#57b6fa",
-        roughness: 0.7,
-        metalness: 0.6,
-      })
+      new MeshMatcapMaterial({ matcap: matcapTexture8 })
+      // new THREE.MeshStandardMaterial({
+      //   color: "#57b6fa",
+      //   roughness: 0.7,
+      //   metalness: 0.6,
+      // })
     );
     magnifier.position.x = 1.25;
     magnifier.position.y = 1.62;
@@ -35060,11 +35071,12 @@ var app = (function () {
 
     const magnifierStick = new Mesh(
       new CylinderGeometry(0.02, 0.02, 0.1, 16),
-      new MeshStandardMaterial({
-        color: "#57b6fa",
-        roughness: 0.7,
-        metalness: 0.6,
-      })
+      new MeshMatcapMaterial({ matcap: matcapTexture8 })
+      // new THREE.MeshStandardMaterial({
+      //   color: "#57b6fa",
+      //   roughness: 0.7,
+      //   metalness: 0.6,
+      // })
     );
     magnifierStick.position.x = 1.31;
     magnifierStick.position.y = 1.51;
@@ -35075,11 +35087,12 @@ var app = (function () {
     // Main
     const main = new Mesh(
       createBoxWithRoundedEdges(3.08, 2.2, 0.3, 0.1, 5),
-      new MeshStandardMaterial({
-        color: "#57b6fa",
-        roughness: 0.7,
-        metalness: 0.6,
-      })
+      new MeshMatcapMaterial({ matcap: matcapTexture5 })
+      // new THREE.MeshStandardMaterial({
+      //   color: "#57b6fa",
+      //   roughness: 0.7,
+      //   metalness: 0.6,
+      // })
     );
     main.position.x = -0.95;
     monitor.add(main);
@@ -35087,11 +35100,12 @@ var app = (function () {
     // Img
     const img = new Mesh(
       createBoxWithRoundedEdges(2.7, 1.82, 0.2, 0.1, 5),
-      new MeshStandardMaterial({
-        color: "#e0f6ff",
-        roughness: 0.7,
-        metalness: 0.6,
-      })
+      new MeshMatcapMaterial({ matcap: matcapTexture7 })
+      // new THREE.MeshStandardMaterial({
+      //   color: "#e0f6ff",
+      //   roughness: 0.7,
+      //   metalness: 0.6,
+      // })
     );
     img.position.x = -0.95;
     img.position.z = 0.12;
@@ -35103,22 +35117,26 @@ var app = (function () {
     triangleShape.lineTo(-1.3, 0.3);
     triangleShape.lineTo(-2.2, -0.8);
     const triangleGeometry = new ShapeGeometry(triangleShape);
-    const triangleMaterial = new MeshStandardMaterial({
-      color: "#57b6fa",
-      roughness: 0.7,
-      metalness: 0.6,
+    const triangleMaterial = new MeshMatcapMaterial({
+      matcap: matcapTexture8,
     });
+    // new THREE.MeshStandardMaterial({
+    //   color: "#57b6fa",
+    //   roughness: 0.7,
+    //   metalness: 0.6,
+    // });
     const meshTriangle1 = new Mesh(triangleGeometry, triangleMaterial);
     meshTriangle1.position.z = 0.23;
     monitor.add(meshTriangle1);
 
     const sun = new Mesh(
       new CircleGeometry(0.3, 32),
-      new MeshStandardMaterial({
-        color: "#57b6fa",
-        roughness: 0.7,
-        metalness: 0.6,
-      })
+      new MeshMatcapMaterial({ matcap: matcapTexture8 })
+      // new THREE.MeshStandardMaterial({
+      //   color: "#57b6fa",
+      //   roughness: 0.7,
+      //   metalness: 0.6,
+      // })
     );
     sun.position.x = -0.09;
     sun.position.y = 0.44;
@@ -35128,11 +35146,12 @@ var app = (function () {
     // Menu
     const menu = new Mesh(
       createBoxWithRoundedEdges(1.7, 2.2, 0.3, 0.1, 5),
-      new MeshStandardMaterial({
-        color: "#fcc2fb",
-        roughness: 0.7,
-        metalness: 0.6,
-      })
+      new MeshMatcapMaterial({ matcap: matcapTexture6 })
+      // new THREE.MeshStandardMaterial({
+      //   color: "#fcc2fb",
+      //   roughness: 0.7,
+      //   metalness: 0.6,
+      // })
     );
     menu.position.x = 1.65;
     monitor.add(menu);
@@ -35142,11 +35161,12 @@ var app = (function () {
       // Icon
       const menuIcon = new Mesh(
         new CylinderGeometry(0.05, 0.05, 0.3, 32),
-        new MeshStandardMaterial({
-          color: "#57b6fa",
-          roughness: 0.7,
-          metalness: 0.6,
-        })
+        new MeshMatcapMaterial({ matcap: matcapTexture8 })
+        // new THREE.MeshStandardMaterial({
+        //   color: "#57b6fa",
+        //   roughness: 0.7,
+        //   metalness: 0.6,
+        // })
       );
       menuIcon.position.x = 0.98;
       menuIcon.position.y = 0.87 - i / 1.5;
@@ -35156,11 +35176,12 @@ var app = (function () {
       // Lines
       const lines = new Mesh(
         new CylinderGeometry(0.05, 0.05, 0.7, 32),
-        new MeshStandardMaterial({
-          color: "#e0f6ff",
-          roughness: 0.7,
-          metalness: 0.6,
-        })
+        new MeshMatcapMaterial({ matcap: matcapTexture7 })
+        // new THREE.MeshStandardMaterial({
+        //   color: "#e0f6ff",
+        //   roughness: 0.7,
+        //   metalness: 0.6,
+        // })
       );
       lines.position.x = 1.45;
       lines.position.y = 0.87 - i / 1.5;
@@ -35170,11 +35191,12 @@ var app = (function () {
       // Lines 2
       const lines2 = new Mesh(
         new CylinderGeometry(0.05, 0.05, 0.4, 32),
-        new MeshStandardMaterial({
-          color: "#e0f6ff",
-          roughness: 0.7,
-          metalness: 0.6,
-        })
+        new MeshMatcapMaterial({ matcap: matcapTexture7 })
+        // new THREE.MeshStandardMaterial({
+        //   color: "#e0f6ff",
+        //   roughness: 0.7,
+        //   metalness: 0.6,
+        // })
       );
       lines2.position.x = 2.08;
       lines2.position.y = 0.87 - i / 1.5;
@@ -35187,11 +35209,12 @@ var app = (function () {
     // Footer
     const footer = new Mesh(
       createBoxWithRoundedEdges(1.7, 1, 0.3, 0.1, 5),
-      new MeshStandardMaterial({
-        color: "#fcc2fb",
-        roughness: 0.7,
-        metalness: 0.6,
-      })
+      new MeshMatcapMaterial({ matcap: matcapTexture6 })
+      // new THREE.MeshStandardMaterial({
+      //   color: "#fcc2fb",
+      //   roughness: 0.7,
+      //   metalness: 0.6,
+      // })
     );
     footer.position.x = -1.65;
     footer.position.y = -1.8;
@@ -35199,11 +35222,12 @@ var app = (function () {
 
     const footer2 = new Mesh(
       createBoxWithRoundedEdges(3.08, 1, 0.3, 0.1, 5),
-      new MeshStandardMaterial({
-        color: "#57b6fa",
-        roughness: 0.7,
-        metalness: 0.6,
-      })
+      new MeshMatcapMaterial({ matcap: matcapTexture5 })
+      // new THREE.MeshStandardMaterial({
+      //   color: "#57b6fa",
+      //   roughness: 0.7,
+      //   metalness: 0.6,
+      // })
     );
     footer2.position.x = 0.95;
     footer2.position.y = -1.8;
@@ -35219,9 +35243,9 @@ var app = (function () {
 
     const textureLoader = new TextureLoader();
     const matcapTexture = textureLoader.load("textures/matcaps/4.png");
-    const matcapTexture2 = textureLoader.load("textures/matcaps/7.png");
+    const matcapTexture2 = textureLoader.load("textures/matcaps/2.png");
     const matcapTexture3 = textureLoader.load("textures/matcaps/8.png");
-    const matcapTexture4 = textureLoader.load("textures/matcaps/3.png");
+    const matcapTexture4 = textureLoader.load("textures/matcaps/7.png");
 
     const fontLoader = new FontLoader();
 

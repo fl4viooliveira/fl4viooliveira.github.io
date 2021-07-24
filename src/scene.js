@@ -64,13 +64,21 @@ scene.add(monitor);
 // monitor.rotation.y = -0.48;
 
 // Header
+
+const textureLoad = new THREE.TextureLoader();
+const matcapTexture5 = textureLoad.load("textures/matcaps/2.png");
+const matcapTexture6 = textureLoad.load("textures/matcaps/6.png");
+const matcapTexture7 = textureLoad.load("textures/matcaps/3.png");
+const matcapTexture8 = textureLoad.load("textures/matcaps/4.png");
+
 const header = new THREE.Mesh(
   createBoxWithRoundedEdges(5, 0.6, 0.3, 0.1, 5),
-  new THREE.MeshStandardMaterial({
-    color: "#fcc2fb",
-    roughness: 0.7,
-    metalness: 0.6,
-  })
+  new THREE.MeshMatcapMaterial({ matcap: matcapTexture5 })
+  // new THREE.MeshStandardMaterial({
+  //   color: "#fcc2fb",
+  //   roughness: 0.7,
+  //   metalness: 0.6,
+  // })
 );
 header.position.y = 1.58;
 monitor.add(header);
@@ -79,11 +87,12 @@ monitor.add(header);
 for (let i = 0; i < 3; i++) {
   const menuHead = new THREE.Mesh(
     new THREE.CylinderGeometry(0.05, 0.05, 0.3, 32),
-    new THREE.MeshStandardMaterial({
-      color: "#e0f6ff",
-      roughness: 0.7,
-      metalness: 0.6,
-    })
+    new THREE.MeshMatcapMaterial({ matcap: matcapTexture7 })
+    // new THREE.MeshStandardMaterial({
+    //   color: "#e0f6ff",
+    //   roughness: 0.7,
+    //   metalness: 0.6,
+    // })
   );
   menuHead.position.x = -1.8 + i / 2;
   menuHead.position.y = 1.56;
@@ -95,11 +104,12 @@ for (let i = 0; i < 3; i++) {
 // Search
 const search = new THREE.Mesh(
   createBoxWithRoundedEdges(1, 0.4, 0.2, 0.07, 5),
-  new THREE.MeshStandardMaterial({
-    color: "#e0f6ff",
-    roughness: 0.7,
-    metalness: 0.6,
-  })
+  new THREE.MeshMatcapMaterial({ matcap: matcapTexture7 })
+  // new THREE.MeshStandardMaterial({
+  //   color: "#e0f6ff",
+  //   roughness: 0.7,
+  //   metalness: 0.6,
+  // })
 );
 search.position.x = 1.58;
 search.position.y = 1.58;
@@ -109,11 +119,12 @@ monitor.add(search);
 //magnifier
 const magnifier = new THREE.Mesh(
   new THREE.TorusGeometry(0.07, 0.02, 16, 100),
-  new THREE.MeshStandardMaterial({
-    color: "#57b6fa",
-    roughness: 0.7,
-    metalness: 0.6,
-  })
+  new THREE.MeshMatcapMaterial({ matcap: matcapTexture8 })
+  // new THREE.MeshStandardMaterial({
+  //   color: "#57b6fa",
+  //   roughness: 0.7,
+  //   metalness: 0.6,
+  // })
 );
 magnifier.position.x = 1.25;
 magnifier.position.y = 1.62;
@@ -122,11 +133,12 @@ monitor.add(magnifier);
 
 const magnifierStick = new THREE.Mesh(
   new THREE.CylinderGeometry(0.02, 0.02, 0.1, 16),
-  new THREE.MeshStandardMaterial({
-    color: "#57b6fa",
-    roughness: 0.7,
-    metalness: 0.6,
-  })
+  new THREE.MeshMatcapMaterial({ matcap: matcapTexture8 })
+  // new THREE.MeshStandardMaterial({
+  //   color: "#57b6fa",
+  //   roughness: 0.7,
+  //   metalness: 0.6,
+  // })
 );
 magnifierStick.position.x = 1.31;
 magnifierStick.position.y = 1.51;
@@ -137,11 +149,12 @@ monitor.add(magnifierStick);
 // Main
 const main = new THREE.Mesh(
   createBoxWithRoundedEdges(3.08, 2.2, 0.3, 0.1, 5),
-  new THREE.MeshStandardMaterial({
-    color: "#57b6fa",
-    roughness: 0.7,
-    metalness: 0.6,
-  })
+  new THREE.MeshMatcapMaterial({ matcap: matcapTexture5 })
+  // new THREE.MeshStandardMaterial({
+  //   color: "#57b6fa",
+  //   roughness: 0.7,
+  //   metalness: 0.6,
+  // })
 );
 main.position.x = -0.95;
 monitor.add(main);
@@ -149,11 +162,12 @@ monitor.add(main);
 // Img
 const img = new THREE.Mesh(
   createBoxWithRoundedEdges(2.7, 1.82, 0.2, 0.1, 5),
-  new THREE.MeshStandardMaterial({
-    color: "#e0f6ff",
-    roughness: 0.7,
-    metalness: 0.6,
-  })
+  new THREE.MeshMatcapMaterial({ matcap: matcapTexture7 })
+  // new THREE.MeshStandardMaterial({
+  //   color: "#e0f6ff",
+  //   roughness: 0.7,
+  //   metalness: 0.6,
+  // })
 );
 img.position.x = -0.95;
 img.position.z = 0.12;
@@ -165,22 +179,26 @@ triangleShape.moveTo(-0.4, -0.8);
 triangleShape.lineTo(-1.3, 0.3);
 triangleShape.lineTo(-2.2, -0.8);
 const triangleGeometry = new THREE.ShapeGeometry(triangleShape);
-const triangleMaterial = new THREE.MeshStandardMaterial({
-  color: "#57b6fa",
-  roughness: 0.7,
-  metalness: 0.6,
+const triangleMaterial = new THREE.MeshMatcapMaterial({
+  matcap: matcapTexture8,
 });
+// new THREE.MeshStandardMaterial({
+//   color: "#57b6fa",
+//   roughness: 0.7,
+//   metalness: 0.6,
+// });
 const meshTriangle1 = new THREE.Mesh(triangleGeometry, triangleMaterial);
 meshTriangle1.position.z = 0.23;
 monitor.add(meshTriangle1);
 
 const sun = new THREE.Mesh(
   new THREE.CircleGeometry(0.3, 32),
-  new THREE.MeshStandardMaterial({
-    color: "#57b6fa",
-    roughness: 0.7,
-    metalness: 0.6,
-  })
+  new THREE.MeshMatcapMaterial({ matcap: matcapTexture8 })
+  // new THREE.MeshStandardMaterial({
+  //   color: "#57b6fa",
+  //   roughness: 0.7,
+  //   metalness: 0.6,
+  // })
 );
 sun.position.x = -0.09;
 sun.position.y = 0.44;
@@ -190,11 +208,12 @@ monitor.add(sun);
 // Menu
 const menu = new THREE.Mesh(
   createBoxWithRoundedEdges(1.7, 2.2, 0.3, 0.1, 5),
-  new THREE.MeshStandardMaterial({
-    color: "#fcc2fb",
-    roughness: 0.7,
-    metalness: 0.6,
-  })
+  new THREE.MeshMatcapMaterial({ matcap: matcapTexture6 })
+  // new THREE.MeshStandardMaterial({
+  //   color: "#fcc2fb",
+  //   roughness: 0.7,
+  //   metalness: 0.6,
+  // })
 );
 menu.position.x = 1.65;
 monitor.add(menu);
@@ -204,11 +223,12 @@ for (let i = 0; i < 3; i++) {
   // Icon
   const menuIcon = new THREE.Mesh(
     new THREE.CylinderGeometry(0.05, 0.05, 0.3, 32),
-    new THREE.MeshStandardMaterial({
-      color: "#57b6fa",
-      roughness: 0.7,
-      metalness: 0.6,
-    })
+    new THREE.MeshMatcapMaterial({ matcap: matcapTexture8 })
+    // new THREE.MeshStandardMaterial({
+    //   color: "#57b6fa",
+    //   roughness: 0.7,
+    //   metalness: 0.6,
+    // })
   );
   menuIcon.position.x = 0.98;
   menuIcon.position.y = 0.87 - i / 1.5;
@@ -218,11 +238,12 @@ for (let i = 0; i < 3; i++) {
   // Lines
   const lines = new THREE.Mesh(
     new THREE.CylinderGeometry(0.05, 0.05, 0.7, 32),
-    new THREE.MeshStandardMaterial({
-      color: "#e0f6ff",
-      roughness: 0.7,
-      metalness: 0.6,
-    })
+    new THREE.MeshMatcapMaterial({ matcap: matcapTexture7 })
+    // new THREE.MeshStandardMaterial({
+    //   color: "#e0f6ff",
+    //   roughness: 0.7,
+    //   metalness: 0.6,
+    // })
   );
   lines.position.x = 1.45;
   lines.position.y = 0.87 - i / 1.5;
@@ -232,11 +253,12 @@ for (let i = 0; i < 3; i++) {
   // Lines 2
   const lines2 = new THREE.Mesh(
     new THREE.CylinderGeometry(0.05, 0.05, 0.4, 32),
-    new THREE.MeshStandardMaterial({
-      color: "#e0f6ff",
-      roughness: 0.7,
-      metalness: 0.6,
-    })
+    new THREE.MeshMatcapMaterial({ matcap: matcapTexture7 })
+    // new THREE.MeshStandardMaterial({
+    //   color: "#e0f6ff",
+    //   roughness: 0.7,
+    //   metalness: 0.6,
+    // })
   );
   lines2.position.x = 2.08;
   lines2.position.y = 0.87 - i / 1.5;
@@ -249,11 +271,12 @@ for (let i = 0; i < 3; i++) {
 // Footer
 const footer = new THREE.Mesh(
   createBoxWithRoundedEdges(1.7, 1, 0.3, 0.1, 5),
-  new THREE.MeshStandardMaterial({
-    color: "#fcc2fb",
-    roughness: 0.7,
-    metalness: 0.6,
-  })
+  new THREE.MeshMatcapMaterial({ matcap: matcapTexture6 })
+  // new THREE.MeshStandardMaterial({
+  //   color: "#fcc2fb",
+  //   roughness: 0.7,
+  //   metalness: 0.6,
+  // })
 );
 footer.position.x = -1.65;
 footer.position.y = -1.8;
@@ -261,11 +284,12 @@ monitor.add(footer);
 
 const footer2 = new THREE.Mesh(
   createBoxWithRoundedEdges(3.08, 1, 0.3, 0.1, 5),
-  new THREE.MeshStandardMaterial({
-    color: "#57b6fa",
-    roughness: 0.7,
-    metalness: 0.6,
-  })
+  new THREE.MeshMatcapMaterial({ matcap: matcapTexture5 })
+  // new THREE.MeshStandardMaterial({
+  //   color: "#57b6fa",
+  //   roughness: 0.7,
+  //   metalness: 0.6,
+  // })
 );
 footer2.position.x = 0.95;
 footer2.position.y = -1.8;
@@ -281,9 +305,9 @@ scene.add(randomElements);
 
 const textureLoader = new THREE.TextureLoader();
 const matcapTexture = textureLoader.load("textures/matcaps/4.png");
-const matcapTexture2 = textureLoader.load("textures/matcaps/7.png");
+const matcapTexture2 = textureLoader.load("textures/matcaps/2.png");
 const matcapTexture3 = textureLoader.load("textures/matcaps/8.png");
-const matcapTexture4 = textureLoader.load("textures/matcaps/3.png");
+const matcapTexture4 = textureLoader.load("textures/matcaps/7.png");
 
 const fontLoader = new THREE.FontLoader();
 
