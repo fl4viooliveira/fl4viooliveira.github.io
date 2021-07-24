@@ -309,7 +309,7 @@
         padding: 2px 8px;
         border-radius: 8px;
     }
-    .banner .contentBx h4{
+    /* .banner .contentBx h4{
         font-size: 1.5em;
         color: #333;
         font-weight: 300;
@@ -323,13 +323,13 @@
         font-size: 3em;
         color:#333;
         line-height: 1em;
-    }
+    } */
     p{
         font-size: 1.1em;
         margin: 20px 0;
         font-weight: 300;
     }
-    .btn{
+    /* .btn{
         background: #00bcd4;
         color: #fff;
         padding: 10px 30px;
@@ -337,7 +337,7 @@
         text-decoration: none;
         font-weight: 500;
         letter-spacing: 2px;
-    }
+    } */
     .sidebar{
         position: fixed;
         background: #000;
@@ -593,9 +593,9 @@
     }
 
     @media (max-width: 991px){
-        .banner .imgSidebar{
+        /* .banner .imgSidebar{
             display: none;
-        }
+        } */
         .banner .contentBx, .sidebar{
             width: 100%;
             padding: 40px;
