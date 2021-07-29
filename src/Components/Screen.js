@@ -1,12 +1,10 @@
 import {RoundedBox} from "@react-three/drei";
 
-// Rounded Edges Function
-
 function Screen() {
   return (
     <group visible position={[0, -0, 1]}>
+      {/* Header*/}
       <mesh position={[0, 1.58, 0]}>
-        {/* Header*/}
         <RoundedBox args={[5, 0.6, 0.3]} radius={0.1} smoothness={5}>
           <meshStandardMaterial
             color={"#fcc2fb"}
