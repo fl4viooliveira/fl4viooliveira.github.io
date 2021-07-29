@@ -1,54 +1,60 @@
-import { Canvas } from "@react-three/fiber";
-import { MeshStandardMaterial } from "three";
+import {RoundedBox} from "@react-three/drei";
+
+// Rounded Edges Function
 
 function Screen() {
   return (
     <group visible position={[0, -0, 1]}>
       <mesh position={[0, 1.58, 0]}>
-        // Header
-        <boxGeometry args={[5, 0.6, 0.3]} />
-        <meshStandardMaterial
-          color={"#fcc2fb"}
-          roughness={0.7}
-          metalness={0.6}
-        />
+        {/* Header*/}
+        <RoundedBox args={[5, 0.6, 0.3]} radius={0.1} smoothness={5}>
+          <meshStandardMaterial
+            color={"#fcc2fb"}
+            roughness={0.7}
+            metalness={0.6}
+          />
+        </RoundedBox>
       </mesh>
-      // Main Screen
+      {/* Main Screen*/}
       <mesh position={[-0.95, 0, 0]}>
-        <boxGeometry args={[3.08, 2.2, 0.3]} />
-        <meshStandardMaterial
-          color={"#57b6fa"}
-          roughness={0.7}
-          metalness={0.6}
-        />
+        <RoundedBox args={[3.08, 2.2, 0.3]} radius={0.1} smoothness={5}>
+          <meshStandardMaterial
+            color={"#57b6fa"}
+            roughness={0.7}
+            metalness={0.6}
+          />
+        </RoundedBox>
       </mesh>
-      // Menu
+      {/*Menu*/}
       <mesh position={[1.65, 0, 0]}>
-        <boxGeometry args={[1.7, 2.2, 0.3]} />
-        <meshStandardMaterial
-          color={"#fcc2fb"}
-          roughness={0.7}
-          metalness={0.6}
-        />
+        <RoundedBox args={[1.7, 2.2, 0.3]} radius={0.1} smoothness={5}>
+          <meshStandardMaterial
+            color={"#fcc2fb"}
+            roughness={0.7}
+            metalness={0.6}
+          />
+        </RoundedBox>
       </mesh>
-      // Footer
+      {/*Footer*/}
       <mesh position={[-1.65, -1.8, 0]}>
-        <boxGeometry args={[1.7, 1, 0.3]} />
-        <meshStandardMaterial
-          color={"#fcc2fb"}
-          roughness={0.7}
-          metalness={0.6}
-        />
+        <RoundedBox args={[1.7, 1, 0.3]} radius={0.1} smoothness={5}>
+          <meshStandardMaterial
+            color={"#fcc2fb"}
+            roughness={0.7}
+            metalness={0.6}
+          />
+        </RoundedBox>
       </mesh>
-      // Footer 2
+      {/*Footer2*/}
       <mesh position={[0.95, -1.8, 0]}>
-        <boxGeometry args={[3.08, 1, 0.3]} />
-        <meshStandardMaterial
-          color={"#57b6fa"}
-          roughness={0.7}
-          metalness={0.6}
-        />
-      </mesh>{" "}
+        <RoundedBox args={[3.08, 1, 0.3]} radius={0.1} smoothness={5}>
+          <meshStandardMaterial
+            color={"#57b6fa"}
+            roughness={0.7}
+            metalness={0.6}
+          />
+        </RoundedBox>
+      </mesh>
     </group>
   );
 }
