@@ -1,0 +1,65 @@
+.toggle {
+  position: fixed;
+  top: 30px;
+  right: 30px;
+  width: 50px;
+  height: 50px;
+  background: #000 url(../static/images/menu.png);
+  background-size: 30px;
+  background-position: center;
+  background-repeat: no-repeat;
+  cursor: pointer;
+  z-index: 1000;
+}
+.toggle.active {
+  background: #000 url(../static/images/close.png);
+  background-size: 25px;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+.sidebar {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: calc(100% - 500px);
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 100px;
+}
+.sidebar {
+  position: fixed;
+  background: #000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: 0.5s;
+  padding: 40px;
+  z-index: 100;
+  right: -100%;
+}
+.sidebar.active {
+  right: 0;
+}
+.sidebar ul {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+.sidebar ul li {
+  list-style: none;
+}
+.sidebar ul li a {
+  color: #fff;
+  text-decoration: none;
+  font-size: 2em;
+  margin: 10px 0;
+  font-weight: 300;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+.sidebar ul li a:hover {
+  color: #00bcd4;
+}

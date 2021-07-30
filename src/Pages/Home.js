@@ -6,9 +6,10 @@ import "./Home.css";
 function Home() {
   return (
     <section className="banner" id="home">
-      <div className="contentBx">
-        {/*--3d - Scene-- */}
+      <div className="three-scene">
         <Scene />
+      </div>
+      <div className="contentBx">
         <h5 className="logoText">Fl4v.io</h5>
         <div>
           <h4>
