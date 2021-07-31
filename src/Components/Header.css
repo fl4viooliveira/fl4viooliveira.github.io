@@ -63,3 +63,33 @@
 .sidebar ul li a:hover {
   color: #00bcd4;
 }
+.header .logoText {
+  position: absolute;
+  top: 30px;
+  left: 40px;
+  font-size: 1.2em;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  background: transparent;
+  color: rgb(0, 0, 0);
+  padding: 2px 8px;
+  border-radius: 8px;
+  border: 2px solid black;
+  z-index: 1000;
+}
+@media (max-width: 991px) {
+  .logoText {
+    left: 0;
+    margin-top: 10px;
+  }
+  .sidebar {
+    width: 100%;
+    padding: 40px;
+  }
+  .toggle {
+    right: 40px;
+  }
+  .sci {
+    right: 40px;
+  }
+}

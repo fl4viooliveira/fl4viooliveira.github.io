@@ -10,7 +10,6 @@ function Home() {
         <Scene />
       </div>
       <div className="contentBx">
-        <h5 className="logoText">Fl4v.io</h5>
         <div>
           <h4>
             <span>Hello</span>, I'm

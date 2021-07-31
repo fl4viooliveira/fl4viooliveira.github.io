@@ -7,6 +7,7 @@ function Header() {
 
   return (
     <div className="header">
+      <h5 className="logoText">Fl4v.io</h5>
       <div
         className={click ? "toggle active" : "toggle"}
         onClick={handleClick}

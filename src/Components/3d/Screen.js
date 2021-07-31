@@ -1,14 +1,14 @@
-import {RoundedBox} from "@react-three/drei";
+import { RoundedBox } from "@react-three/drei";
 
 function Screen() {
   return (
-    <group visible position={[0, -0, 1]}>
+    <group visible position={[0, 0, 1]}>
       {/* Header*/}
       <mesh position={[0, 1.58, 0]}>
         <RoundedBox args={[5, 0.6, 0.3]} radius={0.1} smoothness={5}>
           <meshStandardMaterial
             color={"#fcc2fb"}
-            roughness={0.7}
+            roughness={0.2}
             metalness={0.6}
           />
         </RoundedBox>
@@ -18,7 +18,7 @@ function Screen() {
         <RoundedBox args={[3.08, 2.2, 0.3]} radius={0.1} smoothness={5}>
           <meshStandardMaterial
             color={"#57b6fa"}
-            roughness={0.7}
+            roughness={0.2}
             metalness={0.6}
           />
         </RoundedBox>
@@ -28,7 +28,7 @@ function Screen() {
         <RoundedBox args={[1.7, 2.2, 0.3]} radius={0.1} smoothness={5}>
           <meshStandardMaterial
             color={"#fcc2fb"}
-            roughness={0.7}
+            roughness={0.2}
             metalness={0.6}
           />
         </RoundedBox>
@@ -38,7 +38,7 @@ function Screen() {
         <RoundedBox args={[1.7, 1, 0.3]} radius={0.1} smoothness={5}>
           <meshStandardMaterial
             color={"#fcc2fb"}
-            roughness={0.7}
+            roughness={0.2}
             metalness={0.6}
           />
         </RoundedBox>
@@ -48,7 +48,7 @@ function Screen() {
         <RoundedBox args={[3.08, 1, 0.3]} radius={0.1} smoothness={5}>
           <meshStandardMaterial
             color={"#57b6fa"}
-            roughness={0.7}
+            roughness={0.2}
             metalness={0.6}
           />
         </RoundedBox>
