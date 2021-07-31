@@ -9,8 +9,8 @@ import "./Services.css";
 function Services() {
   return (
     <div>
-      <section class="services" id="services">
-        <div class="title">
+      <section className="services" id="services">
+        <div className="title">
           <h2>Our Services</h2>
           <p>
             It is the services that we offer to help you bring your project to
@@ -18,8 +18,8 @@ function Services() {
             scratch to the deployment.
           </p>
         </div>
-        <div class="content">
-          <div class="servicesBx">
+        <div className="content">
+          <div className="servicesBx">
             <img src={webdevelopment} alt="Web Development icon" />
             <h2>Web Development</h2>
             <p>
@@ -28,7 +28,7 @@ function Services() {
               applications.
             </p>
           </div>
-          <div class="servicesBx">
+          <div className="servicesBx">
             <img src={webdesign} alt="Web Development icon" />
             <h2>Web Design</h2>
             <p>
@@ -37,7 +37,7 @@ function Services() {
               a logo refresh.
             </p>
           </div>
-          <div class="servicesBx">
+          <div className="servicesBx">
             <img src={frontend} alt="Frontend icon" />
             <h2>Frontend</h2>
             <p>
@@ -46,7 +46,7 @@ function Services() {
               have the skills to make it happen.
             </p>
           </div>
-          <div class="servicesBx">
+          <div className="servicesBx">
             <img src={backend} alt="Backend icon" />
             <h2>Backend</h2>
             <p>
@@ -55,7 +55,7 @@ function Services() {
               adding easily new functionalities.
             </p>
           </div>
-          <div class="servicesBx">
+          <div className="servicesBx">
             <img src={deployment} alt="Deployment icon" />
             <h2>Deployment</h2>
             <p>
@@ -63,7 +63,7 @@ function Services() {
               services like AWS, Azure, Google Cloud and others.{" "}
             </p>
           </div>
-          <div class="servicesBx">
+          <div className="servicesBx">
             <img src={administrator} alt="Administrator icon" />
             <h2>Website Administration</h2>
             <p>
