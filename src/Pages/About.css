@@ -51,3 +51,19 @@
 .about .content .imgBx img {
   max-width: 100%;
 }
+
+@media (max-width: 991px) {
+  .about .content {
+    flex-direction: column;
+  }
+  .about .content .textBx {
+    min-width: 100%;
+    width: 100%;
+  }
+  .about .content {
+    margin-top: 0;
+  }
+  .about .content .imgBx {
+    margin-left: 0;
+  }
+}

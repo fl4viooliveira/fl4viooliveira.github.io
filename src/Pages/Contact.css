@@ -47,3 +47,17 @@
   cursor: pointer;
   max-width: 150px;
 }
+
+@media (max-width: 991px) {
+  .contact .contactForm {
+    width: 100%;
+  }
+  .contactForm .row {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+  }
+  .contact .contactForm .row .col50 {
+    width: 100%;
+  }
+}
