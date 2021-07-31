@@ -6,7 +6,6 @@ import Work from "./Pages/Work";
 import Contact from "./Pages/Contact";
 import Footer from "./Components/Footer";
 import "./App.css";
-import { ContactShadows } from "@react-three/drei";
 
 function App() {
   return (
