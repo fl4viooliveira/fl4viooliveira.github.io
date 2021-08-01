@@ -1,6 +1,12 @@
 Canvas {
   display: block;
-  background: rgb(217, 221, 217);
+  /* background: rgb(217, 221, 217); */
   width: 100vw;
   height: 100vh;
 }
+
+/* @media (max-width: 991px) {
+  Canvas {
+    background: lightblue;
+  }
+} */

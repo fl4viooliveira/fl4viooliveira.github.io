@@ -12,7 +12,7 @@ section {
   position: absolute;
   top: 0;
   left: 0;
-  width: 500px;
+  width: 100%;
   height: 100%;
 }
 .banner .three-scene Scene {
@@ -34,6 +34,12 @@ section {
   justify-content: center;
   align-items: center;
   padding: 100px;
+}
+.banner .contentBx {
+  position: absolute;
+  width: 500px;
+  left: 0;
+  object-fit: cover;
 }
 .banner .contentBx h4 {
   font-size: 1.5em;
@@ -86,11 +92,19 @@ p {
 }
 @media (max-width: 991px) {
   .banner .three-scene {
-    display: none;
+    display: block;
+    margin: 00px auto;
+    position: absolute;
+    width: 100%;
+    height: 100%;
   }
   .banner .contentBx {
     width: 100%;
     padding: 40px;
+  }
+  .banner .contentBx .textBox {
+    background: rgb(255, 255, 255, 0.5);
+    padding: 5px;
   }
   section {
     padding: 40px;

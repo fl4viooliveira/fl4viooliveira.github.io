@@ -10,7 +10,7 @@ function Home() {
         <Scene />
       </div>
       <div className="contentBx">
-        <div>
+        <div className="textBox">
           <h4>
             <span>Hello</span>, I'm
           </h4>

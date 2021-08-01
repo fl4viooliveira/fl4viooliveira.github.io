@@ -1500,7 +1500,7 @@
     "utility-types" "^3.10.0"
     "zustand" "^3.5.1"
 
-"@react-three/fiber@^7.0.6", "@react-three/fiber@>=6.0":
+"@react-three/fiber@^7.0.6", "@react-three/fiber@>=6.0", "@react-three/fiber@>=7.0":
   "integrity" "sha512-GSMmnk66B/xGGfbSj5lGiZCxGQD0i8rm0Bt/Xp6TD2b9cYe2Lxb2wegU04zIeN89aoUYMHXhL1GNXsZvvOjfUA=="
   "resolved" "https://registry.npmjs.org/@react-three/fiber/-/fiber-7.0.6.tgz"
   "version" "7.0.6"
@@ -1515,6 +1515,14 @@
     "use-asset" "^1.0.4"
     "utility-types" "^3.10.0"
     "zustand" "^3.5.1"
+
+"@react-three/postprocessing@^2.0.5":
+  "integrity" "sha512-0o4NjYXpqfbW03fpB2WuWA2FApoafwvqhDI2Ca1Weljbo3d/Uy3XUBB8WyZU3zWIAQbg7SzU/d03wpFSGzWzJQ=="
+  "resolved" "https://registry.npmjs.org/@react-three/postprocessing/-/postprocessing-2.0.5.tgz"
+  "version" "2.0.5"
+  dependencies:
+    "postprocessing" "^6.22.2"
+    "react-merge-refs" "^1.1.0"
 
 "@rollup/plugin-node-resolve@^7.1.1":
   "integrity" "sha512-RxtSL3XmdTAE2byxekYLnx+98kEUOrPHF/KRVjLH+DEIHy6kjIw7YINQzn+NXiH/NTrQLAwYs0GWB+csWygA9Q=="
@@ -8997,6 +9005,11 @@
     "source-map" "^0.6.1"
     "supports-color" "^6.1.0"
 
+"postprocessing@^6.22.2":
+  "integrity" "sha512-zk8sw7ZFlr7v5OVLnM6QpM8DDrV9buFuTfTYa0K0dTEB5ap5qCTVg25mG66uJ90vqu3u4bFJY6jbpoW3BGmALg=="
+  "resolved" "https://registry.npmjs.org/postprocessing/-/postprocessing-6.22.3.tgz"
+  "version" "6.22.3"
+
 "potpack@^1.0.1":
   "integrity" "sha512-15vItUAbViaYrmaB/Pbw7z6qX2xENbFSTA7Ii4tgbPtasxm5v6ryKhKtL91tpWovDJzTiZqdwzhcFBCwiMVdVw=="
   "resolved" "https://registry.npmjs.org/potpack/-/potpack-1.0.1.tgz"
@@ -10897,7 +10910,7 @@
     "potpack" "^1.0.1"
     "zstddec" "^0.0.2"
 
-"three@^0.130.1", "three@>= 0.123.0", "three@>=0.103.0", "three@>=0.126", "three@>=0.128.0":
+"three@^0.130.1", "three@>= 0.102.0 < 0.132.0", "three@>= 0.123.0", "three@>=0.103.0", "three@>=0.126", "three@>=0.128.0", "three@>=0.130.1":
   "integrity" "sha512-OSPPKcGvFSiGkG3jFrwwC76PBV/ZSrGxpBbg28bW8s9GU8r/y2spNGtEXHEb/CVqo0Ctf5Lx2rVaxQZB6OasaA=="
   "resolved" "https://registry.npmjs.org/three/-/three-0.130.1.tgz"
   "version" "0.130.1"
