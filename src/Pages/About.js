@@ -14,13 +14,13 @@ function About() {
         <div className="textBx">
           <p>
             I'm Flavio, continuously working to improve my web development
-            skills on the frontend, basically using Svelte framework,
-            JavaScript, CSS3 and HTML5. On the backend, we are mainly developing
-            using the Django framework, Python and SQL database. I'm working as
-            a freelancer, developing some web solutions for projects with
-            scalable perspectives and integrating Django Rest API with the
-            Svelte frontend. In this way, we could see some fantastic plans,
-            project, and dreams get off the paper to reality.
+            skills on the frontend, basically using React, Svelte, , CSS3 and
+            HTML5. On the backend, we are mainly developing using the Django
+            framework, Python and SQL database. I'm working as a freelancer,
+            developing some web solutions for projects with scalable
+            perspectives and integrating Django Rest API with the Svelte
+            frontend. In this way, we could see some fantastic plans, project,
+            and dreams get off the paper to reality.
             <br />
             <br />
             I speak Portuguese, English, and Spanish at the lower level.
@@ -29,9 +29,9 @@ function About() {
             could confirm it in the last six years, moving country, changing the
             job, and adapting well in diverse environments.
             <br />
-            <br />I used to be an athlete in Jiu Jitsu. I still compete,
-            sometimes. I just described it because this experience helps me to
-            push myself to be better day by day.
+            <br />I used to be an athlete and coach in Jiu Jitsu and Paraglider.
+            I just described it because this experience helps me to push myself
+            to be better day by day.
           </p>
         </div>
         <div className="imgBx">

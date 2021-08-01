@@ -1,10 +1,9 @@
 import * as THREE from "three";
 import React, { useRef, useMemo, useState, Suspense } from "react";
-import { Canvas, useFrame } from "@react-three/fiber";
-import { Enviroment, ContactShadows } from "@react-three/drei";
+import { Canvas, useFrame, useLoader } from "@react-three/fiber";
+import { Environment, ContactShadows } from "@react-three/drei";
 import { EffectComposer, SSAO } from "@react-three/postprocessing";
 import "./Scene.css";
-import { SphereGeometry } from "three";
 
 function Swarm({ count, ...props }) {
   const mesh = useRef();
@@ -81,7 +80,30 @@ function Scene() {
         <color attach="background" args={["#f0f0f0"]} />
         <fog attach="fog" args={["red", 60, 100]} />
         <ambientLight intensity={1.5} />
+        <pointLight position={[100, 10, -50]} intensity={20} castShadow />
+        <pointLight position={[-100, -100, -100]} intensity={10} color="red" />
         <Swarm count={150} position={[0, 10, 0]} />
+        <ContactShadows
+          rotation={[Math.PI / 2, 0, 0]}
+          position={[0, -30, 0]}
+          opacity={0.5}
+          width={130}
+          height={130}
+          blur={1}
+          far={40}
+        />
+        <EffectComposer multisampling={0}>
+          <SSAO
+            samples={31}
+            radius={10}
+            intensity={30}
+            luminanceInfluence={0.1}
+            color="red"
+          />
+        </EffectComposer>
+        <Suspense fallback={null}>
+          <Environment preset="city" />
+        </Suspense>
       </Canvas>
     </div>
   );
