@@ -2,6 +2,8 @@ import work1 from "../static/images/work-1.jpg";
 import work2 from "../static/images/work-2.jpg";
 import work3 from "../static/images/work-3.jpg";
 import work4 from "../static/images/work-4.jpg";
+import work5 from "../static/images/work-5.jpg";
+import work6 from "../static/images/work-6.jpg";
 import "./Work.css";
 
 function Work() {
@@ -21,6 +23,26 @@ function Work() {
               <img src={work1} alt="work-1" />
             </div>
             <div className="textBx">
+              <a href="https://brigadelover.com/" target="_blank">
+                <h3>Brigadelover</h3>
+              </a>
+            </div>
+          </div>{" "}
+          <div className="workBx">
+            <div className="imgBx">
+              <img src={work2} alt="work-2" />
+            </div>
+            <div className="textBx">
+              <a href="https://fl4viooliveira.github.io/cdl/" target="_blank">
+                <h3>CDL Construction</h3>
+              </a>
+            </div>
+          </div>{" "}
+          <div className="workBx">
+            <div className="imgBx">
+              <img src={work3} alt="work-3" />
+            </div>
+            <div className="textBx">
               <a
                 href="https://fl4viooliveira.github.io/bkg_grid_layout/"
                 target="_blank"
@@ -31,7 +53,7 @@ function Work() {
           </div>
           <div className="workBx">
             <div className="imgBx">
-              <img src={work2} alt="work-2" />
+              <img src={work4} alt="work-4" />
             </div>
             <div className="textBx">
               <a
@@ -44,7 +66,7 @@ function Work() {
           </div>
           <div className="workBx">
             <div className="imgBx">
-              <img src={work3} alt="work-3" />
+              <img src={work5} alt="work-5" />
             </div>
             <div className="textBx">
               <a
@@ -57,7 +79,7 @@ function Work() {
           </div>
           <div className="workBx">
             <div className="imgBx">
-              <img src={work4} alt="work-4" />
+              <img src={work6} alt="work-6" />
             </div>
             <div className="textBx">
               <a

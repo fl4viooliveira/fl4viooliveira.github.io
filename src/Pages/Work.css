@@ -45,3 +45,13 @@
   letter-spacing: 1px;
   font-size: 1em;
 }
+
+@media (max-width: 991px) {
+  .work .content {
+    padding: 15px;
+  }
+  .work .content .workBx .imgBx img {
+    height: 100%;
+    border: rgb(238, 238, 238) solid 2px;
+  }
+}

@@ -78,10 +78,10 @@ function Scene() {
         camera={{ fov: 75, position: [0, 0, 60], near: 10, far: 150 }}
       >
         <color attach="background" args={["#f0f0f0"]} />
-        <fog attach="fog" args={["red", 60, 100]} />
+        <fog attach="fog" args={["blue", 60, 100]} />
         <ambientLight intensity={1.5} />
         <pointLight position={[100, 10, -50]} intensity={20} castShadow />
-        <pointLight position={[-100, -100, -100]} intensity={10} color="red" />
+        <pointLight position={[-100, -100, -100]} intensity={10} color="blue" />
         <Swarm count={150} position={[0, 10, 0]} />
         <ContactShadows
           rotation={[Math.PI / 2, 0, 0]}
@@ -98,7 +98,7 @@ function Scene() {
             radius={10}
             intensity={30}
             luminanceInfluence={0.1}
-            color="red"
+            color="blue"
           />
         </EffectComposer>
         <Suspense fallback={null}>
