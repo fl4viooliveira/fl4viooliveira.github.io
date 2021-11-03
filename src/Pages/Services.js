@@ -11,7 +11,7 @@ function Services() {
     <div>
       <section className="services" id="services">
         <div className="title">
-          <h2>Our Services</h2>
+          <h2>How can I help you?</h2>
           <p>
             It is the services that we offer to help you bring your project to
             life. We can do any step separately or the whole process from

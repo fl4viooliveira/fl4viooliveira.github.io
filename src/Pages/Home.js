@@ -17,12 +17,11 @@ function Home() {
           <h2>Flavio Oliveira</h2>
           <h4> A developer with a versatile coding skillset.</h4>
           <p>
-            We are a developer with a broad and versatile coding skillset. We
-            can help startups and enterprises with prototypes and ideas by
-            efficiently building those things into reality. Our expertise lies
-            in building MVPs, enterprise software, scalable microservices, REST
-            and Socket APIs and deployments in AWS, Azure, DigitalOcean and
-            others.{" "}
+            We can help you get off scratch, projects as startups, prototypes
+            ideas, or create a web application for your business. With a good
+            skill set, we can build MVPs, enterprise software, scalable
+            microservices, REST and Socket APIs, and deployments in AWS, Azure,
+            DigitalOcean, etc.{" "}
           </p>
           <a href="#about" class="btn">
             About Me

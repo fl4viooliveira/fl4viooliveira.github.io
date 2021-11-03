@@ -42,5 +42,17 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "description": "",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fl4viooliveira/fl4viooliveira.github.io.git"
+  },
+  "keywords": [],
+  "author": "fl4viooliveira",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/fl4viooliveira/fl4viooliveira.github.io/issues"
   }
 }
