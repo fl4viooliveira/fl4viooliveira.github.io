@@ -76,6 +76,11 @@
   border-radius: 8px;
   border: 2px solid black;
   z-index: 1000;
+  cursor: pointer;
+}
+.header .logoText a {
+  text-decoration: none;
+  color: #000;
 }
 @media (max-width: 991px) {
   .logoText {
